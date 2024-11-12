@@ -1,0 +1,14 @@
+---
+title: "01_load"
+author: "Group 29"
+format: html
+editor: visual
+---
+
+## Loading relevant libraries
+
+## Loading relevant data
+
+## Wrangeling data
+
+## Saving data in a tsv format
