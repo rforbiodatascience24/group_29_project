@@ -5,3 +5,9 @@ editor: visual
 ---
 
 ## Data Analysis
+
+Creation of the big plot - figure 2:
+
+The CI of the different treatments looking at different subgroups in the data. Pay note that some of the groups are represented by a 95% CI and others has a 99% CI. The 99% CI is used for all the subgroups, while the 95% CI is for the main group. Size of square refer to the amount of available information (the sample size).
+
+![](images/clipboard-1327647554.png)

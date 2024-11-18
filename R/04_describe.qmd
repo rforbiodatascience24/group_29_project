@@ -5,3 +5,21 @@ editor: visual
 ---
 
 ## Description of Data
+
+From the paper - figure 1 and table 1 + 2 + 3 + 4 + 5 + 6
+
+Figure 1 - the group sizes:
+
+![](images/clipboard-2585393746.png)
+
+Table 1 - characteristics of patients
+
+Table 2 - outcome of the different groups after 14 days
+
+Table 3 - outcome of the different groups after 6 months
+
+Table 4 - outcome of the different groups after 14 days split up into groups with and without atrial fibrillation
+
+Table 5 - outcome of the different groups after 14 days of only heparin split between small and medium dose
+
+Table 6 - Direct comparison of low dose heparin and aspirin absolute outcomes after 14 days compared to the control
