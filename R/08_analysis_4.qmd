@@ -1,0 +1,24 @@
+---
+title: "08_analysis_4"
+author: "Group 29"
+format: html
+editor: visual
+---
+
+## Data analysis
+
+## Effects subdivided by heparin and aspirin
+
+Allocation on:
+
+absolute risk of symptomatic intracranial haemorrhage;
+
+absolute risk of transfused or fatal extracranial haemorrhage;
+
+absolute risk of recurrent ischaemic stroke;
+
+absolute risk of pulmonary embolism reported (with possibility of substantial under-reporting)
+
+Error bars plot one standard error for percentage. For each bar, lower part gives number and percentage of fatal events.
+
+![](images/clipboard-548017269.png){width="200"}
