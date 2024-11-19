@@ -9,15 +9,64 @@ editor: visual
 ## Loading libraries
 
 ```{r}
+#| eval: true
 library("tidyverse")
 ```
 
 ## Loading data
 
 ```{r}
+#| eval: true
 data <- read_tsv("../data/_raw/01_dat_load.tsv")
 ```
 
 ```{r}
-data
+data |> ggplot(mapping = aes(x = HOURLOCAL))+
+  geom_histogram()
+
+data |> ggplot(mapping = aes(x = MINLOCAL))+
+  geom_histogram()
+
+
+data |> ggplot(mapping = aes(x = DAYLOCAL))+
+  geom_histogram()
+```
+
+```{r}
+
+#Replacing all C with NA to indicate missing value
+data_clean_noC <- data |> 
+  mutate(across(where(is.character), ~ na_if(.,"C")))
+```
+
+```{r}
+
+#Replacing all H for M for indicating medium dose (Heparin)
+data_clean_noH <- data_clean_noC |> 
+  mutate(RXHEP = if_else(RXHEP == "H","M",RXHEP))
+```
+
+```{r}
+
+#Replacing all values above 59 in minute and hour with NA
+data_clean_truetime <- data_clean_noH |> 
+  mutate(MINLOCAL = if_else(MINLOCAL > 59, NA, MINLOCAL),
+         HOURLOCAL = if_else(HOURLOCAL > 23, NA, HOURLOCAL))
+```
+
+```{r}
+
+#Merging the Hep high and hep medium column, changing unknown to NA
+data_clean_correctHepDose <- data_clean_truetime |> 
+  mutate(across(c(DMH14,DHH14), ~replace_na(.,""))) |> 
+  unite(DMH14, c(DMH14,DHH14), sep = "") |> 
+  mutate(DMH14 = na_if(DMH14,"")) |> 
+  mutate(across(c(DMH14,DLH14), ~na_if(., "U")))
+```
+
+```{r}
+
+#Removing comment columns
+data_clean_smaller <- data_clean_correctHepDose |> 
+  select(-c(DMAJNCHX,DNOSTRKX,DSIDEX,DDEADX,FDEADX))
 ```
