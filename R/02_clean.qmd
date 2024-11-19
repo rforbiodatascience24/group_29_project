@@ -120,7 +120,6 @@ data_clean_english <- data_clean_NAintro |>
     RMONTH == "gru" ~ "Dec"))
 ```
 
-<<<<<<< HEAD
 ## Saving final clean data
 
 ```{r}
