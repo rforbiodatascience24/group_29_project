@@ -4,7 +4,7 @@ format: html
 editor: visual
 ---
 
-## Data Analysis 
+## Data Analysis
 
 ## Short-term effects of early anticoagulant therapy
 
