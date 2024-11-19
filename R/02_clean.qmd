@@ -61,17 +61,12 @@ For the pilot study, medium dose of heparin is annotated as high dose. The high 
 
 ```{r}
 
-<<<<<<< HEAD
 #Replacing all H for M for indicating medium dose (Heparin)
 data_clean_noH <- data_clean_truetime |> 
   mutate(RXHEP = if_else(RXHEP == "H","M",RXHEP))
 
 #Merging the Hep high and hep medium column, changing unknown to NA
 data_clean_correctHepDose <- data_clean_noH |> 
-=======
-#Merging the Hep high and Hep medium column, changing unknown to NA
-data_clean_correctHepDose <- data_clean_truetime |> 
->>>>>>> 19ba95cda526ba33747e86b86cb8222bf993daf2
   mutate(across(c(DMH14,DHH14), ~replace_na(.,""))) |> 
   unite(DMH14, c(DMH14,DHH14), sep = "") |> 
   mutate(DMH14 = na_if(DMH14,"")) |> 
@@ -92,21 +87,9 @@ data_clean_annotationalign <- data_clean_correctHepDose |>
 The variable STRK14 is annotated as STR14 in the data description, and the column is therefore renamed accordingly
 
 ```{r}
-<<<<<<< HEAD
 
 data_clean_annotationalign <- data_clean_annotationalign |> 
   rename("STR14" = STRK14)
-=======
-data_clean_properOCcode <- data_clean_properOCcode |> 
-  mutate(DEAD = case_when(
-    OCCODE == 0 ~ NA,
-    OCCODE == 1 ~ "dead",
-    OCCODE == 2 ~ "dependent",  
-    OCCODE == 3 ~ "not recovered",
-    OCCODE == 4 ~ "recovered",
-    OCCODE == 8 ~ NA,
-    OCCODE == 9 ~ NA))
->>>>>>> 19ba95cda526ba33747e86b86cb8222bf993daf2
 ```
 
 In the variable SET14D, a 0 is indicating that it is not known if the subject is alive or dead at the 14 day checkup. We therefore want to change the 0 to NA, indicating that this information is not known.
@@ -142,18 +125,4 @@ data_clean_english <- data_clean_NAintro |>
 
 ```{r}
 write_tsv(data_clean_english, file = "../data/02_dat_clean.tsv")
-=======
-#Combining DEAD1-DEAD8 into DEADC - DEADC does not contain updates after 6 months
-data_clean_properDEADcode <- data_clean_properOCcode |> 
-  mutate(DEAD1 = if_else(DEAD1 == 1, "1", ""),
-         DEAD2 = if_else(DEAD2 == 1, "2", ""),
-         DEAD3 = if_else(DEAD3 == 1, "3", ""),
-         DEAD4 = if_else(DEAD4 == 1, "4", ""),
-         DEAD5 = if_else(DEAD5 == 1, "5", ""),
-         DEAD6 = if_else(DEAD6 == 1, "6", ""),
-         DEAD7 = if_else(DEAD7 == 1, "7", ""),
-         DEAD8 = if_else(DEAD8 == 1, "8", "")) |>
-  unite(DEADC, c(DEAD1,DEAD2,DEAD3,DEAD4,DEAD5,DEAD6,DEAD7,DEAD8), sep = "") |> 
-  mutate(DEADC = na_if(DEADC,""))
->>>>>>> 19ba95cda526ba33747e86b86cb8222bf993daf2
 ```
