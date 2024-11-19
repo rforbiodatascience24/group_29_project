@@ -112,7 +112,7 @@ data_5 |>
   geom_col(position = position_dodge(preserve = "single"),
            alpha = 0.7,
            color = "black") +
-  geom_text(aes(label = round(percentage, 2),
+  geom_text(aes(label = round(percentage, 2)),
             position = position_dodge(width = 0.9),
             vjust = -0.5,
             size = 3) +
