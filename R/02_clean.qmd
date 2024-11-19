@@ -4,7 +4,7 @@ format: html
 editor: visual
 ---
 
-# Data Cleaning
+# Data Cleaning MISSING EXTRA HEADER 3
 
 ## Loading libraries
 
@@ -22,7 +22,7 @@ data <- read_tsv("../data/_raw/01_dat_load.tsv")
 
 ## Data cleaning
 
-### Changing faulty characters to NA
+###  
 
 During revision of the data, many faulty characters of U and C appear within columns, only meant for Y or N. The U and C are therefore changed to NA to indicate a missing value.
 
