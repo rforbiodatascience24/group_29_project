@@ -22,18 +22,17 @@ raw_data <- read_csv(file = "https://datashare.ed.ac.uk/bitstream/handle/10283/1
 ## Saving data in a tsv format
 
 ```{r}
-#| echo: true
+#| echo: true 
 #| eval: true
 
 # Define the file path
-file_path <- "../data/_raw/"
+file_path <- "../data/_raw/" 
 if (!file.exists(file_path)){dir.create(file_path, recursive = TRUE)}
 
+#Create the directory if it doesn't exist
+if (!file.exists(file_path)) { dir.create(file_path, recursive = TRUE) }
 
-# Create the directory if it doesn't exist
-if (!file.exists(file_path)) {
-    dir.create(file_path, recursive = TRUE)
-}
-
-# Write the data to a TSV file
-write_tsv(x = raw_data, file = str_c(file_path, "01_dat_load.tsv"))
+#Write the data to a TSV file
+write_tsv(x = raw_data, 
+          file = str_c(file_path, "01_dat_load.tsv"))
+```
