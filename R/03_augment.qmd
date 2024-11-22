@@ -101,5 +101,5 @@ data_clean_groups <- data_clean_properDEADcode |>
 ## Saving augmented data
 
 ```{r}
-write_csv(data_clean_groups, file = "../data/03_dat_aug.tsv")
+write_tsv(data_clean_groups, file = "../data/03_dat_aug.tsv")
 ```
