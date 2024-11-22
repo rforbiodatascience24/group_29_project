@@ -11,3 +11,92 @@ editor: visual
 Effects of anticoagulants during the scheduled treatment period (mostly about 14 days) in completed unconfounded randomised trials in acute ischaemic stroke on: (a) recurrent ischaemic stroke, (b) haemorrhagic stroke, (c) death from any cause or non-fatal stroke (non-fatal stroke includes non-fatal recurrent strokes of ischaemic or unknown type and haemorrhagic strokes). The overall results of the 95% CI is represented by diamonds.
 
 ![](images/clipboard-3530018570.png){width="336"}
+
+## Loading libraries
+
+```{r}
+#| eval: true
+library(ggplot2)
+library(dplyr)
+library(readr)
+```
+
+## Import the dataset
+
+```{r}
+
+# Load the dataset
+dataset <- read_csv("../data/03_dat_aug.tsv")
+```
+
+## Prepare the data
+
+```{r}
+
+# Prepare data
+summary <- dataset |> 
+  group_by(DH14) |>   # Group by subgroups
+  summarize(
+    Events = sum(as.numeric(DEADC), na.rm = TRUE),  # Sum events for each subgroup
+    Total = n(),  # Total population in each subgroup
+    NonEvents = Total - Events  # Calculate non-events
+  ) |> 
+  mutate(
+    Odds = Events / NonEvents,  # Calculate odds
+    Reference_Odds = first(Odds),  # Reference odds (assume first group is control)
+    Odds_Ratio = Odds / Reference_Odds,  # Calculate odds ratio
+    Variance = 1 / Events + 1 / NonEvents +
+               1 / first(Events) + 1 / first(NonEvents),  # Variance for confidence intervals
+    CI_Lower = exp(log(Odds_Ratio) - 1.96 * sqrt(Variance)),  # Lower bound of 95% CI
+    CI_Upper = exp(log(Odds_Ratio) + 1.96 * sqrt(Variance)),  # Upper bound of 95% CI
+    Reduction = paste0(round((1 - Odds_Ratio) * 100, 1), "% ↓")  # Calculate percentage reduction
+  )
+
+# Display the summary table
+print(summary)
+```
+
+## Recreate figure 3
+
+```{r}
+
+# Create forest plot
+forest_plot <- ggplot(summary, aes(x = Odds_Ratio, y = DH14)) +
+  geom_point(size = 4) +  # Add points for odds ratios
+  geom_errorbarh(aes(xmin = CI_Lower, xmax = CI_Upper), height = 0.2) +  # Add error bars
+  geom_text(aes(label = Reduction), hjust = -0.2, size = 3) +  # Annotate percentage reduction
+  scale_x_log10(limits = c(0.5, 2)) +  # Log scale for odds ratios
+  labs(
+    title = "Anticoagulant vs Control",
+    x = "Anticoagulant Better                 Anticoagulant Worse",
+    y = "Subgroup"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.y = element_text(size = 10),
+    axis.title.x = element_text(size = 10, face = "bold"),
+    plot.title = element_text(hjust = 0.5, size = 12, face = "bold")
+  )
+
+# Print the plot
+print(forest_plot)
+
+```
+
+### **Add Supporting Table**
+
+Combine the summary table and the forest plot:
+
+```{r}
+library(gridExtra)
+
+# Create a table of summary statistics
+table <- tableGrob(summary |> 
+                     select(DH14, Odds_Ratio, CI_Lower, CI_Upper, Reduction), 
+                   rows = NULL)
+
+# Arrange the table and plot side by side
+
+grid.arrange(forest_plot, table, ncol = 2)
+
+```
