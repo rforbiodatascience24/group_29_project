@@ -106,7 +106,8 @@ data_clean_groups |>
     DDIAGISC == "Y" ~ "DDIAGISC",
     DDIAGHA == "Y" ~ "DDIAGHA",
     DDIAGUN == "Y" ~ "DDIAGUN",
-    DNOSTRK == "Y" ~ "DNOSTRK"))
+    DNOSTRK == "Y" ~ "DNOSTRK",
+    TRUE ~ NA))
 ```
 
 ## Saving augmented data
