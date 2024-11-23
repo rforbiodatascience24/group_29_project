@@ -4,10 +4,147 @@ format: html
 editor: visual
 ---
 
-## Data Analysis
+# Data Analysis
 
 Creation of the big plot - figure 2:
 
 The CI of the different treatments looking at different subgroups in the data. Pay note that some of the groups are represented by a 95% CI and others has a 99% CI. The 99% CI is used for all the subgroups, while the 95% CI is for the main group. Size of square refer to the amount of available information (the sample size).
 
 ![](images/clipboard-1327647554.png)
+
+## Loading libraries
+
+```{r}
+library("tidyverse")
+```
+
+## Loading data
+
+```{r}
+data <- read_tsv("../data/03_dat_aug.tsv")
+```
+
+## Heparin vs. Control Subgroup Analysis
+
+Heparin VS control - by the RXHEP variable
+
+Aspirin VS control - by the RXASP variable
+
+The outcomes are either fully recovered or not recovered (both independent) OR dependent or dead from any cause (dead or dependent)
+
+So the two subgroups trial aspirin
+
+Heparin+ trial aspirin : RXHEP = L/M & RXASP = Y - control = RXHEP = N & RXASP = Y
+
+Heparin+ no trial aspirin: RXHEP = L/M & RXASP = N. - control = RXHEP = N & RXASP = N
+
+```{r}
+data_slim <- data |>
+  mutate("Heparin" = case_when(
+    RXHEP == 'L' ~ 'Y',
+    RXHEP == 'M' ~ 'Y',
+    RXHEP == 'N' ~ 'N',
+    is.na(RXHEP) ~ NA)) |>
+  mutate("Outcome" = case_when(
+    OCCODE == "dead" ~ "dead/dependent",
+    OCCODE == "dependent" ~ "dead/dependent",
+    OCCODE == "not recovered" ~ "independent",
+    OCCODE == "recovered" ~ "independent",
+    is.na(OCCODE) ~ NA
+  )) |> 
+  mutate("RDELAY_group" = case_when(
+    RDELAY <= 8 ~ "0-8h",
+    RDELAY <= 12 ~ "9-12h",
+    RDELAY <= 24 ~ "13-24h",
+    RDELAY <= 48 ~ "25-48h",
+    TRUE ~ NA)) |> 
+  mutate("AGE_group" = case_when(
+    AGE <= 75 ~ "≤75",
+    AGE > 75 ~ ">75"
+  )) |> 
+  mutate("RSBP_group" = case_when(
+    RSBP <= 180 ~ "≤180",
+    RSBP > 180 ~ ">180")) |> 
+  mutate("EXPDD_group" = case_when(
+    EXPDD <= 0.4 ~ "0-40%",
+    EXPDD <= 0.65 ~ "40-65%",
+    EXPDD <= 0.90 ~ "65-90%",
+    EXPDD <= 1 ~ "90-100%")) |> 
+  select(Heparin,Outcome,RXASP,RDELAY_group,SEX,AGE_group,RSLEEP,RCONSC,RATRIAL,RSBP_group,STYPE,RDEF3,RCT,RVISINF,DDIAG,RASP3,RHEP24,EXPDD_group)
+```
+
+```{r}
+data_nested <- data_slim |> 
+  pivot_longer(cols = -c(Heparin,Outcome), names_to = "group", values_to = "subgroup") |>
+  drop_na() |> 
+  group_by(Heparin,Outcome,group,subgroup) |> 
+  count() |> 
+  mutate(n = n/1000) |> 
+  group_by(group,subgroup) |> 
+  nest() |> 
+  ungroup()
+```
+
+
+```{r}
+data_statistics <- data_nested |>
+    mutate(data = map(.x = data, 
+                      .f = ~ .x |> 
+                        pivot_wider(
+                          names_from = Outcome,
+                          values_from = n))) |> 
+  mutate(Total_dead = map_dbl(.x = data,
+                              .f = ~sum(.x |> pull(`dead/dependent`))),
+         Total_patients = map_dbl(.x = data,
+                                  .f = ~sum(.x |> pull(`dead/dependent`))+sum(.x |> pull(independent))),
+         Dead_rate = Total_dead / Total_patients) |> 
+  mutate(data = map2(.x = data,
+                     .y = Dead_rate,
+                     .f = ~ .x |>
+                       mutate(Expected_deaths = .y*(`dead/dependent`+independent)))) |>
+  mutate(E = map_dbl(.x = data,
+                     .f = ~ .x |>
+                       select(Heparin,Expected_deaths) |> 
+                       pivot_wider(
+                         names_from = Heparin,
+                         values_from = Expected_deaths) |>
+                       mutate(difference = Y - N) |> 
+                       pull(difference))) |> 
+  mutate(O = map_dbl(.x = data,
+                     .f = ~ .x |> 
+                       select(Heparin,`dead/dependent`) |> 
+                       pivot_wider(
+                         names_from = Heparin,
+                         values_from = `dead/dependent`) |>
+                       mutate(difference = Y - N) |> 
+                       pull(difference))) |> 
+  mutate(V = map_dbl(.x = data,
+                     .f = ~ .x |> 
+                       mutate(inv_dead = 1/`dead/dependent`,
+                              inv_alive = 1/independent) |> 
+                       summarise(total = sum(inv_dead) + sum(inv_alive)) |>
+                       pull(total)))
+```
+
+```{r}
+k <- 0.207
+alpha <- 0.99
+
+data_CI <- data_statistics |> 
+  mutate(Ad_ben = k*(O-E),
+         std_dev = k*sqrt(V),
+         CI_lower = Ad_ben - qnorm(alpha/2)*std_dev,
+         CI_upper = Ad_ben + qnorm(alpha/2)*std_dev) |> 
+  unite(group_name, c(group,subgroup))
+```
+
+```{r}
+data_CI |> 
+  ggplot(aes(x = Ad_ben,
+             y = group_name,
+             xmin = CI_lower,
+             xmax = CI_upper))+
+  geom_point()+
+  geom_errorbarh()
+```
+

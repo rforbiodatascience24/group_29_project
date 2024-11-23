@@ -101,7 +101,7 @@ data_clean_groups <- data_clean_properDEADcode |>
 There are four different columns in the data which all represents the final diagnosis of the initial event. It is fair to assume that if one final diagnosis is made of an intial event then another diagnosis is not made, as there are no data entries which has "Y" in more than one of the diagnosis. One column, DDIAG, is therfore made to represent the final diagnosis of the initial event.
 
 ```{r}
-data_clean_groups |> 
+data_clean_groups <- data_clean_groups |> 
   mutate("DDIAG" = case_when(
     DDIAGISC == "Y" ~ "DDIAGISC",
     DDIAGHA == "Y" ~ "DDIAGHA",
