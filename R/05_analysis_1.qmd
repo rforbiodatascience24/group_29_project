@@ -26,17 +26,7 @@ data <- read_tsv("../data/03_dat_aug.tsv")
 
 ## Heparin vs. Control Subgroup Analysis
 
-Heparin VS control - by the RXHEP variable
-
-Aspirin VS control - by the RXASP variable
-
-The outcomes are either fully recovered or not recovered (both independent) OR dependent or dead from any cause (dead or dependent)
-
-So the two subgroups trial aspirin
-
-Heparin+ trial aspirin : RXHEP = L/M & RXASP = Y - control = RXHEP = N & RXASP = Y
-
-Heparin+ no trial aspirin: RXHEP = L/M & RXASP = N. - control = RXHEP = N & RXASP = N
+### Data augmentation - Creating the desired subgroups
 
 ```{r}
 data_slim <- data |>
@@ -73,6 +63,8 @@ data_slim <- data |>
   select(Heparin,Outcome,RXASP,RDELAY_group,SEX,AGE_group,RSLEEP,RCONSC,RATRIAL,RSBP_group,STYPE,RDEF3,RCT,RVISINF,DDIAG,RASP3,RHEP24,EXPDD_group)
 ```
 
+### Data augmentation - Calculating the statistics used in the plot
+
 ```{r}
 data_nested <- data_slim |> 
   pivot_longer(cols = -c(Heparin,Outcome), names_to = "group", values_to = "subgroup") |>
@@ -84,7 +76,6 @@ data_nested <- data_slim |>
   nest() |> 
   ungroup()
 ```
-
 
 ```{r}
 data_statistics <- data_nested |>
@@ -138,13 +129,72 @@ data_CI <- data_statistics |>
   unite(group_name, c(group,subgroup))
 ```
 
+### Data Illustration
+
+First the group labels are created for the plot
+
 ```{r}
-data_CI |> 
+full_labels <-  c(
+  "AGE_group_>75" = "Age >75", 
+  "AGE_group_≤75" = "Age ≤75",
+  "DDIAG_DDIAGHA" = "Final diagnosis: Haemorrhagic stroke",
+  "DDIAG_DDIAGISC" = "Final diagnosis: Ischaemic stroke",
+  "DDIAG_DDIAGUN" = "Final diagnosis: Indeterminate stroke",
+  "DDIAG_DNOSTRK" = "Final diagnosis: Not a stroke",
+  "EXPDD_group_0-40%" = "Predicted probability of death/dependence at 6 month: 0-40%",
+  "EXPDD_group_40-65%" = "Predicted probability of death/dependence at 6 month: 40-65%",
+  "EXPDD_group_65-90%" = "Predicted probability of death/dependence at 6 month: 65-90%",
+  "EXPDD_group_90-100%" = "Predicted probability of death/dependence at 6 month: 90-100%",
+  "RASP3_N" = "No aspirin within 3 days prior to randomisation",
+  "RASP3_Y" = "Aspirin within 3 days prior to randomisation",
+  "RHEP24_N" = "No heparin within 24 hours prior to randomisation",
+  "RHEP24_Y" = "Heparin within 24 hours prior to randomisation",
+  "RATRIAL_N" = "No atrial fibrillation",
+  "RATRIAL_Y" = "Atrial fibrillation",
+  "RCONSC_D" = "Drowsy state at randomisation",
+  "RCONSC_F" = "Fully alert at randomisation",
+  "RCONSC_U" = "Unconcious at randomisation",
+  "RCT_N" = "No CT before randomisation",
+  "RCT_Y" = "CT before randomisation",
+  "RDEF3_N" = "No leg/foot deficit",
+  "RDEF3_Y" = "Leg/foot deficit",
+  "RDELAY_group_0-8h" = "0-8 hour delay between stroke and randomisation",
+  "RDELAY_group_9-12h" = "9-12 hour delay between stroke and randomisation",
+  "RDELAY_group_13-24h" = "13-24 hour delay between stroke and randomisation",
+  "RDELAY_group_25-48h" = "25-48 hour delay between stroke and randomisation",
+  "RSBP_group_≤180" = "Systolic blood pressure under 180mmHg at randomisation",
+  "RSBP_group_>180" = "Systolic blood pressure over 180mmHg at randomisation",
+  "RSLEEP_N" = "Symptoms appearing while awake",
+  "RSLEEP_Y" = "Symptoms appearing while asleep",
+  "RVISINF_N" = "No infarct visible on CT",
+  "RVISINF_Y" = "Infarct visible on CT",
+  "RXASP_N" = "No trial aspirin allocated",
+  "RXASP_Y" = "Trial aspirin allocated",
+  "SEX_F" = "Female",
+  "SEX_M" = "Male",
+  "STYPE_LACS" = "Stroke subtype: Lacunar syndrome",
+  "STYPE_PACS" = "Stroke subtype: Partial anterior circulation syndrome",
+  "STYPE_POCS" = "Stroke subtype: Posterior circulation syndrome",
+  "STYPE_TACS" = "Stroke subtype: Total anterior circulation syndrome",
+  "STYPE_OTH" = "Stroke subtype: Other")
+```
+
+The plot is created similarly to the figure 2 in the data
+
+```{r}
+p1 <- data_CI |> 
   ggplot(aes(x = Ad_ben,
              y = group_name,
              xmin = CI_lower,
              xmax = CI_upper))+
-  geom_point()+
-  geom_errorbarh()
+  geom_point(aes(size = Total_patients),shape = 15)+
+  geom_errorbarh(color = "blue")+
+  geom_vline(xintercept = 0, color = "grey", linetype = 2)+
+  scale_y_discrete(labels = full_labels)+
+  scale_size_continuous(range = c(1,3))+
+  labs(x = "Reductions in odds of being dead or dependent at six months for heparin versus no heparin",
+       size = "Group size (in 1000 patients)")+
+  theme_minimal()+
+  theme(axis.title.y = element_blank(),
+        legend.position = "bottom")
 ```
-
