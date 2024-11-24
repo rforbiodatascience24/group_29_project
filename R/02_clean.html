@@ -6,9 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Group 29">
 
-<title>01_load</title>
+<title>02_clean</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -58,16 +57,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="01_load_files/libs/clipboard/clipboard.min.js"></script>
-<script src="01_load_files/libs/quarto-html/quarto.js"></script>
-<script src="01_load_files/libs/quarto-html/popper.min.js"></script>
-<script src="01_load_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="01_load_files/libs/quarto-html/anchor.min.js"></script>
-<link href="01_load_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="01_load_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="01_load_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="01_load_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="01_load_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="02_clean_files/libs/clipboard/clipboard.min.js"></script>
+<script src="02_clean_files/libs/quarto-html/quarto.js"></script>
+<script src="02_clean_files/libs/quarto-html/popper.min.js"></script>
+<script src="02_clean_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="02_clean_files/libs/quarto-html/anchor.min.js"></script>
+<link href="02_clean_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="02_clean_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="02_clean_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="02_clean_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="02_clean_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 
 
 </head>
@@ -80,19 +79,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">01_load</h1>
+<h1 class="title">02_clean</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Group 29 </p>
-          </div>
-  </div>
     
   
     
@@ -103,8 +96,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="loading-relevant-libraries" class="level2">
-<h2 class="anchored" data-anchor-id="loading-relevant-libraries">Loading relevant libraries</h2>
+<section id="data-cleaning-missing-extra-header-3" class="level1">
+<h1>Data Cleaning MISSING EXTRA HEADER 3</h1>
+<section id="loading-libraries" class="level2">
+<h2 class="anchored" data-anchor-id="loading-libraries">Loading libraries</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"tidyverse"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
@@ -149,23 +144,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 ✖ dplyr::lag()    masks stats::lag()
 ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"here"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'here' was built under R version 4.2.3</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>here() starts at C:/Users/frede/OneDrive/Dokumenter/2 DTU master/1 Semester/22160 R for Bio Data Science/group_29_project</code></pre>
-</div>
 </div>
 </section>
-<section id="loading-relevant-data" class="level2">
-<h2 class="anchored" data-anchor-id="loading-relevant-data">Loading relevant data</h2>
+<section id="loading-data" class="level2">
+<h2 class="anchored" data-anchor-id="loading-data">Loading data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>raw_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="at">file =</span> <span class="st">"https://datashare.ed.ac.uk/bitstream/handle/10283/124/IST_corrected.csv?sequence=5&amp;isAllowed=y"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">"../data/_raw/01_dat_load.tsv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Rows: 19435 Columns: 112
 ── Column specification ────────────────────────────────────────────────────────
-Delimiter: ","
+Delimiter: "\t"
 chr (63): RCONSC, SEX, RSLEEP, RATRIAL, RCT, RVISINF, RHEP24, RASP3, RDEF1, ...
 dbl (49): HOSPNUM, RDELAY, AGE, RSBP, HOURLOCAL, MINLOCAL, DAYLOCAL, ONDRUG,...
 
@@ -174,20 +162,91 @@ dbl (49): HOSPNUM, RDELAY, AGE, RSBP, HOURLOCAL, MINLOCAL, DAYLOCAL, ONDRUG,...
 </div>
 </div>
 </section>
-<section id="saving-data-in-a-tsv-format" class="level2">
-<h2 class="anchored" data-anchor-id="saving-data-in-a-tsv-format">Saving data in a tsv format</h2>
+<section id="data-cleaning" class="level2">
+<h2 class="anchored" data-anchor-id="data-cleaning">Data cleaning</h2>
+<section id="section" class="level3">
+<h3 class="anchored" data-anchor-id="section"></h3>
+<p>During revision of the data, many faulty characters of U and C appear within columns, only meant for Y or N. The U and C are therefore changed to NA to indicate a missing value.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the file path</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>file_path <span class="ot">&lt;-</span> <span class="st">"../data/_raw/"</span> </span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">file.exists</span>(file_path)){<span class="fu">dir.create</span>(file_path, <span class="at">recursive =</span> <span class="cn">TRUE</span>)}</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Create the directory if it doesn't exist</span></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">file.exists</span>(file_path)) { <span class="fu">dir.create</span>(file_path, <span class="at">recursive =</span> <span class="cn">TRUE</span>) }</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="co">#Write the data to a TSV file</span></span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="fu">write_tsv</span>(<span class="at">x =</span> raw_data, </span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>          <span class="at">file =</span> <span class="fu">str_c</span>(file_path, <span class="st">"01_dat_load.tsv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>data_clean <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Replacing all C with NA to indicate missing value</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.character), <span class="sc">~</span> <span class="fu">na_if</span>(.,<span class="st">"C"</span>))) <span class="sc">|&gt;</span> </span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Replace all U and u with NA in all columns except for RCONSC, where U = unconscious</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">RCONSC =</span> <span class="fu">if_else</span>(RCONSC <span class="sc">==</span> <span class="st">"U"</span>, <span class="st">"unconscious"</span>, RCONSC)) <span class="sc">|&gt;</span> </span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.character), <span class="sc">~</span><span class="fu">na_if</span>(.,<span class="st">"U"</span>)),</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>         <span class="fu">across</span>(<span class="fu">where</span>(is.character), <span class="sc">~</span><span class="fu">na_if</span>(.,<span class="st">"u"</span>))) <span class="sc">|&gt;</span> </span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">RCONSC =</span> <span class="fu">if_else</span>(RCONSC <span class="sc">==</span> <span class="st">"unconscious"</span>, <span class="st">"U"</span>, RCONSC))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>In column DASP14 and FAP, both n and N along with y and Y both indicating No and Yes respectively. To match the general synthax, all letters are made upper case</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Making y and n upper case</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>data_clean_high <span class="ot">&lt;-</span> data_clean <span class="sc">|&gt;</span> </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">c</span>(DASP14,FAP), <span class="sc">~</span><span class="fu">str_to_upper</span>(.)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In the two columns minlocal and hourlocal the local time of the randomization study initiation is annotated. This value is not allowed to be higher than 59 min and 23 hours. All values above this is set to NA for missing values.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Replacing all values above 59 in minute and hour with NA</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>data_clean_truetime <span class="ot">&lt;-</span> data_clean_high <span class="sc">|&gt;</span> </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">MINLOCAL =</span> <span class="fu">if_else</span>(MINLOCAL <span class="sc">&gt;</span> <span class="dv">59</span>, <span class="cn">NA</span>, MINLOCAL),</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">HOURLOCAL =</span> <span class="fu">if_else</span>(HOURLOCAL <span class="sc">&gt;</span> <span class="dv">23</span>, <span class="cn">NA</span>, HOURLOCAL))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>For the pilot study, medium dose of heparin is annotated as high dose. The high dose annotation is changed to medium dose annotation, and the two columns for medium dose of pilot study and following study is merged.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Replacing all H for M for indicating medium dose (Heparin)</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>data_clean_noH <span class="ot">&lt;-</span> data_clean_truetime <span class="sc">|&gt;</span> </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">RXHEP =</span> <span class="fu">if_else</span>(RXHEP <span class="sc">==</span> <span class="st">"H"</span>,<span class="st">"M"</span>,RXHEP))</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Merging the Hep high and hep medium column, changing unknown to NA</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>data_clean_correctHepDose <span class="ot">&lt;-</span> data_clean_noH <span class="sc">|&gt;</span> </span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">c</span>(DMH14,DHH14), <span class="sc">~</span><span class="fu">replace_na</span>(.,<span class="st">""</span>))) <span class="sc">|&gt;</span> </span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unite</span>(DMH14, <span class="fu">c</span>(DMH14,DHH14), <span class="at">sep =</span> <span class="st">""</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">DMH14 =</span> <span class="fu">na_if</span>(DMH14,<span class="st">""</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">c</span>(DMH14,DLH14), <span class="sc">~</span><span class="fu">na_if</span>(., <span class="st">"U"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To align the synthax across the columns, the columns DVT14, H14,DDEAD, HTI14, ID14, ISC14, NCB14, NK14, PE14, TRAN14, which have values 0 = no and 1 = yes, will therefore be transformed to N = no and Y = yes.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>data_clean_annotationalign <span class="ot">&lt;-</span> data_clean_correctHepDose <span class="sc">|&gt;</span> </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">c</span>(DVT14,H14,DDEAD,HTI14,ID14,ISC14,NCB14,NK14,PE14,TRAN14,STRK14), </span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>                <span class="sc">~</span><span class="fu">case_when</span>(</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>                  . <span class="sc">==</span> <span class="dv">0</span> <span class="sc">~</span> <span class="st">"N"</span>,</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>                  . <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">"Y"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The variable STRK14 is annotated as STR14 in the data description, and the column is therefore renamed accordingly</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>data_clean_annotationalign <span class="ot">&lt;-</span> data_clean_annotationalign <span class="sc">|&gt;</span> </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"STR14"</span> <span class="ot">=</span> STRK14)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In the variable SET14D, a 0 is indicating that it is not known if the subject is alive or dead at the 14 day checkup. We therefore want to change the 0 to NA, indicating that this information is not known.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>data_clean_NAintro <span class="ot">&lt;-</span> data_clean_annotationalign <span class="sc">|&gt;</span> </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">SET14D =</span> <span class="fu">if_else</span>(SET14D <span class="sc">==</span> <span class="dv">0</span>, <span class="cn">NA</span>, SET14D))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In the RDATE variable, all times are annotated as polish months and year. We aim to convert this information in two columns, and reencode the polish to english months</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>data_clean_english <span class="ot">&lt;-</span> data_clean_NAintro <span class="sc">|&gt;</span> </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_wider_delim</span>(RDATE,<span class="at">delim =</span> <span class="st">"-"</span>, <span class="at">names =</span> <span class="fu">c</span>(<span class="st">"RMONTH"</span>,<span class="st">"RYEAR"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">RMONTH =</span> <span class="fu">case_when</span>(</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    RMONTH <span class="sc">==</span> <span class="st">"sty"</span> <span class="sc">~</span> <span class="st">"Jan"</span>,</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    RMONTH <span class="sc">==</span> <span class="st">"lut"</span> <span class="sc">~</span> <span class="st">"Feb"</span>,</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    RMONTH <span class="sc">==</span> <span class="st">"mar"</span> <span class="sc">~</span> <span class="st">"Mar"</span>,</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    RMONTH <span class="sc">==</span> <span class="st">"kwi"</span> <span class="sc">~</span> <span class="st">"Apr"</span>,</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    RMONTH <span class="sc">==</span> <span class="st">"maj"</span> <span class="sc">~</span> <span class="st">"May"</span>,</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    RMONTH <span class="sc">==</span> <span class="st">"cze"</span> <span class="sc">~</span> <span class="st">"Jun"</span>,</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>    RMONTH <span class="sc">==</span> <span class="st">"lip"</span> <span class="sc">~</span> <span class="st">"Jul"</span>,</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>    RMONTH <span class="sc">==</span> <span class="st">"sie"</span> <span class="sc">~</span> <span class="st">"Aug"</span>,</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>    RMONTH <span class="sc">==</span> <span class="st">"wrz"</span> <span class="sc">~</span> <span class="st">"Sep"</span>,</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>    RMONTH <span class="sc">==</span> <span class="st">"pa</span><span class="sc">\x9f</span><span class="st">"</span> <span class="sc">~</span> <span class="st">"Oct"</span>,</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>    RMONTH <span class="sc">==</span> <span class="st">"lis"</span> <span class="sc">~</span> <span class="st">"Nov"</span>,</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>    RMONTH <span class="sc">==</span> <span class="st">"gru"</span> <span class="sc">~</span> <span class="st">"Dec"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="saving-final-clean-data" class="level2">
+<h2 class="anchored" data-anchor-id="saving-final-clean-data">Saving final clean data</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_tsv</span>(data_clean_english, <span class="at">file =</span> <span class="st">"../data/02_dat_clean.tsv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
 </section>
 
 </main>

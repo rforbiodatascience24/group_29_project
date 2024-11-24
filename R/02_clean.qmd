@@ -22,7 +22,7 @@ data <- read_tsv("../data/_raw/01_dat_load.tsv")
 
 ## Data cleaning
 
-###  
+### 
 
 During revision of the data, many faulty characters of U and C appear within columns, only meant for Y or N. The U and C are therefore changed to NA to indicate a missing value.
 

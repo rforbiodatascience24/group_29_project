@@ -197,4 +197,6 @@ p1 <- data_CI |>
   theme_minimal()+
   theme(axis.title.y = element_blank(),
         legend.position = "bottom")
+
+p1
 ```

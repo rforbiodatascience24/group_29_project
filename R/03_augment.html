@@ -6,9 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Group 29">
 
-<title>01_load</title>
+<title>03_augment</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -58,16 +57,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="01_load_files/libs/clipboard/clipboard.min.js"></script>
-<script src="01_load_files/libs/quarto-html/quarto.js"></script>
-<script src="01_load_files/libs/quarto-html/popper.min.js"></script>
-<script src="01_load_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="01_load_files/libs/quarto-html/anchor.min.js"></script>
-<link href="01_load_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="01_load_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="01_load_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="01_load_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="01_load_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="03_augment_files/libs/clipboard/clipboard.min.js"></script>
+<script src="03_augment_files/libs/quarto-html/quarto.js"></script>
+<script src="03_augment_files/libs/quarto-html/popper.min.js"></script>
+<script src="03_augment_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="03_augment_files/libs/quarto-html/anchor.min.js"></script>
+<link href="03_augment_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="03_augment_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="03_augment_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="03_augment_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="03_augment_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 
 
 </head>
@@ -80,19 +79,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">01_load</h1>
+<h1 class="title">03_augment</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Group 29 </p>
-          </div>
-  </div>
     
   
     
@@ -103,8 +96,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="loading-relevant-libraries" class="level2">
-<h2 class="anchored" data-anchor-id="loading-relevant-libraries">Loading relevant libraries</h2>
+<section id="data-augmentation" class="level1">
+<h1>Data Augmentation</h1>
+<section id="loading-libraries" class="level2">
+<h2 class="anchored" data-anchor-id="loading-libraries">Loading libraries</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"tidyverse"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
@@ -149,45 +144,107 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 ✖ dplyr::lag()    masks stats::lag()
 ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"here"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'here' was built under R version 4.2.3</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>here() starts at C:/Users/frede/OneDrive/Dokumenter/2 DTU master/1 Semester/22160 R for Bio Data Science/group_29_project</code></pre>
-</div>
 </div>
 </section>
-<section id="loading-relevant-data" class="level2">
-<h2 class="anchored" data-anchor-id="loading-relevant-data">Loading relevant data</h2>
+<section id="loading-clean-data" class="level2">
+<h2 class="anchored" data-anchor-id="loading-clean-data">Loading clean data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>raw_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="at">file =</span> <span class="st">"https://datashare.ed.ac.uk/bitstream/handle/10283/124/IST_corrected.csv?sequence=5&amp;isAllowed=y"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>data_clean <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="at">file =</span> <span class="st">"../data/02_dat_clean.tsv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Rows: 19435 Columns: 112
 ── Column specification ────────────────────────────────────────────────────────
-Delimiter: ","
-chr (63): RCONSC, SEX, RSLEEP, RATRIAL, RCT, RVISINF, RHEP24, RASP3, RDEF1, ...
-dbl (49): HOSPNUM, RDELAY, AGE, RSBP, HOURLOCAL, MINLOCAL, DAYLOCAL, ONDRUG,...
+Delimiter: "\t"
+chr (71): RCONSC, SEX, RSLEEP, RATRIAL, RCT, RVISINF, RHEP24, RASP3, RDEF1, ...
+dbl (40): HOSPNUM, RDELAY, AGE, RSBP, RYEAR, HOURLOCAL, MINLOCAL, DAYLOCAL, ...
+lgl  (1): DDEAD
 
 ℹ Use `spec()` to retrieve the full column specification for this data.
 ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 </div>
 </div>
 </section>
-<section id="saving-data-in-a-tsv-format" class="level2">
-<h2 class="anchored" data-anchor-id="saving-data-in-a-tsv-format">Saving data in a tsv format</h2>
+<section id="data-augmentation-1" class="level2">
+<h2 class="anchored" data-anchor-id="data-augmentation-1">Data augmentation</h2>
+<p>Some columns is already known to not be relevant. These will therefore be removed to reduce the space of the column.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the file path</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>file_path <span class="ot">&lt;-</span> <span class="st">"../data/_raw/"</span> </span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">file.exists</span>(file_path)){<span class="fu">dir.create</span>(file_path, <span class="at">recursive =</span> <span class="cn">TRUE</span>)}</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Create the directory if it doesn't exist</span></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">file.exists</span>(file_path)) { <span class="fu">dir.create</span>(file_path, <span class="at">recursive =</span> <span class="cn">TRUE</span>) }</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="co">#Write the data to a TSV file</span></span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="fu">write_tsv</span>(<span class="at">x =</span> raw_data, </span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>          <span class="at">file =</span> <span class="fu">str_c</span>(file_path, <span class="st">"01_dat_load.tsv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>data_clean <span class="ot">&lt;-</span> data_clean <span class="sc">|&gt;</span> </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Removing comment columns</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(DMAJNCHX,DNOSTRKX,DSIDEX,DDEADX,FDEADX)) <span class="sc">|&gt;</span> </span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Removing columns which are not interesting for our studies</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(HOSPNUM,CNTRYNUM,SET14D,NCCODE)) <span class="sc">|&gt;</span> </span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Removing column which have unknown meaning as not included in variable descriptions</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(DIED))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>DLH14 describes if the subject had a low dose of heparin (Yes/No), DMH14 describes if the subject had a medium dose of heparin (Yes/No), given for 14 days or till death/discharge. We want to merge the two columns into one to improve tidyness, Introduce L for low, M for medium, C for control (no Heparin) and NA for no known information or conflicting information in the two columns.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>data_clean_hepgroups <span class="ot">&lt;-</span> data_clean <span class="sc">|&gt;</span> </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"DH14"</span> <span class="ot">=</span> <span class="fu">case_when</span>(</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    (<span class="fu">is.na</span>(DLH14) <span class="sc">&amp;</span> <span class="fu">is.na</span>(DMH14)) <span class="sc">~</span> <span class="cn">NA</span>,</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    (DLH14 <span class="sc">==</span> <span class="st">"Y"</span> <span class="sc">&amp;</span> DMH14 <span class="sc">==</span> <span class="st">"Y"</span>) <span class="sc">~</span> <span class="cn">NA</span>,</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    (DLH14 <span class="sc">==</span> <span class="st">"N"</span> <span class="sc">&amp;</span> DMH14 <span class="sc">==</span> <span class="st">"N"</span>) <span class="sc">~</span> <span class="st">"C"</span>,</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    (DLH14 <span class="sc">==</span> <span class="st">"Y"</span> <span class="sc">&amp;</span> DMH14 <span class="sc">==</span> <span class="st">"N"</span>) <span class="sc">~</span> <span class="st">"L"</span>,</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    (DLH14 <span class="sc">==</span> <span class="st">"N"</span> <span class="sc">&amp;</span> DMH14 <span class="sc">==</span> <span class="st">"Y"</span>) <span class="sc">~</span> <span class="st">"M"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The numbers 1-8 is used for naming cause of death. Therefore OCCODE is renamed to the actual meanings of the numbers 0-9 to prevent confusion to number code in cause of death.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>data_clean_properOCcode <span class="ot">&lt;-</span> data_clean_hepgroups <span class="sc">|&gt;</span> </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">OCCODE =</span> <span class="fu">case_when</span>(</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    OCCODE <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">8</span>,<span class="dv">9</span>) <span class="sc">~</span> <span class="cn">NA</span>,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    OCCODE <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">"dead"</span>,</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    OCCODE <span class="sc">==</span> <span class="dv">2</span> <span class="sc">~</span> <span class="st">"dependent"</span>,</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    OCCODE <span class="sc">==</span> <span class="dv">3</span> <span class="sc">~</span> <span class="st">"not recovered"</span>,</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    OCCODE <span class="sc">==</span> <span class="dv">4</span> <span class="sc">~</span> <span class="st">"recovered"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The columns DDEADD and FDEADD are the same, as the value is the date of death of the subject, which is independent of when the checkup is done. The columns are therefore renamed to DEADD (deathdate) and one of the columns are removed.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Removing ambigious columns</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>data_clean_properdeath <span class="ot">&lt;-</span>  data_clean_properOCcode <span class="sc">|&gt;</span> </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"DEADD"</span> <span class="ot">=</span> DDEADD) <span class="sc">|&gt;</span> </span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>FDEADD)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The causes of death at 6 months are split into 8 different columns called DEAD1-8. To have more tidy data, all columns are merged together into one column, using the same 1-8 code for cause of death as DDEADC and FDEADC columns. The new column is called DEADC (death cause)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>data_clean_properDEADcode <span class="ot">&lt;-</span> data_clean_properdeath <span class="sc">|&gt;</span> </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">DEAD1 =</span> <span class="fu">if_else</span>(DEAD1 <span class="sc">==</span> <span class="dv">1</span>, <span class="st">"1"</span>, <span class="st">""</span>),</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">DEAD2 =</span> <span class="fu">if_else</span>(DEAD2 <span class="sc">==</span> <span class="dv">1</span>, <span class="st">"2"</span>, <span class="st">""</span>),</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">DEAD3 =</span> <span class="fu">if_else</span>(DEAD3 <span class="sc">==</span> <span class="dv">1</span>, <span class="st">"3"</span>, <span class="st">""</span>),</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">DEAD4 =</span> <span class="fu">if_else</span>(DEAD4 <span class="sc">==</span> <span class="dv">1</span>, <span class="st">"4"</span>, <span class="st">""</span>),</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">DEAD5 =</span> <span class="fu">if_else</span>(DEAD5 <span class="sc">==</span> <span class="dv">1</span>, <span class="st">"5"</span>, <span class="st">""</span>),</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">DEAD6 =</span> <span class="fu">if_else</span>(DEAD6 <span class="sc">==</span> <span class="dv">1</span>, <span class="st">"6"</span>, <span class="st">""</span>),</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">DEAD7 =</span> <span class="fu">if_else</span>(DEAD7 <span class="sc">==</span> <span class="dv">1</span>, <span class="st">"7"</span>, <span class="st">""</span>),</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">DEAD8 =</span> <span class="fu">if_else</span>(DEAD8 <span class="sc">==</span> <span class="dv">1</span>, <span class="st">"8"</span>, <span class="st">""</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unite</span>(DEADC, <span class="fu">c</span>(DEAD1,DEAD2,DEAD3,DEAD4,DEAD5,DEAD6,DEAD7,DEAD8), <span class="at">sep =</span> <span class="st">""</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">DEADC =</span> <span class="fu">na_if</span>(DEADC,<span class="st">""</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>There are 6 different groups in the data. We therefore want to make a group name column to get an easy overview of the groups in the data</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>data_clean_groups <span class="ot">&lt;-</span> data_clean_properDEADcode <span class="sc">|&gt;</span> </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"data_group"</span> <span class="ot">=</span> <span class="fu">case_when</span>(</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    (RXASP <span class="sc">==</span> <span class="st">"Y"</span> <span class="sc">&amp;</span> RXHEP <span class="sc">==</span> <span class="st">"L"</span>) <span class="sc">~</span> <span class="st">"Asp-Hep(low)"</span>,</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    (RXASP <span class="sc">==</span> <span class="st">"Y"</span> <span class="sc">&amp;</span> RXHEP <span class="sc">==</span> <span class="st">"M"</span>) <span class="sc">~</span> <span class="st">"Asp-Hep(med)"</span>,</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    (RXASP <span class="sc">==</span> <span class="st">"Y"</span> <span class="sc">&amp;</span> RXHEP <span class="sc">==</span> <span class="st">"N"</span>) <span class="sc">~</span> <span class="st">"Asp-Hep(No)"</span>,</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    (RXASP <span class="sc">==</span> <span class="st">"N"</span> <span class="sc">&amp;</span> RXHEP <span class="sc">==</span> <span class="st">"L"</span>) <span class="sc">~</span> <span class="st">"Asp(No)-Hep(low)"</span>,</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    (RXASP <span class="sc">==</span> <span class="st">"N"</span> <span class="sc">&amp;</span> RXHEP <span class="sc">==</span> <span class="st">"M"</span>) <span class="sc">~</span> <span class="st">"Asp(No)-Hep(med)"</span>,</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    (RXASP <span class="sc">==</span> <span class="st">"N"</span> <span class="sc">&amp;</span> RXHEP <span class="sc">==</span> <span class="st">"N"</span>) <span class="sc">~</span> <span class="st">"Asp(No)-Hep(No)"</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>There are four different columns in the data which all represents the final diagnosis of the initial event. It is fair to assume that if one final diagnosis is made of an intial event then another diagnosis is not made, as there are no data entries which has “Y” in more than one of the diagnosis. One column, DDIAG, is therfore made to represent the final diagnosis of the initial event.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>data_clean_groups <span class="ot">&lt;-</span> data_clean_groups <span class="sc">|&gt;</span> </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"DDIAG"</span> <span class="ot">=</span> <span class="fu">case_when</span>(</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    DDIAGISC <span class="sc">==</span> <span class="st">"Y"</span> <span class="sc">~</span> <span class="st">"DDIAGISC"</span>,</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    DDIAGHA <span class="sc">==</span> <span class="st">"Y"</span> <span class="sc">~</span> <span class="st">"DDIAGHA"</span>,</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    DDIAGUN <span class="sc">==</span> <span class="st">"Y"</span> <span class="sc">~</span> <span class="st">"DDIAGUN"</span>,</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    DNOSTRK <span class="sc">==</span> <span class="st">"Y"</span> <span class="sc">~</span> <span class="st">"DNOSTRK"</span>,</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="saving-augmented-data" class="level2">
+<h2 class="anchored" data-anchor-id="saving-augmented-data">Saving augmented data</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_tsv</span>(data_clean_groups, <span class="at">file =</span> <span class="st">"../data/03_dat_aug.tsv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
 </section>
 
 </main>
