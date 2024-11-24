@@ -24,55 +24,36 @@ Error bars plot one standard error for percentage. For each bar, lower part give
 ![](images/clipboard-3768980609.png){width="557"}
 
 ```{r}
-data <- data_clean_properDEADcode
+#| eval: true
+library(ggplot2)
+library(dplyr)
+library(readr)
+```
+
+```{r}
+data <- read_tsv("../data/03_dat_aug.tsv")
 ```
 
 ```{r}
 data |> 
-  group_by(H14) |> 
-  count()
-```
-
-```{r}
-data |> 
-  select(DLH14, DMH14) |> 
-  count()
-  
-  
-```
-
-```{r}
-data_2 <- data |> 
-  mutate(DH14 = case_when(
-    DLH14 == "N" & DMH14 == "N" ~ "C",
-    DLH14 == "Y" & DMH14 == "N" ~ "L",
-    DLH14 == "N" & DMH14 == "Y" ~ "M"))
-```
-
-```{r}
-data_2 |> 
-  select(DH14) |> 
   group_by(DH14) |> 
   count()
 ```
 
 ```{r}
-data_2 |> 
-  mutate(across(DASP14, ~na_if(., "U")),
-         DASP14 = if_else(DASP14 == "y", "Y", DASP14),
-         DASP14 = if_else(DASP14 == "n", "N", DASP14)) |> 
-  group_by(DH14, DASP14) |> 
+data |> 
+  group_by(RXASP) |> 
   count()
 ```
 
 ```{r}
-data_2 |> 
+data |> 
   group_by(DH14, RXASP) |> 
   count()
 ```
 
 ```{r}
-data_2 |> 
+data |> 
   group_by(DH14, RXASP) |> 
   count() |> 
   ggplot(aes(x = DH14, y = n, fill = RXASP)) +
@@ -80,9 +61,9 @@ data_2 |>
 ```
 
 ```{r}
-data_3 <- data_2 |> 
+data_3 <- data |> 
   select(DH14, RXASP, DRSH) |> 
-  mutate(across(DRSH, ~na_if(., "U")))
+  mutate(across(DRSH))
 ```
 
 ```{r}
@@ -102,8 +83,6 @@ data_5 <- data_4 |>
   filter(DRSH != "N") |> 
   mutate(DH14 = factor(DH14, levels = c("M", "L", "C")),
          RXASP = factor(RXASP, levels = c("Y", "N")))
-  
-data_5
 ```
 
 ```{r}
