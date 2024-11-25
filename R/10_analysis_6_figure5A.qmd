@@ -1,17 +1,13 @@
 ---
-title: "08_analysis_4"
+title: "10_analysis_6_figure5A"
 author: "Group 29"
 format: html
 editor: visual
 ---
 
-## Data analysis - Pulmonary Embolism
+## Data analysis - XXX
 
-Creation of figure 5.D. It illustrates how pulmonary embolism after 14 days is related to 6 combinations of doses of heparin and aspirin.
-
-In the report it looks like this:
-
-![](images/clipboard-1604809038.png)
+Creation of figure 5A
 
 ## Loading Libraries
 
@@ -34,11 +30,11 @@ In order to make the correct plot, it is necessary to use the same variables as 
 
 ```{r}
 data |> 
-  group_by(RXASP,RXHEP,PE14) |> 
+  group_by(RXASP,RXHEP,H14) |> 
   count()
 ```
 
-The numbers here seems to fit the numbers from figure 5.D to the extent that it can be read.
+The numbers here seems to fit the numbers from figure 5.A to the extent that it can be read. XXX
 
 ## Data Augmentation
 
@@ -46,7 +42,7 @@ In order to make the data set smaller and more clearly arranged, all other colum
 
 ```{r}
 relevant_data <- data |> 
-  select(RXHEP, RXASP, PE14) 
+  select(RXHEP, RXASP, H14) 
 ```
 
 The plot has percentages of reported pulmonary embolism on the y-axis. Such a variable is created.
@@ -54,7 +50,7 @@ The plot has percentages of reported pulmonary embolism on the y-axis. Such a va
 ```{r}
 percentage_data <- relevant_data |>
   #Counts the patients in each group
-  group_by(RXHEP, RXASP, PE14) |> 
+  group_by(RXHEP, RXASP, H14) |> 
   count() |> 
   #Creates the six groups examined
   group_by(RXHEP, RXASP) |> 
@@ -64,7 +60,7 @@ percentage_data <- relevant_data |>
          p = n / total_in_group,
          se = sqrt(p * (1 - p) / total_in_group) * 100) |> 
   #Removes all patients with no reported pulmonary embolism
-  filter(PE14 != "N") 
+  filter(H14 != "N") 
 ```
 
 To get the same order of the columns in the plot, the factors are applied to the data:
@@ -97,8 +93,8 @@ sorted_data |>
             size = 3) +
   geom_errorbar(position = position_dodge(width = 0.9),
                 width = 0.3) +
-  labs(title = "Percentage of patients with pulmonary embolism after 14 days",
-       subtitle = "These numbers are from second consultation 14 days after randomisation",
+  labs(title = "Percentage of patients with XXX",
+       subtitle = "XXX",
        x = NULL,
        y = "%",
        fill = "Aspirin Dosing") +
