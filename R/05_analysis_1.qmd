@@ -6,16 +6,15 @@ editor: visual
 
 # Data Analysis
 
-Creation of the big plot - figure 2:
+We want to investigate the apperent beneficial effect of the treatment by aspirin and heparin, divided into the different subgroups of the data. We will do that with inspiration from figure 2 in the original paper.
 
 The CI of the different treatments looking at different subgroups in the data. Pay note that some of the groups are represented by a 95% CI and others has a 99% CI. The 99% CI is used for all the subgroups, while the 95% CI is for the main group. Size of square refer to the amount of available information (the sample size).
-
-![](images/clipboard-1327647554.png)
 
 ## Loading libraries
 
 ```{r}
 library("tidyverse")
+library("patchwork")
 ```
 
 ## Loading data
@@ -29,7 +28,7 @@ data <- read_tsv("../data/03_dat_aug.tsv")
 ### Data augmentation - Creating the desired subgroups
 
 ```{r}
-data_slim <- data |>
+data_slim_heparin <- data |>
   mutate("Heparin" = case_when(
     RXHEP == 'L' ~ 'Y',
     RXHEP == 'M' ~ 'Y',
@@ -66,7 +65,7 @@ data_slim <- data |>
 ### Data augmentation - Calculating the statistics used in the plot
 
 ```{r}
-data_nested <- data_slim |> 
+data_nested_heparin <- data_slim_heparin |> 
   pivot_longer(cols = -c(Heparin,Outcome), names_to = "group", values_to = "subgroup") |>
   drop_na() |> 
   group_by(Heparin,Outcome,group,subgroup) |> 
@@ -78,7 +77,7 @@ data_nested <- data_slim |>
 ```
 
 ```{r}
-data_statistics <- data_nested |>
+data_statistics_heparin <- data_nested_heparin |>
     mutate(data = map(.x = data, 
                       .f = ~ .x |> 
                         pivot_wider(
@@ -121,7 +120,7 @@ data_statistics <- data_nested |>
 k <- 0.207
 alpha <- 0.99
 
-data_CI <- data_statistics |> 
+data_CI_heparin <- data_statistics_heparin |> 
   mutate(Ad_ben = k*(O-E),
          std_dev = k*sqrt(V),
          CI_lower = Ad_ben - qnorm(alpha/2)*std_dev,
@@ -134,7 +133,7 @@ data_CI <- data_statistics |>
 First the group labels are created for the plot
 
 ```{r}
-full_labels <-  c(
+full_labels_heparin <-  c(
   "AGE_group_>75" = "Age >75", 
   "AGE_group_≤75" = "Age ≤75",
   "DDIAG_DDIAGHA" = "Final diagnosis: Haemorrhagic stroke",
@@ -176,9 +175,10 @@ full_labels <-  c(
   "STYPE_PACS" = "Stroke subtype: Partial anterior circulation syndrome",
   "STYPE_POCS" = "Stroke subtype: Posterior circulation syndrome",
   "STYPE_TACS" = "Stroke subtype: Total anterior circulation syndrome",
-  "STYPE_OTH" = "Stroke subtype: Other")
+  "STYPE_OTH" = "Stroke subtype: Other"
+  )
 
-data_CI_ordered <- data_CI |> 
+data_CI_ordered_heparin <- data_CI_heparin |> 
   mutate(group_name = factor(group_name,
                              levels = c("EXPDD_group_90-100%","EXPDD_group_65-90%","EXPDD_group_40-65%","EXPDD_group_0-40%","DDIAG_DNOSTRK","DDIAG_DDIAGUN","DDIAG_DDIAGISC","DDIAG_DDIAGHA","RDEF3_Y","RDEF3_N","RSLEEP_Y","RSLEEP_N","RCONSC_U","RCONSC_F","RCONSC_D","RDELAY_group_25-48h","RDELAY_group_13-24h","RDELAY_group_9-12h","RDELAY_group_0-8h","STYPE_OTH","STYPE_TACS","STYPE_POCS","STYPE_PACS","STYPE_LACS","RATRIAL_Y","RATRIAL_N","RVISINF_Y","RVISINF_N","RCT_Y","RCT_N","RHEP24_Y","RHEP24_N","RASP3_Y","RASP3_N","RSBP_group_>180","RSBP_group_≤180","RXASP_Y","RXASP_N","SEX_M","SEX_F","AGE_group_≤75","AGE_group_>75"), ordered = TRUE))
 ```
@@ -186,7 +186,7 @@ data_CI_ordered <- data_CI |>
 The plot is created similarly to the figure 2 in the data
 
 ```{r}
-p1 <- data_CI |> 
+p1 <- data_CI_heparin |> 
   ggplot(aes(x = Ad_ben,
              y = group_name,
              xmin = CI_lower,
@@ -194,7 +194,7 @@ p1 <- data_CI |>
   geom_point(aes(size = Total_patients),shape = 15)+
   geom_errorbarh(color = "blue")+
   geom_vline(xintercept = 0, color = "grey", linetype = 2)+
-  scale_y_discrete(labels = full_labels)+
+  scale_y_discrete(labels = full_labels_heparin)+
   scale_size_continuous(range = c(1,3))+
   labs(x = "Reductions in odds of being dead or dependent at six months for heparin versus no heparin",
        size = "Group size (in 1000 patients)")+
@@ -210,7 +210,7 @@ p1
 ### Data augmentation - Creating the desired subgroups
 
 ```{r}
-data_slim <- data |>
+data_slim_aspirin <- data |>
   mutate("Aspirin" = RXASP) |> 
   mutate("Outcome" = case_when(
     OCCODE == "dead" ~ "dead/dependent",
@@ -243,7 +243,7 @@ data_slim <- data |>
 ### Data augmentation - Calculating the statistics used in the plot
 
 ```{r}
-data_nested <- data_slim |> 
+data_nested_aspirin <- data_slim_aspirin |> 
   pivot_longer(cols = -c(Aspirin,Outcome), names_to = "group", values_to = "subgroup") |>
   drop_na() |> 
   group_by(Aspirin,Outcome,group,subgroup) |> 
@@ -255,7 +255,7 @@ data_nested <- data_slim |>
 ```
 
 ```{r}
-data_statistics <- data_nested |>
+data_statistics_aspirin <- data_nested_aspirin |>
     mutate(data = map(.x = data, 
                       .f = ~ .x |> 
                         pivot_wider(
@@ -298,11 +298,11 @@ data_statistics <- data_nested |>
 k <- 0.207
 alpha <- 0.99
 
-data_CI <- data_statistics |> 
+data_CI_aspirin <- data_statistics_aspirin |> 
   mutate(Ad_ben = k*(O-E),
          std_dev = k*sqrt(V),
-         CI_lower = Ad_ben - qnorm(alpha/2)*std_dev,
-         CI_upper = Ad_ben + qnorm(alpha/2)*std_dev) |> 
+         CI_lower = Ad_ben + qnorm(alpha/2)*std_dev,
+         CI_upper = Ad_ben - qnorm(alpha/2)*std_dev) |> 
   unite(group_name, c(group,subgroup))
 ```
 
@@ -311,7 +311,7 @@ data_CI <- data_statistics |>
 First the group labels are created for the plot
 
 ```{r}
-full_labels <-  c(
+full_labels_aspirin <-  c(
   "AGE_group_>75" = "Age >75", 
   "AGE_group_≤75" = "Age ≤75",
   "DDIAG_DDIAGHA" = "Final diagnosis: Haemorrhagic stroke",
@@ -356,7 +356,7 @@ full_labels <-  c(
   "STYPE_TACS" = "Stroke subtype: Total anterior circulation syndrome",
   "STYPE_OTH" = "Stroke subtype: Other")
 
-data_CI_ordered <- data_CI |> 
+data_CI_ordered_aspirin <- data_CI_aspirin |> 
   mutate(group_name = factor(group_name,
                              levels = c("EXPDD_group_90-100%","EXPDD_group_65-90%","EXPDD_group_40-65%","EXPDD_group_0-40%","DDIAG_DNOSTRK","DDIAG_DDIAGUN","DDIAG_DDIAGISC","DDIAG_DDIAGHA","RDEF3_Y","RDEF3_N","RSLEEP_Y","RSLEEP_N","RCONSC_U","RCONSC_F","RCONSC_D","RDELAY_group_25-48h","RDELAY_group_13-24h","RDELAY_group_9-12h","RDELAY_group_0-8h","STYPE_OTH","STYPE_TACS","STYPE_POCS","STYPE_PACS","STYPE_LACS","RATRIAL_Y","RATRIAL_N","RVISINF_Y","RVISINF_N","RCT_Y","RCT_N","RHEP24_Y","RHEP24_N","RASP3_Y","RASP3_N","RSBP_group_>180","RSBP_group_≤180","RXHEP_M","RXHEP_L","RXHEP_N","SEX_M","SEX_F","AGE_group_≤75","AGE_group_>75"), ordered = TRUE))
 ```
@@ -364,7 +364,7 @@ data_CI_ordered <- data_CI |>
 The plot is created similarly to the figure 2 in the data
 
 ```{r}
-p2 <- data_CI_ordered |> 
+p2 <- data_CI_ordered_aspirin |> 
   ggplot(aes(x = Ad_ben,
              y = group_name,
              xmin = CI_lower,
@@ -372,7 +372,7 @@ p2 <- data_CI_ordered |>
   geom_point(aes(size = Total_patients),shape = 15)+
   geom_errorbarh(color = "blue")+
   geom_vline(xintercept = 0, color = "grey", linetype = 2)+
-  scale_y_discrete(labels = full_labels)+
+  scale_y_discrete(labels = full_labels_aspirin)+
   scale_size_continuous(range = c(1,3))+
   labs(x = "Reductions in odds of being dead or dependent at six months for aspirin versus no aspirin",
        size = "Group size (in 1000 patients)")+
@@ -383,4 +383,11 @@ p2 <- data_CI_ordered |>
   annotate("text", x = 0.04, y="AGE_group_>75", label = "Aspirin worse")
 
 p2
+```
+
+## Save the results
+
+```{r}
+ggsave(filename = "../results/05_keyplot_2a.png", plot = p1)
+ggsave(filename = "../results/05_keyplot_2b.png", plot = p2)
 ```
