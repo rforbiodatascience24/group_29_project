@@ -12,6 +12,23 @@ Figure 1 - the group sizes:
 
 ![](images/clipboard-2585393746.png)
 
+```{r}
+#| eval: true
+library(ggplot2)
+library(dplyr)
+library(readr)
+```
+
+```{r}
+data <- read_tsv("../data/03_dat_aug.tsv")
+```
+
+```{r}
+data |> 
+  group_by(data_group) |> 
+  count()
+```
+
 Table 1 - characteristics of patients
 
 Table 2 - outcome of the different groups after 14 days

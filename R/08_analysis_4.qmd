@@ -36,19 +36,7 @@ data <- read_tsv("../data/03_dat_aug.tsv")
 
 ```{r}
 data |> 
-  group_by(DH14) |> 
-  count()
-```
-
-```{r}
-data |> 
-  group_by(RXASP) |> 
-  count()
-```
-
-```{r}
-data |> 
-  group_by(DH14, RXASP) |> 
+  group_by(data_group) |> 
   count()
 ```
 
