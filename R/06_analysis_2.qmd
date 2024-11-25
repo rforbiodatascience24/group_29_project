@@ -8,17 +8,17 @@ editor: visual
 
 ## Short-term effects of early anticoagulant therapy
 
-Effects of anticoagulants during the scheduled treatment period (mostly about 14 days) in completed unconfounded randomised trials in acute ischaemic stroke on: (a) recurrent ischaemic stroke, (b) haemorrhagic stroke, (c) death from any cause or non-fatal stroke (non-fatal stroke includes non-fatal recurrent strokes of ischaemic or unknown type and haemorrhagic strokes). The overall results of the 95% CI is represented by diamonds.
+![](images/clipboard-1936709756.png)
 
-![](images/clipboard-3530018570.png){width="336"}
-
-## Loading libraries
+Effects of anticoagulants during the scheduled treatment period (mostly about 14 days) in completed unconfounded randomised trials in acute ischaemic stroke on: (a) recurrent ischaemic stroke, (b) haemorrhagic stroke, (c) death from any cause or non-fatal stroke (non-fatal stroke includes non-fatal recurrent strokes of ischaemic or unknown type and haemorrhagic strokes). The overall results of the 95% CI is represented by diamonds.Loading libraries
 
 ```{r}
+
 #| eval: true
-library(ggplot2)
-library(dplyr)
-library(readr)
+library("tidyverse")
+library("ggplot2")
+library("dplyr")
+library("readr")
 ```
 
 ## Import the dataset
@@ -29,7 +29,7 @@ library(readr)
 dataset <- read_tsv("../data/03_dat_aug.tsv")
 ```
 
-## Prepare the data
+## Preparation of subgroups in data
 
 ```{r}
 
