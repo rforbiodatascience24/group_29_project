@@ -46,11 +46,14 @@ data_clean_high <- data_clean |>
   mutate(across(c(DASP14,FAP), ~str_to_upper(.)))
 ```
 
+### Converting all time-values exceeding 59 min and 23 hours to NA
+
 In the two columns minlocal and hourlocal the local time of the randomization study initiation is annotated. This value is not allowed to be higher than 59 min and 23 hours. All values above this is set to NA for missing values.
 
 ```{r}
 
 #Replacing all values above 59 in minute and hour with NA
+#Replacing all values above 59 in minute and 23 hour with NA
 data_clean_truetime <- data_clean_high |> 
   mutate(MINLOCAL = if_else(MINLOCAL > 59, NA, MINLOCAL),
          HOURLOCAL = if_else(HOURLOCAL > 23, NA, HOURLOCAL))
