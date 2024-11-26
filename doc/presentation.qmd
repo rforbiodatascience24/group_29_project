@@ -23,7 +23,7 @@ Assesing effects of antithrombotics (heparin and aspirin) for recurrent ischaemi
 
 ## Methods
 
-### Raw data: 
+### Raw data:
 
 19435 observations with 112 variables
 
@@ -38,4 +38,4 @@ Age values converted to integers, column names replaced with more meaningful nam
 
 ## Data visualization: type of stroke
 
-## Data visualization: effects of treaments
+## Data visualization: effects of treatments
