@@ -41,7 +41,7 @@ data_clean_properNA <- data |>
 In the variable SET14D, a 0 is indicating that it is not known if the subject is alive or dead at the 14 day checkup. We therefore want to change the 0 to NA, indicating that this information is not known.
 
 ```{r}
-
+#converting 0 to NA
 data_clean_properNA2 <- data_clean_properNA |> 
   mutate(SET14D = if_else(SET14D == 0, NA, SET14D))
 ```
@@ -49,7 +49,7 @@ data_clean_properNA2 <- data_clean_properNA |>
 In column DASP14 and FAP, both n and N along with y and Y both indicating No and Yes respectively. To match the general synthax, all letters are made upper case
 
 ```{r}
-#Making y and n upper case
+#making y and n upper case
 data_clean_propervar <- data_clean_properNA2 |> 
   mutate(across(c(DASP14,FAP), ~str_to_upper(.)))
 ```
@@ -57,7 +57,7 @@ data_clean_propervar <- data_clean_properNA2 |>
 In the columns DVT14, H14,DDEAD, HTI14, ID14, ISC14, NCB14, NK14, PE14, TRAN14, values are 0 = no and 1 = yes, and to match the other binary variables they will therefore be transformed to N = no and Y = yes.
 
 ```{r}
-
+#converting 0 to N(No) and 1 to Y(yes)
 data_clean_propervar2 <- data_clean_propervar |> 
   mutate(across(c(DVT14,H14,DDEAD,HTI14,ID14,ISC14,NCB14,NK14,PE14,TRAN14,STRK14), 
                 ~case_when(
@@ -65,13 +65,28 @@ data_clean_propervar2 <- data_clean_propervar |>
                   . == 1 ~ "Y")))
 ```
 
+### Ensuring global syntax for numbers 1-8 naming cause of death
+
+The numbers 1-8 is used for naming cause of death. Therefore OCCODE is renamed to the actual meanings of the numbers 0-9 to prevent confusion to number code in cause of death.
+
+```{r}
+#changing values 0-9 for occode to their actual meaning
+data_clean_properOCcode <- data_clean_propervar2 |> 
+  mutate(OCCODE = case_when(
+    OCCODE %in% c(0,8,9) ~ NA,
+    OCCODE == 1 ~ "dead",
+    OCCODE == 2 ~ "dependent",
+    OCCODE == 3 ~ "not recovered",
+    OCCODE == 4 ~ "recovered"))
+```
+
 ### Converting all time-values exceeding 59 min and 23 hours to NA
 
 In the two columns minlocal and hourlocal the local time of the randomization study initiation is annotated. This value is not allowed to be higher than 59 min and 23 hours. All values above this is set to NA for missing values.
 
 ```{r}
-#Replacing all values above 59 in minute and 23 hour with NA
-data_clean_truetime <- data_clean_propervar |> 
+#replacing all values above 59 in minute and 23 hour with NA
+data_clean_truetime <- data_clean_properOCcode |> 
   mutate(MINLOCAL = if_else(MINLOCAL > 59, NA, MINLOCAL),
          HOURLOCAL = if_else(HOURLOCAL > 23, NA, HOURLOCAL))
 ```
@@ -81,12 +96,11 @@ data_clean_truetime <- data_clean_propervar |>
 For the pilot study, medium dose of heparin is annotated as high dose. The high dose annotation is changed to medium dose annotation, and the two columns for medium dose of pilot study and following study is merged.
 
 ```{r}
-
-#Replacing all H for M for indicating medium dose (Heparin)
+#replacing all H for M for indicating medium dose (Heparin)
 data_clean_noH <- data_clean_truetime |> 
   mutate(RXHEP = if_else(RXHEP == "H","M",RXHEP))
 
-#Merging the Hep high and hep medium column, changing unknown to NA
+#merging the Hep high and hep medium column, changing unknown to NA
 data_clean_correctHepDose <- data_clean_noH |> 
   mutate(across(c(DMH14,DHH14), ~replace_na(.,""))) |> 
   unite(DMH14, c(DMH14,DHH14), sep = "") |> 
@@ -97,7 +111,7 @@ data_clean_correctHepDose <- data_clean_noH |>
 The variable STRK14 is annotated as STR14 in the data description, and the column is therefore renamed accordingly
 
 ```{r}
-
+#converting name of variable STRK14 to align with the variable description
 data_clean_annotationalign <- data_clean_correctHepDose |> 
   rename("STR14" = STRK14)
 ```
@@ -105,6 +119,7 @@ data_clean_annotationalign <- data_clean_correctHepDose |>
 In the RDATE variable, all times are annotated as polish months and year. We aim to convert this information in two columns, and reencode the polish to english months
 
 ```{r}
+#converting polish month names to english month names
 data_clean_english <- data_clean_annotationalign |> 
   separate_wider_delim(RDATE,delim = "-", names = c("RMONTH","RYEAR")) |> 
   mutate(RMONTH = case_when(
@@ -122,8 +137,109 @@ data_clean_english <- data_clean_annotationalign |>
     RMONTH == "gru" ~ "Dec"))
 ```
 
+### Removal of irrelevant columns 
+
+Some columns is already known to not be relevant. These will therefore be removed to reduce the space of the column.
+
+```{r}
+#removing of irrelevant columns
+data_clean_removecol <- data_clean_english |> 
+  #Removing comment columns
+  select(-c(DMAJNCHX,DNOSTRKX,DSIDEX,DDEADX,FDEADX)) |> 
+  #Removing columns which are not interesting for our studies
+  select(-c(HOSPNUM,CNTRYNUM,SET14D,NCCODE)) |> 
+  #Removing column which have unknown meaning as not included in variable descriptions
+  select(-c(DIED))
+```
+
+### Merging of columns
+
+The columns DDEADD and FDEADD are the same, as the value is the date of death of the subject, which is independent of when the checkup is done. The columns are therefore renamed to DEADD (deathdate) and one of the columns are removed.
+
+```{r}
+#removing ambigious columns
+data_clean_mergecol <-  data_clean_removecol |> 
+  rename("DEADD" = DDEADD) |> 
+  select(-FDEADD)
+```
+
+There are four different columns in the data which all represents the final diagnosis of the initial event. It is fair to assume that if one final diagnosis is made of an initial event then another diagnosis is not made, as there are no data entries which has "Y" in more than one of the diagnosis. One column, DDIAG, is therefore made to represent the final diagnosis of the initial event.
+
+```{r}
+#mergin 4 columns into a new (DDIAG)
+data_clean_mergecol2 <- data_clean_mergecol |> 
+  mutate("DDIAG" = case_when(
+    DDIAGISC == "Y" ~ "DDIAGISC",
+    DDIAGHA == "Y" ~ "DDIAGHA",
+    DDIAGUN == "Y" ~ "DDIAGUN",
+    DNOSTRK == "Y" ~ "DNOSTRK",
+    TRUE ~ NA))
+```
+
+The causes of death at 6 months are split into 8 different columns called DEAD1-8. To have more tidy data, all columns are merged together into one column, using the same 1-8 code for cause of death as DDEADC and FDEADC columns. The new column is called DEADC (death cause)
+
+```{r}
+#creating of one column DEADC, which contains all causes of death as 1-8
+data_clean_properDEADcode <- data_clean_mergecol2 |> 
+  mutate(DEAD1 = if_else(DEAD1 == 1, "1", ""),
+         DEAD2 = if_else(DEAD2 == 1, "2", ""),
+         DEAD3 = if_else(DEAD3 == 1, "3", ""),
+         DEAD4 = if_else(DEAD4 == 1, "4", ""),
+         DEAD5 = if_else(DEAD5 == 1, "5", ""),
+         DEAD6 = if_else(DEAD6 == 1, "6", ""),
+         DEAD7 = if_else(DEAD7 == 1, "7", ""),
+         DEAD8 = if_else(DEAD8 == 1, "8", "")) |>
+  unite(DEADC, c(DEAD1,DEAD2,DEAD3,DEAD4,DEAD5,DEAD6,DEAD7,DEAD8), sep = "") |> 
+  mutate(DEADC = na_if(DEADC,""))
+view(data_clean_properDEADcode)
+```
+
+### Splitting/joining data
+
+Adding unique identifier (number) to each patient is done for the purpose of having a key to join the data after splitting. Creating a variable is normally thought of as data augmentation, but it is done in the cleaning for this purpose.
+
+In order to be able to distinguish patients participating in the trial a Unique Subject Identifier USUBJID is added a variable number one in the cleaned dataset.
+
+```{r}
+#adding a unique identifier (number) to each patient
+data_clean_numbered<- data_clean_properDEADcode |> 
+  mutate(USUBJID = row_number()) |> 
+  select(USUBJID, everything())
+```
+
+It might be relevant to split data into multiple datasets. This is the case if we want to share some data with stakeholders while some variables contain information that is sensitive and need to remove from the dataset (e.g. GDPR reasons).
+
+```{r}
+#splitting of dataset into 2
+data_split_1 <- data_clean_numbered |> 
+  select(1:50)
+
+data_split_2 <- data_clean_numbered |> 
+  select(1, 51:96)
+```
+
+```{r}
+#joining dataset by the key which we have created
+data_inner_joined <- data_split_1 |> 
+  inner_join(data_split_2, by = join_by(USUBJID))
+```
+
+Another scenario might be that while the external stakeholder is working with their part of the dataset `data_split_2`, patients might have withdrawn from the study and rows have been removed in `data_split_1`. If we want to remove the same patients/observations during the join, `left_join()` will be used.
+
+```{r}
+#removing observations
+data_split_1_1 <- data_split_1 |>
+  slice(-sample(n(), 500))
+```
+
+```{r}
+#combining two datasets, where one has missing observations
+data_left_joined <- data_split_1_1 |> 
+  left_join(data_split_2, by = join_by(USUBJID))
+```
+
 ## Saving final clean data
 
 ```{r}
-write_tsv(data_clean_english, file = "../data/02_dat_clean.tsv")
+write_tsv(data_inner_joined, file = "../data/02_dat_clean.tsv")
 ```
