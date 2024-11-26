@@ -128,6 +128,8 @@ STYPE_median <- dataset |>
 print(STYPE_median)
 ```
 
+The median age of the different stroke subtypes are shown, where the subtype TACS has the highest median age of 76 years.
+
 -   Effects of treatments
 
 # Data visualization
