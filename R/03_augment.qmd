@@ -98,7 +98,7 @@ data_clean_groups <- data_clean_properDEADcode |>
   ))
 ```
 
-There are four different columns in the data which all represents the final diagnosis of the initial event. It is fair to assume that if one final diagnosis is made of an intial event then another diagnosis is not made, as there are no data entries which has "Y" in more than one of the diagnosis. One column, DDIAG, is therfore made to represent the final diagnosis of the initial event.
+There are four different columns in the data which all represents the final diagnosis of the initial event. It is fair to assume that if one final diagnosis is made of an initial event then another diagnosis is not made, as there are no data entries which has "Y" in more than one of the diagnosis. One column, DDIAG, is therefore made to represent the final diagnosis of the initial event.
 
 ```{r}
 data_clean_groups <- data_clean_groups |> 
@@ -110,8 +110,45 @@ data_clean_groups <- data_clean_groups |>
     TRUE ~ NA))
 ```
 
+In order to be able to distinguish patients participating in the trial a Unique Subject Identifier `USUJBID` is added a variable number one in the cleaned dataset.
+
+```{r}
+data_clean_groups <- data_clean_groups |> 
+  mutate(USUBJID = row_number()) |> 
+  select(USUBJID, everything())
+```
+
 ## Saving augmented data
 
 ```{r}
 write_tsv(data_clean_groups, file = "../data/03_dat_aug.tsv")
+```
+
+## Splitting/joining data
+
+It might be relevant to split data into multiple datasets. This is the case if we want to share some data with stakeholders while some variables contain information that is sensitive and need to remove from the dataset (e.g. GDPR reasons).
+
+```{r}
+data_split_1 <- data_clean_groups |> 
+  select(1:50)
+
+data_split_2 <- data_clean_groups |> 
+  select(1, 51:98)
+```
+
+```{r}
+data_inner_joined <- data_split_1 |> 
+  inner_join(data_split_2, by = join_by(USUBJID))
+```
+
+Another scenario might be that while the external stakeholder is working with their part of the dataset `data_split_2`, patients might have withdrawn from the study and rows have been removed in `data_split_1`. If we want to remove the same patients/observations during the join, `left_join()` will be used.
+
+```{r}
+data_split_1_1 <- data_split_1 |>
+  slice(-sample(n(), 500))
+```
+
+```{r}
+data_left_joined <- data_split_1_1 |> 
+  left_join(data_split_2, by = join_by(USUBJID))
 ```
