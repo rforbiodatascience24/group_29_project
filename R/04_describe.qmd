@@ -6,10 +6,6 @@ editor: visual
 
 # Descriptive analysis
 
--   Age distribution of the study population
-
--   Gender distribution of the study population
-
 ## Loading libraries
 
 ```{r}
@@ -23,7 +19,10 @@ library("readr")
 
 ## Import the dataset
 
-```{r} # Load the dataset  dataset <- read_tsv("../data/03_dat_aug.tsv")}
+```{r}
+
+# Load the dataset  
+dataset <- read_tsv("../data/03_dat_aug.tsv")
 ```
 
 ## Age distribution of study population
@@ -71,16 +70,52 @@ ggplot(dataset, aes(x = AGE)) +
                 label.padding=unit(0.4,"lines")) # Mean age shown in a text box with padding
 ```
 
-## Gender distribution of the study population
-
-```{r}
-# Gender distribution
-
-```
-
 # Data visualization
 
-Number of inital ischemic strokes based on age
+## Boxplot for predicted probability of death at 6 months compared by gender 
+
+```{r}
+
+
+# Boxplot of predicted probability of death at 6 months distributed by gender 
+ggplot(dataset, aes(x = SEX, y = EXPDD,fill=SEX)) +
+  geom_boxplot(alpha = 0.7,color="black") + 
+  scale_fill_manual(values = c("darkred", "blue")) + # Custom fill colors for gender
+  labs(
+    title = "Predicted probability of death at 6 months",
+    x = "Gender",
+    y = " EXPD6",
+    fill = "Gender",
+    color = "Gender"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 18),
+    axis.title.x = element_text(face = "bold", size = 14),
+    axis.title.y = element_text(face = "bold", size = 14),
+    legend.position = "top"
+  ) +
+  scale_y_continuous(
+    limits = c(0, 1), # Adjust the range to display outliers
+    expand = expansion(mult = c(0.05, 0.1)) # Add some space for outliers
+  )
+```
+
+```{r}
+
+#Calculate median EXPDD by gender
+
+median_table <- dataset |> 
+  group_by(SEX) |> 
+  summarize(Median_EXPDD = median(EXPDD, na.rm = TRUE))
+print(median_table)
+```
+
+From the medians of the EXPDD variable, it can be seen by comparing the genders, that females have a higher median of 0.73175 than males (0.53940), thus a relatively higher predicted probability of death at 6 months from randomization.
+
+## Age distribution of initial ischemic strokes
+
+Use FDE
 
 ## Description of Data
 
