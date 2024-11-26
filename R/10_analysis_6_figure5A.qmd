@@ -1,0 +1,111 @@
+---
+title: "10_analysis_6_figure5A"
+author: "Group 29"
+format: html
+editor: visual
+---
+
+## Data analysis - XXX
+
+Creation of figure 5A
+
+## Loading Libraries
+
+```{r}
+#| eval: true
+library(ggplot2)
+library(dplyr)
+library(readr)
+```
+
+## Loading Data
+
+```{r}
+data <- read_tsv("../data/03_dat_aug.tsv")
+```
+
+## Finding Relevant Data
+
+In order to make the correct plot, it is necessary to use the same variables as the authors of the article. In order to validate that the correct variables have been identified a table summing the number of patients in each group is made:
+
+```{r}
+data |> 
+  group_by(RXASP,RXHEP,H14) |> 
+  count()
+```
+
+The numbers here seems to fit the numbers from figure 5.A to the extent that it can be read. XXX
+
+## Data Augmentation
+
+In order to make the data set smaller and more clearly arranged, all other columns than the three relevant, are removed:
+
+```{r}
+relevant_data <- data |> 
+  select(RXHEP, RXASP, H14) 
+```
+
+The plot has percentages of reported pulmonary embolism on the y-axis. Such a variable is created.
+
+```{r}
+percentage_data <- relevant_data |>
+  #Counts the patients in each group
+  group_by(RXHEP, RXASP, H14) |> 
+  count() |> 
+  #Creates the six groups examined
+  group_by(RXHEP, RXASP) |> 
+  #Creates a row with percentages for use in plot
+  mutate(total_in_group = sum(n),
+         percentage = n / total_in_group * 100,
+         p = n / total_in_group,
+         se = sqrt(p * (1 - p) / total_in_group) * 100) |> 
+  #Removes all patients with no reported pulmonary embolism
+  filter(H14 != "N") 
+```
+
+To get the same order of the columns in the plot, the factors are applied to the data:
+
+```{r}
+sorted_data <- percentage_data |> 
+  mutate(RXHEP = factor(RXHEP, levels = c("M", "L", "N")),
+         RXASP = factor(RXASP, levels = c("Y", "N")))
+```
+
+## Visualisation
+
+NEEDS DESCRIPTIONS ON EACH LINE
+
+WHAT DOES THIS MEAN: "For each bar, lower part gives number and percentage of fatal events."
+
+```{r}
+sorted_data |>   
+  ggplot(aes(x = RXHEP,
+             y = percentage,
+             fill = RXASP,
+             ymin = percentage - se,
+             ymax = percentage + se)) +
+  geom_col(position = position_dodge(preserve = "single"),
+           alpha = 0.7,
+           color = "black") +
+  geom_text(aes(label = round(percentage, 2)),
+            position = position_dodge(width = 0.9),
+            vjust = -0.5,
+            size = 3) +
+  geom_errorbar(position = position_dodge(width = 0.9),
+                width = 0.3) +
+  labs(title = "Percentage of patients with XXX",
+       subtitle = "XXX",
+       x = NULL,
+       y = "%",
+       fill = "Aspirin Dosing") +
+  scale_fill_brewer(palette = "Dark2",
+                    labels = c("Y" = "300 mg daily",
+                                 "N" = "No Aspirin")) +
+  theme_minimal() +
+  theme(legend.position = "bottom",
+        axis.title.y = element_text(angle = 0, vjust = 0.5),
+        panel.grid.major.x = element_blank()) +
+  scale_x_discrete(labels = c("M" = "12500 IU Heparin",
+                              "L" = "5000 IU Heparin",
+                              "N" = "No Heparin"))
+```
