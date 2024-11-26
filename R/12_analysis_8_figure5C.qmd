@@ -27,8 +27,7 @@ data <- read_tsv("../data/03_dat_aug.tsv")
 
 ## Finding Relevant Data
 
-In order to make the correct plot, it is necessary to use the same variables as the authors of the article. In order to validate that the correct variables have been identified a table summing the number of patients in each group is made:
-## Creating Function
+In order to make the correct plot, it is necessary to use the same variables as the authors of the article. In order to validate that the correct variables have been identified a table summing the number of patients in each group is made: \## Creating Function
 
 ```{r}
 data |> 
@@ -169,4 +168,5 @@ sorted_data |>
                               "L" = "5000 IU Heparin",
                               "N" = "No Heparin"))
 ```
+
 test
