@@ -3,7 +3,8 @@ title: "Initial Stroke Analysis"
 subtitle: "Group 29: Helena Møller, Emma Christiansen, Casper Harreby, Frederik Holmstrup, and Laura Christiansen"
 format:
   revealjs:
-    theme: solarized
+    css: styles.css
+    footer: "R for Bio Data Science"
 editor: visual
 ---
 
@@ -11,7 +12,7 @@ editor: visual
 
 ### The International Stroke Trial v. 2 data
 
-Randomised, open trial
+-   Accessing efficacy and safety of antithrombotic therapy compared to control.
 
 ### Ischaemic stroke and treatments
 
@@ -23,7 +24,7 @@ Assesing effects of antithrombotics (heparin and aspirin) for recurrent ischaemi
 
 ## Methods
 
-### Raw data: 
+### Raw data:
 
 19435 observations with 112 variables
 
