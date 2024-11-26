@@ -1,6 +1,5 @@
 ---
 title: "presentation"
-format: revealjs
 editor: visual
 ---
 
