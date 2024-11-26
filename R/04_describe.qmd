@@ -9,7 +9,6 @@ editor: visual
 ## Loading libraries
 
 ```{r}
-
 #| eval: true 
 library("tidyverse")
 library("ggplot2")
@@ -32,7 +31,7 @@ dataset <- read_tsv("../data/03_dat_aug.tsv")
 # Calculate the mean of AGE 
 mean_age <- mean(data$AGE, na.rm = TRUE)  # Visualizing age distribution of study population
 
-ggplot(dataset, aes(x = AGE)) +   
+p1<- ggplot(dataset, aes(x = AGE)) +   
   geom_histogram(fill = "lightblue", 
                  color = "darkblue",
                  bins = 30,
@@ -68,9 +67,15 @@ ggplot(dataset, aes(x = AGE)) +
                 fontface="bold",
                 size=5,     
                 label.padding=unit(0.4,"lines")) # Mean age shown in a text box with padding
+
+p1
+
+#saving the plot as a png
+ggsave("../results/03_decription_plot_1.png", plot = p1, width = 8, height = 4, dpi = 300, bg = "white")
+
 ```
 
-## Age distribution of stroke subtypes (STYPE) 
+## Age distribution of stroke subtypes (STYPE)
 
 Show stroke subtype STYPE distributed by age using histogram:
 

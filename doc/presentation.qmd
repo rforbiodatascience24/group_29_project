@@ -22,20 +22,36 @@ Ischaemic stroke:
 
 Assesing effects of antithrombotics (heparin and aspirin) for recurrent ischaemic strokes
 
-## Methods
+## Methods    
 
 ### Raw data:
 
 19435 observations with 112 variables
 
-### 01_load_data:
+### 01_load:
 
 Data has been loaded and saved in a tsv-file.
 
-### 02_clean_data:
+### 02_clean:
 
-Data Wrangling):\
-Age values converted to integers, column names replaced with more meaningful names, unusable values set to NA and the data sets have been re-joined into one.
+Global syntax of NA, and Y/N for binary variables, global syntax for the use of numbers 1-8 as to describe causes of death, correction of errors made when the data was gathered, removal of column determined to be irrelevant, and lastly merging of columns for easier data analysis. Data was split and re-joined into one.
+
+### 03_augment
+
+Groups created based on different treatments, and different doses of aspirin and heparin.
+
+## Descriptive analysis
+
+Observations: 19,435
+
+Variables: 98
+
+```{r}
+#| eval: true
+#| echo: true
+
+knitr::include_graphics("../results/03_decription_plot_1.png")
+```
 
 ## Data visualization: type of stroke
 

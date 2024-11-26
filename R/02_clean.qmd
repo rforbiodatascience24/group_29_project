@@ -1,6 +1,9 @@
 ---
 title: "02_clean"
 format: html
+output:
+  html:
+    output-dir: "/results"
 editor: visual
 ---
 
@@ -9,14 +12,20 @@ editor: visual
 ## Loading libraries
 
 ```{r}
+#| echo: true 
 #| eval: true
+#| message: false
+
 library("tidyverse")
 ```
 
 ## Loading data
 
 ```{r}
+#| echo: true 
 #| eval: true
+#| message: false
+
 data <- read_tsv("../data/_raw/01_dat_load.tsv")
 ```
 
@@ -137,7 +146,7 @@ data_clean_english <- data_clean_annotationalign |>
     RMONTH == "gru" ~ "Dec"))
 ```
 
-### Removal of irrelevant columns 
+### Removal of irrelevant columns
 
 Some columns is already known to not be relevant. These will therefore be removed to reduce the space of the column.
 
@@ -191,7 +200,6 @@ data_clean_properDEADcode <- data_clean_mergecol2 |>
          DEAD8 = if_else(DEAD8 == 1, "8", "")) |>
   unite(DEADC, c(DEAD1,DEAD2,DEAD3,DEAD4,DEAD5,DEAD6,DEAD7,DEAD8), sep = "") |> 
   mutate(DEADC = na_if(DEADC,""))
-view(data_clean_properDEADcode)
 ```
 
 ### Splitting/joining data
