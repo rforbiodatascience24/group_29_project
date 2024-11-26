@@ -103,8 +103,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="data-analysis---xxx-find-out-what-to-replace-h14-with" class="level2">
-<h2 class="anchored" data-anchor-id="data-analysis---xxx-find-out-what-to-replace-h14-with">Data analysis - XXX FIND OUT WHAT TO REPLACE H14 with</h2>
+<section id="data-analysis---xxx-find-out-what-to-replace-ncb14-with" class="level2">
+<h2 class="anchored" data-anchor-id="data-analysis---xxx-find-out-what-to-replace-ncb14-with">Data analysis - XXX FIND OUT WHAT TO REPLACE NCB14 with</h2>
 <p>Creation of figure 5C</p>
 </section>
 <section id="loading-libraries" class="level2">
@@ -160,25 +160,25 @@ lgl  (1): DDEAD
 <p>In order to make the correct plot, it is necessary to use the same variables as the authors of the article. In order to validate that the correct variables have been identified a table summing the number of patients in each group is made:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span> </span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(RXASP,RXHEP,H14) <span class="sc">|&gt;</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(RXASP,RXHEP,NCB14) <span class="sc">|&gt;</span> </span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 12 × 4
-# Groups:   RXASP, RXHEP, H14 [12]
-   RXASP RXHEP H14       n
+# Groups:   RXASP, RXHEP, NCB14 [12]
+   RXASP RXHEP NCB14     n
    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt;
- 1 N     L     N      2413
- 2 N     L     Y        16
- 3 N     M     N      2383
- 4 N     M     Y        43
- 5 N     N     N      4845
- 6 N     N     Y        15
- 7 Y     L     N      2413
- 8 Y     L     Y        19
- 9 Y     M     N      2388
-10 Y     M     Y        42
-11 Y     N     N      4832
-12 Y     N     Y        26</code></pre>
+ 1 N     L     N      2392
+ 2 N     L     Y        37
+ 3 N     M     N      2295
+ 4 N     M     Y       131
+ 5 N     N     N      4841
+ 6 N     N     Y        19
+ 7 Y     L     N      2373
+ 8 Y     L     Y        59
+ 9 Y     M     N      2213
+10 Y     M     Y       217
+11 Y     N     N      4790
+12 Y     N     Y        68</code></pre>
 </div>
 </div>
 <p>The numbers here seems to fit the numbers from figure 5.C to the extent that it can be read. XXX</p>
@@ -188,13 +188,13 @@ lgl  (1): DDEAD
 <p>In order to make the data set smaller and more clearly arranged, all other columns than the three relevant, are removed:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>relevant_data <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(RXHEP, RXASP, H14) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(RXHEP, RXASP, NCB14) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The plot has percentages of reported XXX on the y-axis. Such a variable is created.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>percentage_data <span class="ot">&lt;-</span> relevant_data <span class="sc">|&gt;</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Counts the patients in each group</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(RXHEP, RXASP, H14) <span class="sc">|&gt;</span> </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(RXHEP, RXASP, NCB14) <span class="sc">|&gt;</span> </span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>() <span class="sc">|&gt;</span> </span>
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Creates the six groups examined</span></span>
 <span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(RXHEP, RXASP) <span class="sc">|&gt;</span> </span>
@@ -204,7 +204,7 @@ lgl  (1): DDEAD
 <span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">p =</span> n <span class="sc">/</span> total_in_group,</span>
 <span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">se =</span> <span class="fu">sqrt</span>(p <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p) <span class="sc">/</span> total_in_group) <span class="sc">*</span> <span class="dv">100</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Removes all patients with no reported pulmonary embolism</span></span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(H14 <span class="sc">!=</span> <span class="st">"N"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(NCB14 <span class="sc">!=</span> <span class="st">"N"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>To get the same order of the columns in the plot, the factors are applied to the data:</p>
 <div class="cell">
