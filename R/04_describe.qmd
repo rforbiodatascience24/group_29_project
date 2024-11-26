@@ -12,7 +12,9 @@ editor: visual
 
 ## Loading libraries
 
-```{r} #| eval: true}
+```{r}
+
+#| eval: true 
 library("tidyverse")
 library("ggplot2")
 library("dplyr") 
@@ -26,8 +28,11 @@ library("readr")
 
 ## Age distribution of study population
 
-```{r}  # Calculate the mean of AGE}
-mean_age <- mean(data$AGE, na.rm = TRUE)  # Visualizing age distribution of study population  
+```{r}
+
+# Calculate the mean of AGE 
+mean_age <- mean(data$AGE, na.rm = TRUE)  # Visualizing age distribution of study population
+
 ggplot(dataset, aes(x = AGE)) +   
   geom_histogram(fill = "lightblue", 
                  color = "darkblue",
@@ -68,7 +73,9 @@ ggplot(dataset, aes(x = AGE)) +
 
 ## Gender distribution of the study population
 
-```{r}  # Gender distribution   ggplot(dataset, aes(x = STYPE, fill = SEX)) +   geom_bar() +   scale_fill_manual(values = c("blue", "pink")) +   labs(     title = "Gender Distribution of the Study Population",     x = "Treatment groups",     y = "Number of People"   ) +   theme_minimal(base_size = 14) +   theme(     plot.title = element_text(hjust = 0.5, face = "bold", size = 18),     axis.title.x = element_text(face = "bold", size = 14),     axis.title.y = element_text(face = "bold", size = 14),     legend.position = "none" # Hide legend since labels are on the x-axis   )}
+```{r}
+# Gender distribution
+
 ```
 
 # Data visualization
