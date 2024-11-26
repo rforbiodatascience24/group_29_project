@@ -15,8 +15,6 @@ editor: visual
 
 -   Tjek på hvad der skal i clean go hvad der skal i augment
 
--   Pivot (tjek til Emma)
-
 -   Output fra alle filer I results (html, png)
 
 -   Continuous variable

@@ -27,7 +27,7 @@ library("readr")
 dataset <- read_tsv("../data/03_dat_aug.tsv")
 ```
 
-## Age distribution of study population 
+## Age distribution of study population
 
 ```{r}
 
@@ -79,7 +79,7 @@ ggplot(dataset, aes(x = AGE)) +
   ) # Mean age shown in a text box with padding
 ```
 
-## Gender distribution of the study population 
+## Gender distribution of the study population
 
 ```{r}
 
@@ -103,7 +103,7 @@ ggplot(dataset, aes(x = STYPE, fill = SEX)) +
 
 ```
 
-# Data visualization 
+# Data visualization
 
 Number of inital ischemic strokes based on age
 
