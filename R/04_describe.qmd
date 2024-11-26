@@ -72,7 +72,7 @@ ggplot(dataset, aes(x = AGE)) +
 
 # Data visualization
 
-## Boxplot for predicted probability of death at 6 months compared by gender 
+## Boxplot for predicted probability of death at 6 months compared by gender
 
 ```{r}
 
