@@ -4,6 +4,77 @@ format: html
 editor: visual
 ---
 
+# Descriptive analysis
+
+-   Age distribution of the study population
+
+-   Gender distribution of the study population
+
+## Loading libraries
+
+```{r} #| eval: true}
+library("tidyverse")
+library("ggplot2")
+library("dplyr") 
+library("readr")
+```
+
+## Import the dataset
+
+```{r} # Load the dataset  dataset <- read_tsv("../data/03_dat_aug.tsv")}
+```
+
+## Age distribution of study population
+
+```{r}  # Calculate the mean of AGE}
+mean_age <- mean(data$AGE, na.rm = TRUE)  # Visualizing age distribution of study population  
+ggplot(dataset, aes(x = AGE)) +   
+  geom_histogram(fill = "lightblue", 
+                 color = "darkblue",
+                 bins = 30,
+                 alpha=0.7) +   
+  labs(title = "Age Distribution of the Study Population",     
+       x = "Age (years)",     
+       y = "Number of People") +   
+  theme_minimal(base_size = 14) + # Clean minimal theme with larger text   
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 18),
+        axis.title.x = element_text(face = "bold", size = 14), # Bold x-axis title     
+        axis.title.y = element_text(face = "bold", size = 14), # Bold y-axis title
+        panel.grid.minor = element_blank() # Removes minor grid lines 
+        ) +   
+  scale_x_continuous(breaks = seq(0, 100, by = 10), 
+                     limits = c(0, 100)   ) + # Set x-axis limits and breaks   
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05)),
+                     breaks = seq(0, 3000, by = 500),) + # Avoids crowded y-axis and setting breaks 
+  # Adding a short dashed line for the mean age     
+  geom_segment(aes(x = mean_age,
+                   xend = mean_age,       
+                   y = 0, 
+                   yend = 2900),
+               color = "darkgreen",     
+               linetype = "dashed",     
+               size = 1.0   ) + # Adds mean age as a vertical dashed line   
+  annotate(     "label",     
+                x = mean(dataset$AGE, na.rm = TRUE) + 12, # Moving label 12 units right of mean to prevent overlap     
+                y = max(table(dataset$AGE)) * 0.8, # Position slightly below the peak     
+                label = paste("Mean Age:", 
+                              round(mean(data$AGE, na.rm = TRUE), 1),"years"),
+                color = "white",
+                fill="darkgreen",
+                fontface="bold",
+                size=5,     
+                label.padding=unit(0.4,"lines")) # Mean age shown in a text box with padding
+```
+
+## Gender distribution of the study population
+
+```{r}  # Gender distribution   ggplot(dataset, aes(x = STYPE, fill = SEX)) +   geom_bar() +   scale_fill_manual(values = c("blue", "pink")) +   labs(     title = "Gender Distribution of the Study Population",     x = "Treatment groups",     y = "Number of People"   ) +   theme_minimal(base_size = 14) +   theme(     plot.title = element_text(hjust = 0.5, face = "bold", size = 18),     axis.title.x = element_text(face = "bold", size = 14),     axis.title.y = element_text(face = "bold", size = 14),     legend.position = "none" # Hide legend since labels are on the x-axis   )}
+```
+
+# Data visualization
+
+Number of inital ischemic strokes based on age
+
 ## Description of Data
 
 From the paper - figure 1 and table 1 + 2 + 3 + 4 + 5 + 6
