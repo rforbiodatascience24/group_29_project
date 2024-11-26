@@ -326,7 +326,7 @@
 
 <section id="title-slide" class="quarto-title-block center">
   <h1 class="title">Initial Stroke Analysis</h1>
-  <p class="subtitle">Group 29: Helena Møller, Emma Christiansen, Laura Christiansen, Frederik Holmstrup, and Casper Harryby</p>
+  <p class="subtitle">Group 29: Helena Møller, Emma Christiansen, Casper Harreby, Frederik Holmstrup, and Laura Christiansen</p>
 
 <div class="quarto-title-authors">
 </div>
@@ -334,31 +334,15 @@
 </section>
 <section id="introduction" class="slide level2">
 <h2>Introduction</h2>
-<p>Quarto enables you to weave together content and executable code into a finished presentation. To learn more about Quarto presentations see <a href="https://quarto.org/docs/presentations/" class="uri">https://quarto.org/docs/presentations/</a>.</p>
+<h3 id="the-international-stroke-trial-v.-2">The International Stroke Trial v. 2</h3>
+<h3 id="aim">Aim</h3>
+<p>Assesing effects of antithrombotics for recurrent ischaemic strokes</p>
 </section>
-<section id="data-and-methods" class="slide level2">
-<h2>Data and Methods</h2>
-<p>When you click the <strong>Render</strong> button a document will be generated that includes:</p>
-<ul>
-<li>Content authored with markdown</li>
-<li>Output from executable code</li>
-</ul>
+<section id="data-visualization-type-of-stroke" class="slide level2">
+<h2>Data visualization: type of stroke</h2>
 </section>
-<section id="descriptive-analysis" class="slide level2">
-<h2>Descriptive analysis</h2>
-<p>When you click the <strong>Render</strong> button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:</p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 2</code></pre>
-</div>
-</div>
-</section>
-<section id="discussion" class="slide level2">
-<h2>Discussion</h2>
-<p><code>---</code></p>
-</section>
-<section id="conclusion" class="slide level2">
-<h2>Conclusion</h2>
+<section id="data-visualization-effects-of-treaments" class="slide level2">
+<h2>Data visualization: effects of treaments</h2>
 <div class="quarto-auto-generated-content">
 <div class="footer footer-default">
 
@@ -575,44 +559,6 @@
         ]
       });
     </script>
-    
-    <script>
-      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
-      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
-      // slide changes (different for each slide format).
-      (function () {
-        // dispatch for htmlwidgets
-        function fireSlideEnter() {
-          const event = window.document.createEvent("Event");
-          event.initEvent("slideenter", true, true);
-          window.document.dispatchEvent(event);
-        }
-
-        function fireSlideChanged(previousSlide, currentSlide) {
-          fireSlideEnter();
-
-          // dispatch for shiny
-          if (window.jQuery) {
-            if (previousSlide) {
-              window.jQuery(previousSlide).trigger("hidden");
-            }
-            if (currentSlide) {
-              window.jQuery(currentSlide).trigger("shown");
-            }
-          }
-        }
-
-        // hookup for slidy
-        if (window.w3c_slidy) {
-          window.w3c_slidy.add_observer(function (slide_num) {
-            // slide_num starts at position 1
-            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
-          });
-        }
-
-      })();
-    </script>
-
     <script id="quarto-html-after-body" type="application/javascript">
     window.document.addEventListener("DOMContentLoaded", function (event) {
       const toggleBodyColorMode = (bsSheetEl) => {
