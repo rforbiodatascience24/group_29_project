@@ -21,22 +21,10 @@ data_clean <- read_tsv(file = "../data/02_dat_clean.tsv")
 
 ## Data augmentation
 
-Some columns is already known to not be relevant. These will therefore be removed to reduce the space of the column.
-
-```{r}
-
-data_clean <- data_clean |> 
-  #Removing comment columns
-  select(-c(DMAJNCHX,DNOSTRKX,DSIDEX,DDEADX,FDEADX)) |> 
-  #Removing columns which are not interesting for our studies
-  select(-c(HOSPNUM,CNTRYNUM,SET14D,NCCODE)) |> 
-  #Removing column which have unknown meaning as not included in variable descriptions
-  select(-c(DIED))
-```
-
 DLH14 describes if the subject had a low dose of heparin (Yes/No), DMH14 describes if the subject had a medium dose of heparin (Yes/No), given for 14 days or till death/discharge. We want to merge the two columns into one to improve tidyness, Introduce L for low, M for medium, C for control (no Heparin) and NA for no known information or conflicting information in the two columns.
 
 ```{r}
+#creating groups for heparin doses
 data_clean_hepgroups <- data_clean |> 
   mutate("DH14" = case_when(
     (is.na(DLH14) & is.na(DMH14)) ~ NA,
@@ -46,48 +34,11 @@ data_clean_hepgroups <- data_clean |>
     (DLH14 == "N" & DMH14 == "Y") ~ "M"))
 ```
 
-The numbers 1-8 is used for naming cause of death. Therefore OCCODE is renamed to the actual meanings of the numbers 0-9 to prevent confusion to number code in cause of death.
-
-```{r}
-data_clean_properOCcode <- data_clean_hepgroups |> 
-  mutate(OCCODE = case_when(
-    OCCODE %in% c(0,8,9) ~ NA,
-    OCCODE == 1 ~ "dead",
-    OCCODE == 2 ~ "dependent",
-    OCCODE == 3 ~ "not recovered",
-    OCCODE == 4 ~ "recovered"))
-```
-
-The columns DDEADD and FDEADD are the same, as the value is the date of death of the subject, which is independent of when the checkup is done. The columns are therefore renamed to DEADD (deathdate) and one of the columns are removed.
-
-```{r}
-#Removing ambigious columns
-data_clean_properdeath <-  data_clean_properOCcode |> 
-  rename("DEADD" = DDEADD) |> 
-  select(-FDEADD)
-```
-
-The causes of death at 6 months are split into 8 different columns called DEAD1-8. To have more tidy data, all columns are merged together into one column, using the same 1-8 code for cause of death as DDEADC and FDEADC columns. The new column is called DEADC (death cause)
-
-```{r}
-
-data_clean_properDEADcode <- data_clean_properdeath |> 
-  mutate(DEAD1 = if_else(DEAD1 == 1, "1", ""),
-         DEAD2 = if_else(DEAD2 == 1, "2", ""),
-         DEAD3 = if_else(DEAD3 == 1, "3", ""),
-         DEAD4 = if_else(DEAD4 == 1, "4", ""),
-         DEAD5 = if_else(DEAD5 == 1, "5", ""),
-         DEAD6 = if_else(DEAD6 == 1, "6", ""),
-         DEAD7 = if_else(DEAD7 == 1, "7", ""),
-         DEAD8 = if_else(DEAD8 == 1, "8", "")) |>
-  unite(DEADC, c(DEAD1,DEAD2,DEAD3,DEAD4,DEAD5,DEAD6,DEAD7,DEAD8), sep = "") |> 
-  mutate(DEADC = na_if(DEADC,""))
-```
-
 There are 6 different groups in the data. We therefore want to make a group name column to get an easy overview of the groups in the data
 
 ```{r}
-data_clean_groups <- data_clean_properDEADcode |> 
+#creating groups based on treatment
+data_clean_trtgroups <- data_clean_hepgroups |> 
   mutate("data_group" = case_when(
     (RXASP == "Y" & RXHEP == "L") ~ "Asp-Hep(low)",
     (RXASP == "Y" & RXHEP == "M") ~ "Asp-Hep(med)",
@@ -98,57 +49,10 @@ data_clean_groups <- data_clean_properDEADcode |>
   ))
 ```
 
-There are four different columns in the data which all represents the final diagnosis of the initial event. It is fair to assume that if one final diagnosis is made of an initial event then another diagnosis is not made, as there are no data entries which has "Y" in more than one of the diagnosis. One column, DDIAG, is therefore made to represent the final diagnosis of the initial event.
-
-```{r}
-data_clean_groups <- data_clean_groups |> 
-  mutate("DDIAG" = case_when(
-    DDIAGISC == "Y" ~ "DDIAGISC",
-    DDIAGHA == "Y" ~ "DDIAGHA",
-    DDIAGUN == "Y" ~ "DDIAGUN",
-    DNOSTRK == "Y" ~ "DNOSTRK",
-    TRUE ~ NA))
-```
-
-In order to be able to distinguish patients participating in the trial a Unique Subject Identifier `USUJBID` is added a variable number one in the cleaned dataset.
-
-```{r}
-data_clean_groups <- data_clean_groups |> 
-  mutate(USUBJID = row_number()) |> 
-  select(USUBJID, everything())
-```
-
 ## Saving augmented data
 
 ```{r}
-write_tsv(data_clean_groups, file = "../data/03_dat_aug.tsv")
+write_tsv(data_clean_trtgroups, file = "../data/03_dat_aug.tsv")
 ```
 
-## Splitting/joining data
-
-It might be relevant to split data into multiple datasets. This is the case if we want to share some data with stakeholders while some variables contain information that is sensitive and need to remove from the dataset (e.g. GDPR reasons).
-
-```{r}
-data_split_1 <- data_clean_groups |> 
-  select(1:50)
-
-data_split_2 <- data_clean_groups |> 
-  select(1, 51:98)
-```
-
-```{r}
-data_inner_joined <- data_split_1 |> 
-  inner_join(data_split_2, by = join_by(USUBJID))
-```
-
-Another scenario might be that while the external stakeholder is working with their part of the dataset `data_split_2`, patients might have withdrawn from the study and rows have been removed in `data_split_1`. If we want to remove the same patients/observations during the join, `left_join()` will be used.
-
-```{r}
-data_split_1_1 <- data_split_1 |>
-  slice(-sample(n(), 500))
-```
-
-```{r}
-data_left_joined <- data_split_1_1 |> 
-  left_join(data_split_2, by = join_by(USUBJID))
-```
+## 
