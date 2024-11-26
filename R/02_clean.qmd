@@ -4,7 +4,7 @@ format: html
 editor: visual
 ---
 
-# Data Cleaning MISSING EXTRA HEADER 3
+# Data Cleaning
 
 ## Loading libraries
 
@@ -22,12 +22,12 @@ data <- read_tsv("../data/_raw/01_dat_load.tsv")
 
 ## Data cleaning
 
-### 
+### Ensuring global use of Yes/No for binary variables
 
 During revision of the data, many faulty characters of U and C appear within columns, only meant for Y or N. The U and C are therefore changed to NA to indicate a missing value.
 
 ```{r}
-
+#converting U and C to NA
 data_clean <- data |> 
   #Replacing all C with NA to indicate missing value
   mutate(across(where(is.character), ~ na_if(.,"C"))) |> 
@@ -41,7 +41,6 @@ data_clean <- data |>
 In column DASP14 and FAP, both n and N along with y and Y both indicating No and Yes respectively. To match the general synthax, all letters are made upper case
 
 ```{r}
-
 #Making y and n upper case
 data_clean_high <- data_clean |> 
   mutate(across(c(DASP14,FAP), ~str_to_upper(.)))

@@ -5,6 +5,22 @@ format: html
 editor: visual
 ---
 
+## Huskeliste (slet mig!)
+
+-   Split og saml data
+
+-   Rækkefølge af facet_wrap() plots
+
+-   Overskrifter i figur_5 plots filerne
+
+-   Tjek på hvad der skal i clean go hvad der skal i augment
+
+-   Output fra alle filer I results (html, png)
+
+-   Continuous variable
+
+-   Function
+
 ## Loading relevant libraries
 
 ```{r}

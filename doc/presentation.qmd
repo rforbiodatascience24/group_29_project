@@ -1,24 +1,41 @@
 ---
-title: "presentation"
-format: revealjs
+title: "Initial Stroke Analysis"
+subtitle: "Group 29: Helena Møller, Emma Christiansen, Casper Harreby, Frederik Holmstrup, and Laura Christiansen"
+format:
+  revealjs:
+    theme: solarized
 editor: visual
 ---
 
-## Quarto
+## Introduction
 
-Quarto enables you to weave together content and executable code into a finished presentation. To learn more about Quarto presentations see <https://quarto.org/docs/presentations/>.
+### The International Stroke Trial v. 2 data
 
-## Bullets
+Randomised, open trial
 
-When you click the **Render** button a document will be generated that includes:
+### Ischaemic stroke and treatments
 
--   Content authored with markdown
--   Output from executable code
+Ischaemic stroke:
 
-## Code
+### Aim
 
-When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:
+Assesing effects of antithrombotics (heparin and aspirin) for recurrent ischaemic strokes
 
-```{r}
-1 + 1
-```
+## Methods
+
+### Raw data: 
+
+19435 observations with 112 variables
+
+### 01_load_data:
+
+Data has been loaded and saved in a tsv-file.
+
+### 02_clean_data:
+
+Data Wrangling):\
+Age values converted to integers, column names replaced with more meaningful names, unusable values set to NA and the data sets have been re-joined into one.
+
+## Data visualization: type of stroke
+
+## Data visualization: effects of treaments
