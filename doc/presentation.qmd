@@ -39,4 +39,4 @@ Age values converted to integers, column names replaced with more meaningful nam
 
 ## Data visualization: type of stroke
 
-## Data visualization: effects of treaments
+## Data visualization: effects of treatments
