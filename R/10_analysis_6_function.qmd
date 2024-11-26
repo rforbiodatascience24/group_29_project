@@ -1,18 +1,17 @@
 ---
-title: "12_analysis_8_figure5C"
 title: "12_analysis_8_Function_Boxplot"
 author: "Group 29"
 format: html
 editor: visual
 ---
 
-## Data analysis - XXX FIND OUT WHAT TO REPLACE H14 with
+## Data analysis
 
 Creation of figure 5A: H14
 
-Creation of figure 5B:
+Creation of figure 5B: TRAN14
 
-Creation of figure 5D:
+Creation of figure 5D: PE14
 
 ## Loading Libraries
 
@@ -40,17 +39,6 @@ name_me1 <- function(column_name){
   
   percentage_data <- relevant_data |>
   #Counts the patients in each group
-  group_by(RXHEP, RXASP, !!column_name) |> 
-  count() |> 
-  #Creates the six groups examined
-  group_by(RXHEP, RXASP) |> 
-  #Creates a row with percentages for use in plot
-  mutate(total_in_group = sum(n),
-         percentage = n / total_in_group * 100,
-         p = n / total_in_group,
-         se = sqrt(p * (1 - p) / total_in_group) * 100) |> 
-  #Removes all patients with no reported pulmonary embolism
-  filter(!!column_name != "N") 
       group_by(RXHEP, RXASP, !!column_name) |> 
       count() |> 
       #Creates the six groups examined
@@ -100,6 +88,16 @@ name_me1 <- function(column_name){
   
   return(plot_box)
 }
+```
 
+```{r}
+name_me1(H14)
+```
+
+```{r}
 name_me1(TRAN14)
+```
+
+```{r}
+name_me1(PE14)
 ```
