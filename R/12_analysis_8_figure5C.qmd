@@ -34,7 +34,7 @@ name_me1 <- function(column_name){
       group_by(RXHEP, RXASP, !!column_name) |> 
       count() |> 
       #Creates the six groups examined
-      group_by(RXHEP, RXASP) |> 
+      group_by(RXHEP, RXASP) |>
       #Creates a row with percentages for use in plot
       mutate(total_in_group = sum(n),
              percentage = n / total_in_group * 100,
