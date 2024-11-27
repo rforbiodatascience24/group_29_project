@@ -1,0 +1,107 @@
+---
+title: "14_analysis_10"
+format: html
+editor: visual
+---
+
+## Libraries
+
+```{r}
+#| echo: TRUE
+#| eval: TRUE
+#| message: FALSE
+#| warning: FALSE
+
+
+library(tidyverse)
+library(broom)
+library(ggrepel)
+```
+
+## Load Data
+
+```{r}
+data <- read_tsv("../data/03_dat_aug.tsv", show_col_types = FALSE)
+```
+
+## Analysis
+
+Making a simple linear model for prediction of
+
+-   `EXPDD` (Predicted probability of death/dependence at 6 month)
+
+-   `EXPD6` (Predicted probability of death at 6 month)
+
+-   `EXPD14` (Predicted probability of death at 14 days)
+
+### Model 1
+
+Using `AGE` to see if can be used predict `EXPDD`.
+
+(NOTE: It is not known from the data how
+
+```{r}
+model_1 <- data |> 
+  filter(STYPE == "LACS") |> 
+  lm(data = _, EXPDD ~ AGE)
+  
+```
+
+```{r}
+model_1 |> 
+  summary()
+```
+
+```{r}
+data |> 
+  filter(STYPE == "LACS") |> 
+  ggplot(aes(x = AGE, y = log10(EXPDD))) +
+  geom_point(color = "PURPLE")
+```
+
+### Model 2
+
+```{r}
+model_2 <- data |> 
+  filter(STYPE == "LACS") |> 
+  lm(data = _, log2(EXPD6) ~ AGE)
+```
+
+```{r}
+model_2 |> 
+  summary()
+```
+
+```{r}
+data |> 
+  filter(STYPE == "LACS") |> 
+  ggplot(aes(x = AGE, y = log2(EXPD6))) +
+  geom_point(color = "BLUE")
+```
+
+### Model 3
+
+```{r}
+model_3 <- data |> 
+  filter(STYPE == "LACS") |> 
+  lm(data = _, log2(EXPD14) ~ AGE)
+```
+
+```{r}
+model_3 |> 
+  summary()
+```
+
+```{r}
+data |> 
+  filter(STYPE == "LACS") |> 
+  ggplot(aes(x = AGE, y = log2(EXPD14))) +
+  geom_point(color = "RED")
+```
+
+```{r}
+data |> 
+  select(data_group) |> 
+  group_by(data_group) |> 
+  count()
+```

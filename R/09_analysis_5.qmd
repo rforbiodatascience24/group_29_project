@@ -67,6 +67,16 @@ group_8_data <- grouped_data |>
 ## Plot
 
 ```{r}
+group_counts <- grouped_data |>
+  count(TD)
+
+p0 <- group_counts |>
+  ggplot(mapping = aes(x = TD, y = n))+
+  geom_line()+
+  coord_cartesian(xlim = c(0, 200))
+
+p0
+  
 group_1_counts <- group_1_data |> 
   group_by(data_group, TD) |>
   summarise(count = n(), .groups = "drop")
@@ -83,6 +93,22 @@ p1 <- group_1_counts |>
 
 p1
 
+group_6_counts <- group_6_data |> 
+  group_by(data_group, TD) |>
+  summarise(count = n(), .groups = "drop")
+
+p6 <- group_6_counts |> 
+  ggplot(mapping = aes(x = TD, y = count, color = data_group)) + 
+  geom_line() +
+  labs(
+    title =  "Days elapsed since randomisation before death of initial stroke",
+    x = "Days elapsed since randomisation",
+    y = "Number of peopled died of initial stroke after x days"
+  ) +
+  facet_wrap(~ data_group)
+
+p6
+
 group_5_counts <- group_5_data |> 
   group_by(data_group, TD) |>
   summarise(count = n(), .groups = "drop")
@@ -98,5 +124,8 @@ p5 <- group_5_counts |>
   facet_wrap(~ data_group, scales = "free_x")
 
 p5
+
+# Save the plot as a PNG
+ggsave("../results/my_plot.png", plot = p0, width = 6, height = 4, dpi = 300)
 
 ```

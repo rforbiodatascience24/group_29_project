@@ -1,0 +1,148 @@
+---
+title: "12_analysis_8_Function_Boxplot"
+author: "Group 29"
+format: html
+editor: visual
+---
+
+## Data analysis
+
+Creation of figure 5A: H14
+
+Creation of figure 5B: TRAN14
+
+Creation of figure 5D: PE14
+
+## Loading Libraries
+
+```{r}
+#| eval: true
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(readr)
+```
+
+## Loading Data
+
+```{r}
+data <- read_tsv("../data/03_dat_aug.tsv")
+```
+
+## Creating Function
+
+```{r}
+box_func <- function(event){
+  
+  #Makes it possible to use column name as variable for function
+  column_name <- enquo(event)
+  
+  # Convert column name to a readable string for the title
+  event_name <- as_label(column_name)
+  
+  #Selects only the data of the effect we are investigating
+  relevant_data <- data |> 
+    select(RXHEP, RXASP, !!column_name) 
+  
+  percentage_data <- relevant_data |>
+    
+  #Counts the patients in each group
+      group_by(RXHEP, RXASP, !!column_name) |> 
+      count() |> 
+    
+      #Creates the six groups examined
+      group_by(RXHEP, RXASP) |>
+    
+      #Creates a row with percentages for use in plot
+      mutate(total_in_group = sum(n),
+             percentage = n / total_in_group * 100,
+             
+             #Calculating standard deviations
+             p = n / total_in_group,
+             se = sqrt(p * (1 - p) / total_in_group) * 100) |> 
+    
+    #Removes all patients with no reported pulmonary embolism
+      filter(!!column_name != "N") 
+  
+  #Create the order of doses of medicine, so they have the correct order in the plot
+  sorted_data <- percentage_data |> 
+    mutate(RXHEP = factor(RXHEP, levels = c("M", "L", "N")),
+           RXASP = factor(RXASP, levels = c("Y", "N")))
+  
+  
+  plot_box <- sorted_data |>   
+  
+    ggplot(aes(#Stratisfy on dose of heparin
+               x = RXHEP,
+               
+               #Expresses the chance of the event happening 
+               y = percentage,
+               
+               #Color by the dose of aspirin
+               fill = RXASP,
+               
+               #Defines minimum for error bars
+               ymin = percentage - se,
+               
+               #Defines maximum for error bars
+               ymax = percentage + se)) +
+    
+    #Creates the columns - position_dodge-argument makes 
+    geom_col(position = position_dodge(preserve = "single"), 
+             alpha = 0.7,
+             color = "black") +
+    
+    #Creates text for data 
+    geom_text(aes(label = round(percentage, 2),
+                  
+    #Makes text centered in boxes and correct sizes
+                  y = percentage / 2),
+              position = position_dodge(width = 0.9),
+              vjust = 0.5,
+              size = 4) +
+    
+    #Adds errorbars
+    geom_errorbar(position = position_dodge(width = 0.9),
+                  width = 0.3) +
+    
+    #
+    labs(title = str_c("Percentage of patients with ", event_name),
+         x = NULL,
+         y = "%",
+         fill = "Aspirin Dosing") +
+    scale_fill_brewer(palette = "Dark2",
+                      labels = c("Y" = "300 mg daily",
+                                   "N" = "No Aspirin")) +
+    
+    #Chooses a design
+    theme_minimal() +
+    
+    theme(legend.position = "bottom",
+    
+    #Adjust y-axis tet 
+          axis.title.y = element_text(angle = 0, vjust = 0.5),
+    
+    #Adjusting horizontal lines
+          panel.grid.major.x = element_blank()) +
+    
+    #Edits labels for the X-axis
+    scale_x_discrete(labels = c("M" = "12500 IU Heparin",
+                                "L" = "5000 IU Heparin",
+                                "N" = "No Heparin"))
+  
+  #Defines final output of function to be the plot
+  return(plot_box)
+}
+```
+
+```{r}
+box_func(H14)
+```
+
+```{r}
+box_func(TRAN14)
+```
+
+```{r}
+box_func(PE14)
+```
