@@ -14,3 +14,19 @@ editor: visual
 {{< include 03_augment.qmd >}}
 
 {{< include 04_describe.qmd >}}
+
+{{< include 05_analysis_1.qmd >}}
+
+{{< include 06_analysis_2.qmd >}}
+
+{{< include 07_analysis_3.qmd >}}
+
+{{< include 08_analysis_4.qmd >}}
+
+{{< include 09_analysis_5.qmd >}}
+
+{{< include 10_analysis_6_function.qmd >}}
+
+{{< include 11_analysis_7.qmd >}}
+
+{{< include 14_analysis_10.qmd >}}

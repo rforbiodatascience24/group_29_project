@@ -10,15 +10,13 @@ editor: visual
 
 ```{r}
 library("tidyverse")
-library("ggplot2")
-library("dplyr")
-library("readr")
+library("here")
 ```
 
 ## Loading data
 
 ```{r}
-data <- read_tsv("../data/03_dat_aug.tsv")
+data <- read_tsv(here("data/03_dat_aug.tsv"))
 ```
 
 ## Preparing data

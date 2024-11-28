@@ -14,13 +14,14 @@ The CI of the different treatments looking at different subgroups in the data. P
 
 ```{r}
 library("tidyverse")
-library("patchwork")
+library("here")
 ```
 
 ## Loading data
 
 ```{r}
-data <- read_tsv("../data/03_dat_aug.tsv")
+here()
+data <- read_tsv(here("data/03_dat_aug.tsv"))
 ```
 
 ## Heparin vs. Control Subgroup Analysis
@@ -390,6 +391,6 @@ p2
 ## Save the results
 
 ```{r}
-ggsave(filename = "../results/05_keyplot_2a.png", plot = p1)
-ggsave(filename = "../results/05_keyplot_2b.png", plot = p2)
+ggsave(filename = here("results/05_keyplot_2a.png"), plot = p1)
+ggsave(filename = here("results/05_keyplot_2b.png"), plot = p2)
 ```
