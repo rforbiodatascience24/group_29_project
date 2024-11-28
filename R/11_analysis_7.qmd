@@ -1,7 +1,7 @@
 ---
 title: "09_analysis_5"
+author: "Group 29: Helena Møller, Emma Christensen, Frederik Holmstrup, Casper Harreby & Laura Christiansen"
 format: html
-editor: visual
 ---
 
 # Data analysis - visualising the overall effect of the treatments

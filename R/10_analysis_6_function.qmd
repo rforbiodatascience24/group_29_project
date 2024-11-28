@@ -1,8 +1,7 @@
 ---
-title: "12_analysis_8_Function_Boxplot"
-author: "Group 29"
+title: "08_analysis_4"
+author: "Group 29: Helena Møller, Emma Christensen, Frederik Holmstrup, Casper Harreby & Laura Christiansen"
 format: html
-editor: visual
 ---
 
 ## Data analysis

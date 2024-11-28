@@ -1,7 +1,7 @@
 ---
 title: "06_analysis_2"
+author: "Group 29: Helena Møller, Emma Christensen, Frederik Holmstrup, Casper Harreby & Laura Christiansen"
 format: html
-editor: visual
 ---
 
 ## Short-term effects of early anticoagulant therapy

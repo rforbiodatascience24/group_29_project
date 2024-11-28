@@ -1,10 +1,7 @@
 ---
 title: "02_clean"
+author: "Group 29: Helena Møller, Emma Christensen, Frederik Holmstrup, Casper Harreby & Laura Christiansen"
 format: html
-output:
-  html:
-    output-dir: "../results"   # Ensure the folder exists or create it manually
-editor: visual
 ---
 
 # Data Cleaningh
