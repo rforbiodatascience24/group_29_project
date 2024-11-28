@@ -5,6 +5,7 @@ format:
   revealjs:
     css: styles.css
     footer: "R for Bio Data Science"
+    embed-resources: true
 editor: visual
 ---
 
@@ -46,13 +47,7 @@ Observations: 19,435
 
 Variables: 98
 
-```{r}
-#| eval: true
-#| echo: true
-
-p1
-#knitr::include_graphics("../results/03_decription_plot_1.png")
-```
+![](../results/03_decription_plot_1.png){fig-align="left" width="100%"}
 
 ## Data visualization: type of stroke
 
