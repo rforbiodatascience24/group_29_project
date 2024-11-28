@@ -3,11 +3,11 @@ title: "02_clean"
 format: html
 output:
   html:
-    output-dir: "/results"
+    output-dir: "../results"   # Ensure the folder exists or create it manually
 editor: visual
 ---
 
-# Data Cleaning
+# Data Cleaningh
 
 ## Loading libraries
 
@@ -17,6 +17,8 @@ editor: visual
 #| message: false
 
 library("tidyverse")
+library("knitr")
+library("quarto")
 ```
 
 ## Loading data
@@ -250,4 +252,6 @@ data_left_joined <- data_split_1_1 |>
 
 ```{r}
 write_tsv(data_inner_joined, file = "../data/02_dat_clean.tsv")
+
+list.files("../")
 ```

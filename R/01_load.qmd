@@ -1,22 +1,8 @@
 ---
 title: "01_load"
-author: "Group 29"
+author: "Group 29: Helena Møller, Emma Christensen, Frederik Holmstrup, Casper Harreby & Laura Christiansen"
 format: html
-output-dir: "../results"
-editor: visual
 ---
-
-## Huskeliste (slet mig!)
-
--   Rækkefølge af facet_wrap() plots
-
--   Overskrifter i figur_5 plots filerne
-
--   Output fra alle filer I results (html, png)
-
--   Continuous variable
-
--   Function
 
 ## Loading relevant libraries
 
@@ -44,6 +30,7 @@ raw_data <- read_csv(file = "https://datashare.ed.ac.uk/bitstream/handle/10283/1
 ```{r}
 #| echo: true 
 #| eval: true
+#| message: false
 
 # Define the file path
 file_path <- "../data/_raw/" 
@@ -56,3 +43,4 @@ if (!file.exists(file_path)) { dir.create(file_path, recursive = TRUE) }
 write_tsv(x = raw_data, 
           file = str_c(file_path, "01_dat_load.tsv"))
 ```
+

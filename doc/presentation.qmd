@@ -22,7 +22,7 @@ Ischaemic stroke:
 
 Assesing effects of antithrombotics (heparin and aspirin) for recurrent ischaemic strokes
 
-## Methods    
+## Methods
 
 ### Raw data:
 
@@ -50,7 +50,8 @@ Variables: 98
 #| eval: true
 #| echo: true
 
-knitr::include_graphics("../results/03_decription_plot_1.png")
+p1
+#knitr::include_graphics("../results/03_decription_plot_1.png")
 ```
 
 ## Data visualization: type of stroke
