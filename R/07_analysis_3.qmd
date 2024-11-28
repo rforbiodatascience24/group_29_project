@@ -1,0 +1,129 @@
+---
+title: "07_analysis_3"
+author: "Group 29: Helena Møller, Emma Christensen, Frederik Holmstrup, Casper Harreby & Laura Christiansen"
+format: html
+---
+
+## Data analysis
+
+## Loading libraries
+
+```{r}
+library("tidyverse")
+library("here")
+```
+
+## Loading data
+
+```{r}
+data <- read_tsv(here("data/03_dat_aug.tsv"))
+```
+
+## Preparing data
+
+```{r}
+grouped_data <- data_clean_groups |>
+  group_by(DEADC) |>
+  mutate(
+    TD_causes = case_when(
+      DEADC == 1 ~ "cause_1",
+      DEADC == 2 ~ "cause_2",
+      DEADC == 3 ~ "cause_3",
+      DEADC == 4 ~ "cause_4",
+      DEADC == 5 ~ "cause_5",
+      DEADC == 6 ~ "cause_6",
+      DEADC == 7 ~ "cause_7",
+      DEADC == 8 ~ "cause_8",
+    )
+  )
+
+group_1_data <- grouped_data |> 
+  filter(TD_causes == "cause_1")
+
+group_2_data <- grouped_data |>
+  filter(TD_causes == "cause_2")
+
+group_3_data <- grouped_data |>
+  filter(TD_causes == "cause_3")
+
+group_4_data <- grouped_data |>
+  filter(TD_causes == "cause_4")
+
+group_5_data <- grouped_data |>
+  filter(TD_causes == "cause_5")
+
+group_6_data <- grouped_data |>
+  filter(TD_causes == "cause_6")
+
+group_7_data <- grouped_data |>
+  filter(TD_causes == "cause_7")
+
+group_8_data <- grouped_data |>
+  filter(TD_causes == "cause_8")
+```
+
+## Plot
+
+```{r}
+group_counts <- grouped_data |>
+  count(TD)
+
+p0 <- group_counts |>
+  ggplot(mapping = aes(x = TD, y = n))+
+  geom_line()+
+  coord_cartesian(xlim = c(0, 200))
+
+p0
+  
+group_1_counts <- group_1_data |> 
+  group_by(data_group, TD) |>
+  summarise(count = n(), .groups = "drop")
+
+p1 <- group_1_counts |> 
+  ggplot(mapping = aes(x = TD, y = count, color = data_group)) + 
+  geom_line() +
+  labs(
+    title =  "Days elapsed since randomisation before death of initial stroke",
+    x = "Days elapsed since randomisation",
+    y = "Number of peopled died of initial stroke after x days"
+  ) +
+  facet_wrap(~ data_group)
+
+p1
+
+group_6_counts <- group_6_data |> 
+  group_by(data_group, TD) |>
+  summarise(count = n(), .groups = "drop")
+
+p6 <- group_6_counts |> 
+  ggplot(mapping = aes(x = TD, y = count, color = data_group)) + 
+  geom_line() +
+  labs(
+    title =  "Days elapsed since randomisation before death of initial stroke",
+    x = "Days elapsed since randomisation",
+    y = "Number of peopled died of initial stroke after x days"
+  ) +
+  facet_wrap(~ data_group)
+
+p6
+
+group_5_counts <- group_5_data |> 
+  group_by(data_group, TD) |>
+  summarise(count = n(), .groups = "drop")
+
+p5 <- group_5_counts |> 
+  ggplot(mapping = aes(x = TD, y = count, color = data_group)) + 
+  geom_line() +
+  labs(
+    title =  "Days elapsed since randomisation before death of coronary heart disease",
+    x = "Days elapsed since randomisation",
+    y = "Number of peopled died of coronary heart disease after x days"
+  ) +
+  facet_wrap(~ data_group, scales = "free_x")
+
+p5
+
+# Save the plot as a PNG
+ggsave("../results/my_plot.png", plot = p0, width = 6, height = 4, dpi = 300)
+
+```

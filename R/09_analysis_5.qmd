@@ -1,129 +1,74 @@
 ---
-title: "07_analysis_3"
+title: "09_analysis_5"
 author: "Group 29: Helena Møller, Emma Christensen, Frederik Holmstrup, Casper Harreby & Laura Christiansen"
 format: html
 ---
 
-## Data analysis
+# Data analysis - visualising the overall effect of the treatments
 
 ## Loading libraries
 
 ```{r}
 library("tidyverse")
-library("here")
+library("survival")
+library(RColorBrewer)
 ```
 
 ## Loading data
 
 ```{r}
-data <- read_tsv(here("data/03_dat_aug.tsv"))
+data <- read_tsv("../data/03_dat_aug.tsv")
 ```
 
-## Preparing data
+## Preparing data for plot
+
+To asses the overall impact of the different treatment groups, the data is prepared for a Kaplan-Meier curve of the data and a Cox proportional hazards model
+
+A Kaplan-Meier curve is a curve illustrating the overall survival rate for each group over time. We can plot it for 0-6 months after randomization. We can use this to see if there is an overall difference in survival for the treatments over time. For this we need a time-of-death (if one) and group value for each subject.
 
 ```{r}
-grouped_data <- data_clean_groups |>
-  group_by(DEADC) |>
-  mutate(
-    TD_causes = case_when(
-      DEADC == 1 ~ "cause_1",
-      DEADC == 2 ~ "cause_2",
-      DEADC == 3 ~ "cause_3",
-      DEADC == 4 ~ "cause_4",
-      DEADC == 5 ~ "cause_5",
-      DEADC == 6 ~ "cause_6",
-      DEADC == 7 ~ "cause_7",
-      DEADC == 8 ~ "cause_8",
-    )
-  )
-
-group_1_data <- grouped_data |> 
-  filter(TD_causes == "cause_1")
-
-group_2_data <- grouped_data |>
-  filter(TD_causes == "cause_2")
-
-group_3_data <- grouped_data |>
-  filter(TD_causes == "cause_3")
-
-group_4_data <- grouped_data |>
-  filter(TD_causes == "cause_4")
-
-group_5_data <- grouped_data |>
-  filter(TD_causes == "cause_5")
-
-group_6_data <- grouped_data |>
-  filter(TD_causes == "cause_6")
-
-group_7_data <- grouped_data |>
-  filter(TD_causes == "cause_7")
-
-group_8_data <- grouped_data |>
-  filter(TD_causes == "cause_8")
+data_filtered <- data |> 
+  select(TD,FDEAD,data_group) |> 
+  mutate(FDEAD = recode(FDEAD, "Y" = 1, "N" = 0)) |> 
+  mutate(TD = if_else(TD > 183, 183, TD))
 ```
 
-## Plot
+```{r}
+km_fit <- survfit(Surv(TD, FDEAD) ~ data_group, data = data_filtered)
+km_tidy <- broom::tidy(km_fit)
+```
 
 ```{r}
-group_counts <- grouped_data |>
-  count(TD)
-
-p0 <- group_counts |>
-  ggplot(mapping = aes(x = TD, y = n))+
-  geom_line()+
-  coord_cartesian(xlim = c(0, 200))
-
-p0
-  
-group_1_counts <- group_1_data |> 
-  group_by(data_group, TD) |>
-  summarise(count = n(), .groups = "drop")
-
-p1 <- group_1_counts |> 
-  ggplot(mapping = aes(x = TD, y = count, color = data_group)) + 
-  geom_line() +
+p1 <- km_tidy |>
+  mutate(strata = str_remove(strata,"data_group=")) |> 
+  ggplot(mapping = aes(x = time, 
+                       y = estimate, 
+                       color = strata)) + # `strata` is the name of the groups from the km model
+  geom_step(linewidth = 1) +                           # Kaplan-Meier steps
+  geom_ribbon(aes(ymin = conf.low, ymax = conf.high), 
+              alpha = 0.1, linetype = "dashed") +       # Confidence interval
   labs(
-    title =  "Days elapsed since randomisation before death of initial stroke",
-    x = "Days elapsed since randomisation",
-    y = "Number of peopled died of initial stroke after x days"
-  ) +
-  facet_wrap(~ data_group)
+    title = "Kaplan-Meier Survival curve",
+    x = "Time (days)",
+    y = "Probability of survival",
+    color = "Treatment group")+
+  scale_color_brewer(palette="Dark2")+
+  theme_minimal()
+```
 
-p1
-
-group_6_counts <- group_6_data |> 
-  group_by(data_group, TD) |>
-  summarise(count = n(), .groups = "drop")
-
-p6 <- group_6_counts |> 
-  ggplot(mapping = aes(x = TD, y = count, color = data_group)) + 
-  geom_line() +
+```{r}
+# Plot HR fra Cox-model
+cox_tidy |> 
+  mutate(term = str_replace(term, "gruppe", "")) |>   # Fjern præfikset "gruppe"
+  ggplot(aes(x = estimate, y = term)) +
+  geom_point(size = 3, color = "blue") +
+  #geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), height = 0.2) +  # CI
   labs(
-    title =  "Days elapsed since randomisation before death of initial stroke",
-    x = "Days elapsed since randomisation",
-    y = "Number of peopled died of initial stroke after x days"
+    title = "Hazard Ratios fra Cox-modellen",
+    x = "Hazard Ratio (log-skala)",
+    y = "Gruppe"
   ) +
-  facet_wrap(~ data_group)
-
-p6
-
-group_5_counts <- group_5_data |> 
-  group_by(data_group, TD) |>
-  summarise(count = n(), .groups = "drop")
-
-p5 <- group_5_counts |> 
-  ggplot(mapping = aes(x = TD, y = count, color = data_group)) + 
-  geom_line() +
-  labs(
-    title =  "Days elapsed since randomisation before death of coronary heart disease",
-    x = "Days elapsed since randomisation",
-    y = "Number of peopled died of coronary heart disease after x days"
-  ) +
-  facet_wrap(~ data_group, scales = "free_x")
-
-p5
-
-# Save the plot as a PNG
-ggsave("../results/my_plot.png", plot = p0, width = 6, height = 4, dpi = 300)
+  scale_x_log10() +  # Log-skala for HR
+  theme_minimal()
 
 ```
