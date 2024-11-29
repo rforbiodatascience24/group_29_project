@@ -54,10 +54,12 @@ model_1 |>
 ```
 
 ```{r}
-data |> 
-  filter(STYPE == "LACS") |> 
-  ggplot(aes(x = AGE, y = log10(EXPDD))) +
-  geom_point(color = "PURPLE")
+p1 <- data |> 
+        filter(STYPE == "LACS") |> 
+        ggplot(aes(x = AGE, y = log10(EXPDD))) +
+        geom_point(color = "PURPLE")
+
+p1
 ```
 
 ### Model 2
@@ -74,10 +76,12 @@ model_2 |>
 ```
 
 ```{r}
-data |> 
-  filter(STYPE == "LACS") |> 
-  ggplot(aes(x = AGE, y = log2(EXPD6))) +
-  geom_point(color = "BLUE")
+p2 <- data |> 
+        filter(STYPE == "LACS") |> 
+        ggplot(aes(x = AGE, y = log2(EXPD6))) +
+        geom_point(color = "BLUE")
+
+p2
 ```
 
 ### Model 3
@@ -94,10 +98,12 @@ model_3 |>
 ```
 
 ```{r}
-data |> 
-  filter(STYPE == "LACS") |> 
-  ggplot(aes(x = AGE, y = log2(EXPD14))) +
-  geom_point(color = "RED")
+p3 <- data |> 
+        filter(STYPE == "LACS") |> 
+        ggplot(aes(x = AGE, y = log2(EXPD14))) +
+        geom_point(color = "RED")
+
+p3
 ```
 
 ```{r}
@@ -105,4 +111,12 @@ data |>
   select(data_group) |> 
   group_by(data_group) |> 
   count()
+```
+
+## Saving Plots
+
+```{r}
+ggsave(filename = here("results/14_keyplot_a.png"), plot = p1)  
+ggsave(filename = here("results/14_keyplot_b.png"), plot = p2)
+ggsave(filename = here("results/14_keyplot_c.png"), plot = p3)
 ```
