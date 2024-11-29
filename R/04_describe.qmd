@@ -14,14 +14,15 @@ library("tidyverse")
 library("ggplot2")
 library("dplyr") 
 library("readr")
+library("here")
 ```
 
-## Import the dataset
+## Import the Dataset
 
 ```{r}
 
 # Load the dataset  
-dataset <- read_tsv("../data/03_dat_aug.tsv")
+dataset <- read_tsv(here("data/03_dat_aug.tsv"))
 ```
 
 ## Age distribution of study population
@@ -29,8 +30,10 @@ dataset <- read_tsv("../data/03_dat_aug.tsv")
 ```{r}
 
 # Calculate the mean of AGE 
-mean_age <- mean(data$AGE, na.rm = TRUE)  # Visualizing age distribution of study population
+mean_age <- mean(data$AGE, na.rm = TRUE)  
 
+
+# Visualizing age distribution of study population
 p1<- ggplot(dataset, aes(x = AGE)) +   
   geom_histogram(fill = "lightblue", 
                  color = "darkblue",
@@ -51,7 +54,7 @@ p1<- ggplot(dataset, aes(x = AGE)) +
                      breaks = seq(0, 3000, by = 500),) + # Avoids crowded y-axis and setting breaks 
   # Adding a short dashed line for the mean age     
   geom_segment(aes(x = mean_age,
-                   xend = mean_age,       
+                   xend = mean_age,  
                    y = 0, 
                    yend = 2900),
                color = "darkgreen",     

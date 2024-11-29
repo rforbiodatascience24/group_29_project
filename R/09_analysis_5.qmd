@@ -4,20 +4,21 @@ author: "Group 29: Helena Møller, Emma Christensen, Frederik Holmstrup, Casper 
 format: html
 ---
 
-# Data analysis - visualising the overall effect of the treatments
+# Data analysis - visualizing the overall effect of the treatments
 
 ## Loading libraries
 
 ```{r}
 library("tidyverse")
 library("survival")
+library("here")
 library(RColorBrewer)
 ```
 
 ## Loading data
 
 ```{r}
-data <- read_tsv("../data/03_dat_aug.tsv")
+data <- read_tsv(here("data/03_dat_aug.tsv"))
 ```
 
 ## Preparing data for plot

@@ -151,12 +151,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 ✖ dplyr::lag()    masks stats::lag()
 ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 </div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"here"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'here' was built under R version 4.2.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>here() starts at C:/Users/frede/OneDrive/Dokumenter/2 DTU master/1 Semester/22160 R for Bio Data Science/group_29_project</code></pre>
+</div>
 </div>
 </section>
 <section id="loading-clean-data" class="level2">
 <h2 class="anchored" data-anchor-id="loading-clean-data">Loading clean data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>data_clean <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="at">file =</span> <span class="st">"../data/02_dat_clean.tsv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>data_clean <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="fu">here</span>(<span class="st">"data/02_dat_clean.tsv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Rows: 19435 Columns: 96
 ── Column specification ────────────────────────────────────────────────────────
@@ -174,33 +181,33 @@ lgl  (1): DDEAD
 <h2 class="anchored" data-anchor-id="data-augmentation-1">Data augmentation</h2>
 <p>DLH14 describes if the subject had a low dose of heparin (Yes/No), DMH14 describes if the subject had a medium dose of heparin (Yes/No), given for 14 days or till death/discharge. We want to merge the two columns into one to improve tidyness, Introduce L for low, M for medium, C for control (no Heparin) and NA for no known information or conflicting information in the two columns.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">#creating groups for heparin doses</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>data_clean_hepgroups <span class="ot">&lt;-</span> data_clean <span class="sc">|&gt;</span> </span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"DH14"</span> <span class="ot">=</span> <span class="fu">case_when</span>(</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    (<span class="fu">is.na</span>(DLH14) <span class="sc">&amp;</span> <span class="fu">is.na</span>(DMH14)) <span class="sc">~</span> <span class="cn">NA</span>,</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    (DLH14 <span class="sc">==</span> <span class="st">"Y"</span> <span class="sc">&amp;</span> DMH14 <span class="sc">==</span> <span class="st">"Y"</span>) <span class="sc">~</span> <span class="cn">NA</span>,</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    (DLH14 <span class="sc">==</span> <span class="st">"N"</span> <span class="sc">&amp;</span> DMH14 <span class="sc">==</span> <span class="st">"N"</span>) <span class="sc">~</span> <span class="st">"C"</span>,</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    (DLH14 <span class="sc">==</span> <span class="st">"Y"</span> <span class="sc">&amp;</span> DMH14 <span class="sc">==</span> <span class="st">"N"</span>) <span class="sc">~</span> <span class="st">"L"</span>,</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    (DLH14 <span class="sc">==</span> <span class="st">"N"</span> <span class="sc">&amp;</span> DMH14 <span class="sc">==</span> <span class="st">"Y"</span>) <span class="sc">~</span> <span class="st">"M"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#creating groups for heparin doses</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>data_clean_hepgroups <span class="ot">&lt;-</span> data_clean <span class="sc">|&gt;</span> </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"DH14"</span> <span class="ot">=</span> <span class="fu">case_when</span>(</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    (<span class="fu">is.na</span>(DLH14) <span class="sc">&amp;</span> <span class="fu">is.na</span>(DMH14)) <span class="sc">~</span> <span class="cn">NA</span>,</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    (DLH14 <span class="sc">==</span> <span class="st">"Y"</span> <span class="sc">&amp;</span> DMH14 <span class="sc">==</span> <span class="st">"Y"</span>) <span class="sc">~</span> <span class="cn">NA</span>,</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    (DLH14 <span class="sc">==</span> <span class="st">"N"</span> <span class="sc">&amp;</span> DMH14 <span class="sc">==</span> <span class="st">"N"</span>) <span class="sc">~</span> <span class="st">"C"</span>,</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    (DLH14 <span class="sc">==</span> <span class="st">"Y"</span> <span class="sc">&amp;</span> DMH14 <span class="sc">==</span> <span class="st">"N"</span>) <span class="sc">~</span> <span class="st">"L"</span>,</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    (DLH14 <span class="sc">==</span> <span class="st">"N"</span> <span class="sc">&amp;</span> DMH14 <span class="sc">==</span> <span class="st">"Y"</span>) <span class="sc">~</span> <span class="st">"M"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>There are 6 different groups in the data. We therefore want to make a group name column to get an easy overview of the groups in the data</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#creating groups based on treatment</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>data_clean_trtgroups <span class="ot">&lt;-</span> data_clean_hepgroups <span class="sc">|&gt;</span> </span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"data_group"</span> <span class="ot">=</span> <span class="fu">case_when</span>(</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    (RXASP <span class="sc">==</span> <span class="st">"Y"</span> <span class="sc">&amp;</span> RXHEP <span class="sc">==</span> <span class="st">"L"</span>) <span class="sc">~</span> <span class="st">"Asp-Hep(low)"</span>,</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    (RXASP <span class="sc">==</span> <span class="st">"Y"</span> <span class="sc">&amp;</span> RXHEP <span class="sc">==</span> <span class="st">"M"</span>) <span class="sc">~</span> <span class="st">"Asp-Hep(med)"</span>,</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    (RXASP <span class="sc">==</span> <span class="st">"Y"</span> <span class="sc">&amp;</span> RXHEP <span class="sc">==</span> <span class="st">"N"</span>) <span class="sc">~</span> <span class="st">"Asp-Hep(No)"</span>,</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    (RXASP <span class="sc">==</span> <span class="st">"N"</span> <span class="sc">&amp;</span> RXHEP <span class="sc">==</span> <span class="st">"L"</span>) <span class="sc">~</span> <span class="st">"Asp(No)-Hep(low)"</span>,</span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    (RXASP <span class="sc">==</span> <span class="st">"N"</span> <span class="sc">&amp;</span> RXHEP <span class="sc">==</span> <span class="st">"M"</span>) <span class="sc">~</span> <span class="st">"Asp(No)-Hep(med)"</span>,</span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    (RXASP <span class="sc">==</span> <span class="st">"N"</span> <span class="sc">&amp;</span> RXHEP <span class="sc">==</span> <span class="st">"N"</span>) <span class="sc">~</span> <span class="st">"Asp(No)-Hep(No)"</span></span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">#creating groups based on treatment</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>data_clean_trtgroups <span class="ot">&lt;-</span> data_clean_hepgroups <span class="sc">|&gt;</span> </span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"data_group"</span> <span class="ot">=</span> <span class="fu">case_when</span>(</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    (RXASP <span class="sc">==</span> <span class="st">"Y"</span> <span class="sc">&amp;</span> RXHEP <span class="sc">==</span> <span class="st">"L"</span>) <span class="sc">~</span> <span class="st">"Asp-Hep(low)"</span>,</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    (RXASP <span class="sc">==</span> <span class="st">"Y"</span> <span class="sc">&amp;</span> RXHEP <span class="sc">==</span> <span class="st">"M"</span>) <span class="sc">~</span> <span class="st">"Asp-Hep(med)"</span>,</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    (RXASP <span class="sc">==</span> <span class="st">"Y"</span> <span class="sc">&amp;</span> RXHEP <span class="sc">==</span> <span class="st">"N"</span>) <span class="sc">~</span> <span class="st">"Asp-Hep(No)"</span>,</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    (RXASP <span class="sc">==</span> <span class="st">"N"</span> <span class="sc">&amp;</span> RXHEP <span class="sc">==</span> <span class="st">"L"</span>) <span class="sc">~</span> <span class="st">"Asp(No)-Hep(low)"</span>,</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    (RXASP <span class="sc">==</span> <span class="st">"N"</span> <span class="sc">&amp;</span> RXHEP <span class="sc">==</span> <span class="st">"M"</span>) <span class="sc">~</span> <span class="st">"Asp(No)-Hep(med)"</span>,</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    (RXASP <span class="sc">==</span> <span class="st">"N"</span> <span class="sc">&amp;</span> RXHEP <span class="sc">==</span> <span class="st">"N"</span>) <span class="sc">~</span> <span class="st">"Asp(No)-Hep(No)"</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="saving-augmented-data" class="level2">
 <h2 class="anchored" data-anchor-id="saving-augmented-data">Saving augmented data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_tsv</span>(data_clean_trtgroups, <span class="at">file =</span> <span class="st">"../data/03_dat_aug.tsv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_tsv</span>(data_clean_trtgroups, <span class="at">file =</span> <span class="st">"../data/03_dat_aug.tsv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="section" class="level2">

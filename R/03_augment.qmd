@@ -11,12 +11,13 @@ format: html
 ```{r}
 #| eval: true
 library("tidyverse")
+library("here")
 ```
 
 ## Loading clean data
 
 ```{r}
-data_clean <- read_tsv(file = "../data/02_dat_clean.tsv")
+data_clean <- read_tsv(here("data/02_dat_clean.tsv"))
 ```
 
 ## Data augmentation

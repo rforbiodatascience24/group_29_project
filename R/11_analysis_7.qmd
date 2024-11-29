@@ -11,13 +11,13 @@ format: html
 ```{r}
 library("tidyverse")
 library("survival")
-library(RColorBrewer)
+library("RColorBrewer")
 ```
 
 ## Loading data
 
 ```{r}
-data <- read_tsv("../data/03_dat_aug.tsv")
+data <- read_tsv(here("data/03_dat_aug.tsv"))
 ```
 
 ## Preparing data for plot

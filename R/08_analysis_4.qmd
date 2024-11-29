@@ -16,11 +16,11 @@ Creation of figure 5D: PE14
 
 ```{r}
 #| eval: true
-library(tidyverse)
-library(ggplot2)
-library(dplyr)
-library(readr)
-library(here)
+library("tidyverse")
+library("ggplot2")
+library("dplyr")
+library("readr")
+library("here")
 ```
 
 ## Creating Function
@@ -114,13 +114,21 @@ data <- read_tsv(here("data/03_dat_aug.tsv"))
 ## Creating bar plots
 
 ```{r}
-box_func("cerebral bleed/heamorrhagic stroke within 14 days",data,H14)
+p1 <- box_func("cerebral bleed/heamorrhagic stroke within 14 days",data,H14)
 ```
 
 ```{r}
-box_func("indicator of major non-cerebral bleed within 14 days",data,TRAN14)
+p2 <- box_func("indicator of major non-cerebral bleed within 14 days",data,TRAN14)
 ```
 
 ```{r}
-box_func("indicator of pulmonary embolism within 14 days",data,PE14)
+p3 <- box_func("indicator of pulmonary embolism within 14 days",data,PE14)
+```
+
+## Save the results
+
+```{r}
+ggsave(filename = here("results/08_keyplot_a.png"), plot = p1)  
+ggsave(filename = here("results/08_keyplot_b.png"), plot = p2)
+ggsave(filename = here("results/08_keyplot_c.png"), plot = p3)
 ```

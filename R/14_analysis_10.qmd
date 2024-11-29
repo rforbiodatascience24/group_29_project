@@ -13,15 +13,16 @@ editor: visual
 #| warning: FALSE
 
 
-library(tidyverse)
-library(broom)
-library(ggrepel)
+library("tidyverse")
+library("broom")
+library("ggrepel")
+library("here")
 ```
 
 ## Load Data
 
 ```{r}
-data <- read_tsv("../data/03_dat_aug.tsv", show_col_types = FALSE)
+data <- read_tsv(here("data/03_dat_aug.tsv"))
 ```
 
 ## Analysis

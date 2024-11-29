@@ -4,7 +4,7 @@ author: "Group 29: Helena Møller, Emma Christensen, Frederik Holmstrup, Casper 
 format: html
 ---
 
-# Data Cleaningh
+# Data Cleaning
 
 ## Loading libraries
 
@@ -16,6 +16,7 @@ format: html
 library("tidyverse")
 library("knitr")
 library("quarto")
+library("here")
 ```
 
 ## Loading data
@@ -25,7 +26,7 @@ library("quarto")
 #| eval: true
 #| message: false
 
-data <- read_tsv("../data/_raw/01_dat_load.tsv")
+data <- read_tsv(here("data/_raw/01_dat_load.tsv"))
 ```
 
 ## Data cleaning
