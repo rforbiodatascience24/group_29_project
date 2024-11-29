@@ -25,8 +25,4 @@ editor: visual
 
 {{< include 09_analysis_5.qmd >}}
 
-{{< include 10_analysis_6_function.qmd >}}
-
-{{< include 11_analysis_7.qmd >}}
-
-{{< include 14_analysis_10.qmd >}}
+{{< include 10_analysis_6.qmd >}}
