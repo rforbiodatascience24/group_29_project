@@ -43,4 +43,3 @@ if (!file.exists(file_path)) { dir.create(file_path, recursive = TRUE) }
 write_tsv(x = raw_data, 
           file = str_c(file_path, "01_dat_load.tsv"))
 ```
-

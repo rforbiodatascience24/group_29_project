@@ -22,7 +22,7 @@ data <- read_tsv(here("data/03_dat_aug.tsv"))
 ## Preparing data
 
 ```{r}
-grouped_data <- data_clean_groups |>
+grouped_data <- data |>
   group_by(DEADC) |>
   mutate(
     TD_causes = case_when(
