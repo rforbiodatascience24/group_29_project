@@ -58,16 +58,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="10_analysis_6_function_files/libs/clipboard/clipboard.min.js"></script>
-<script src="10_analysis_6_function_files/libs/quarto-html/quarto.js"></script>
-<script src="10_analysis_6_function_files/libs/quarto-html/popper.min.js"></script>
-<script src="10_analysis_6_function_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="10_analysis_6_function_files/libs/quarto-html/anchor.min.js"></script>
-<link href="10_analysis_6_function_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="10_analysis_6_function_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="10_analysis_6_function_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="10_analysis_6_function_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="10_analysis_6_function_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="08_analysis_4_files/libs/clipboard/clipboard.min.js"></script>
+<script src="08_analysis_4_files/libs/quarto-html/quarto.js"></script>
+<script src="08_analysis_4_files/libs/quarto-html/popper.min.js"></script>
+<script src="08_analysis_4_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="08_analysis_4_files/libs/quarto-html/anchor.min.js"></script>
+<link href="08_analysis_4_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="08_analysis_4_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="08_analysis_4_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="08_analysis_4_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="08_analysis_4_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 
 
 </head>
@@ -268,33 +268,56 @@ lgl  (1): DDEAD
 <section id="creating-bar-plots" class="level2">
 <h2 class="anchored" data-anchor-id="creating-bar-plots">Creating bar plots</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">box_func</span>(<span class="st">"cerebral bleed/heamorrhagic stroke within 14 days"</span>,data,H14)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">box_func</span>(<span class="st">"cerebral bleed/heamorrhagic stroke within 14 days"</span>,data,H14)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>p1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="10_analysis_6_function_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="08_analysis_4_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">box_func</span>(<span class="st">"indicator of major non-cerebral bleed within 14 days"</span>,data,TRAN14)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">box_func</span>(<span class="st">"indicator of major non-cerebral bleed within 14 days"</span>,data,TRAN14)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>p2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="10_analysis_6_function_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="08_analysis_4_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">box_func</span>(<span class="st">"indicator of pulmonary embolism within 14 days"</span>,data,PE14)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">box_func</span>(<span class="st">"indicator of pulmonary embolism within 14 days"</span>,data,PE14)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>p3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="10_analysis_6_function_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="08_analysis_4_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
+</div>
+</div>
+</section>
+<section id="save-the-results" class="level2">
+<h2 class="anchored" data-anchor-id="save-the-results">Save the results</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="fu">here</span>(<span class="st">"results/08_keyplot_a.png"</span>), <span class="at">plot =</span> p1)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Saving 7 x 5 in image</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="fu">here</span>(<span class="st">"results/08_keyplot_b.png"</span>), <span class="at">plot =</span> p2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Saving 7 x 5 in image</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="fu">here</span>(<span class="st">"results/08_keyplot_c.png"</span>), <span class="at">plot =</span> p3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Saving 7 x 5 in image</code></pre>
 </div>
 </div>
 </section>

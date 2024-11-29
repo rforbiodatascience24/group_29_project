@@ -55,21 +55,30 @@ p1 <- km_tidy |>
     color = "Treatment group")+
   scale_color_brewer(palette="Dark2")+
   theme_minimal()
+
+p1
 ```
 
 ```{r}
 # Plot HR fra Cox-model
-cox_tidy |> 
-  mutate(term = str_replace(term, "gruppe", "")) |>   # Fjern præfikset "gruppe"
-  ggplot(aes(x = estimate, y = term)) +
-  geom_point(size = 3, color = "blue") +
-  #geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), height = 0.2) +  # CI
-  labs(
-    title = "Hazard Ratios fra Cox-modellen",
-    x = "Hazard Ratio (log-skala)",
-    y = "Gruppe"
-  ) +
-  scale_x_log10() +  # Log-skala for HR
-  theme_minimal()
+p2 <- cox_tidy |> 
+        mutate(term = str_replace(term, "gruppe", "")) |>   # Fjern præfikset "gruppe"
+        ggplot(aes(x = estimate, y = term)) +
+        geom_point(size = 3, color = "blue") +
+        #geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), height = 0.2) +  # CI
+        labs(
+          title = "Hazard Ratios fra Cox-modellen",
+          x = "Hazard Ratio (log-skala)",
+          y = "Gruppe"
+        ) +
+        scale_x_log10() +  # Log-skala for HR
+        theme_minimal()
 
+```
+
+## Save the results
+
+```{r}
+ggsave(filename = here("results/09_keyplot_a.png"), plot = p1)  
+ggsave(filename = here("results/09_keyplot_b.png"), plot = p2)  
 ```

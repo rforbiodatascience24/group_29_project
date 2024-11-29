@@ -115,14 +115,20 @@ data <- read_tsv(here("data/03_dat_aug.tsv"))
 
 ```{r}
 p1 <- box_func("cerebral bleed/heamorrhagic stroke within 14 days",data,H14)
+
+p1
 ```
 
 ```{r}
 p2 <- box_func("indicator of major non-cerebral bleed within 14 days",data,TRAN14)
+
+p2
 ```
 
 ```{r}
 p3 <- box_func("indicator of pulmonary embolism within 14 days",data,PE14)
+
+p3
 ```
 
 ## Save the results
