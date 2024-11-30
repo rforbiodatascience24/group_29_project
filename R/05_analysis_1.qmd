@@ -20,7 +20,6 @@ library("here")
 ## Loading data
 
 ```{r}
-here()
 data <- read_tsv(here("data/03_dat_aug.tsv"))
 ```
 
@@ -111,10 +110,8 @@ data_statistics_heparin <- data_nested_heparin |>
                        pull(difference))) |> 
   mutate(V = map_dbl(.x = data,
                      .f = ~ .x |> 
-                       mutate(inv_dead = 1/`dead/dependent`,
-                              inv_alive = 1/independent) |> 
-                       summarise(total = sum(inv_dead) + sum(inv_alive)) |>
-                       pull(total)))
+                       summarise(var = var(c(independent,`dead/dependent`))) |>
+                       pull(var)))
 ```
 
 ```{r}
@@ -124,8 +121,8 @@ alpha <- 0.99
 data_CI_heparin <- data_statistics_heparin |> 
   mutate(Ad_ben = k*(O-E),
          std_dev = k*sqrt(V),
-         CI_lower = Ad_ben - qnorm(alpha/2)*std_dev,
-         CI_upper = Ad_ben + qnorm(alpha/2)*std_dev) |> 
+         CI_lower = Ad_ben - qnorm((alpha)/2)*std_dev,
+         CI_upper = Ad_ben + qnorm((alpha)/2)*std_dev) |> 
   unite(group_name, c(group,subgroup))
 ```
 
@@ -290,10 +287,8 @@ data_statistics_aspirin <- data_nested_aspirin |>
                        pull(difference))) |> 
   mutate(V = map_dbl(.x = data,
                      .f = ~ .x |> 
-                       mutate(inv_dead = 1/`dead/dependent`,
-                              inv_alive = 1/independent) |> 
-                       summarise(total = sum(inv_dead) + sum(inv_alive)) |>
-                       pull(total)))
+                       summarise(var = var(c(independent,`dead/dependent`))) |>
+                       pull(var)))
 ```
 
 ```{r}
@@ -303,8 +298,8 @@ alpha <- 0.99
 data_CI_aspirin <- data_statistics_aspirin |> 
   mutate(Ad_ben = k*(O-E),
          std_dev = k*sqrt(V),
-         CI_lower = Ad_ben + qnorm(alpha/2)*std_dev,
-         CI_upper = Ad_ben - qnorm(alpha/2)*std_dev) |> 
+         CI_lower = Ad_ben + qnorm((alpha)/2)*std_dev,
+         CI_upper = Ad_ben - qnorm((alpha)/2)*std_dev) |> 
   unite(group_name, c(group,subgroup))
 ```
 

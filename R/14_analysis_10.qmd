@@ -43,7 +43,8 @@ Using `AGE` to see if can be used predict `EXPDD`.
 ```{r}
 model_1 <- data |> 
   filter(STYPE == "LACS") |> 
-  lm(data = _, EXPDD ~ AGE)
+  lm(data = _,
+     EXPDD ~ AGE)
   
 ```
 
@@ -64,7 +65,8 @@ data |>
 ```{r}
 model_2 <- data |> 
   filter(STYPE == "LACS") |> 
-  lm(data = _, log2(EXPD6) ~ AGE)
+  lm(data = _,
+     log2(EXPD6) ~ AGE)
 ```
 
 ```{r}
@@ -75,7 +77,8 @@ model_2 |>
 ```{r}
 data |> 
   filter(STYPE == "LACS") |> 
-  ggplot(aes(x = AGE, y = log2(EXPD6))) +
+  ggplot(mapping = aes(x = AGE,
+                       y = log2(EXPD6))) +
   geom_point(color = "BLUE")
 ```
 
