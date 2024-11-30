@@ -2,6 +2,9 @@
 title: "02_clean"
 author: "Group 29: Helena Møller, Emma Christensen, Frederik Holmstrup, Casper Harreby & Laura Christiansen"
 format: html
+execute: 
+  message: FALSE
+  warning: FALSE
 ---
 
 # Data Cleaning
@@ -11,7 +14,6 @@ format: html
 ```{r}
 #| echo: true 
 #| eval: true
-#| message: false
 
 library("tidyverse")
 library("knitr")
@@ -24,7 +26,6 @@ library("here")
 ```{r}
 #| echo: true 
 #| eval: true
-#| message: false
 
 data <- read_tsv(here("data/_raw/01_dat_load.tsv"))
 ```

@@ -2,6 +2,9 @@
 title: "10_analysis_6"
 format: html
 editor: visual
+execute: 
+  message: FALSE
+  warning: FALSE
 ---
 
 ## Libraries
@@ -9,9 +12,6 @@ editor: visual
 ```{r}
 #| echo: TRUE
 #| eval: TRUE
-#| message: FALSE
-#| warning: FALSE
-
 
 library("tidyverse")
 library("broom")
@@ -54,6 +54,7 @@ model_1 |>
 ```
 
 ```{r}
+
 p1 <- data |> 
         filter(STYPE == "LACS") |> 
         ggplot(aes(x = AGE, y = log10(EXPDD))) +
@@ -65,6 +66,7 @@ p1
 ### Model 2
 
 ```{r}
+
 model_2 <- data |> 
   filter(STYPE == "LACS") |> 
   lm(data = _, log2(EXPD6) ~ AGE)

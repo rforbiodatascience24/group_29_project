@@ -2,6 +2,9 @@
 title: "05_analysis_1"
 author: "Group 29: Helena Møller, Emma Christensen, Frederik Holmstrup, Casper Harreby & Laura Christiansen"
 format: html
+execute: 
+  message: FALSE
+  warning: FALSE
 ---
 
 # Data Analysis
@@ -13,6 +16,9 @@ The CI of the different treatments looking at different subgroups in the data. P
 ## Loading libraries
 
 ```{r}
+#| echo: true
+#| eval: true
+
 library("tidyverse")
 library("here")
 ```

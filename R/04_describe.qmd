@@ -2,6 +2,9 @@
 title: "04_describe"
 author: "Group 29: Helena Møller, Emma Christensen, Frederik Holmstrup, Casper Harreby & Laura Christiansen"
 format: html
+execute: 
+  message: FALSE
+  warning: FALSE
 ---
 
 # Data description
@@ -10,6 +13,8 @@ format: html
 
 ```{r}
 #| eval: true 
+#| echo: true
+
 library("tidyverse")
 library("ggplot2")
 library("dplyr") 
@@ -34,6 +39,8 @@ Figure 1 - the group sizes:
 
 ```{r}
 #| eval: true
+#| echo: true
+
 library(ggplot2)
 library(dplyr)
 library(readr)

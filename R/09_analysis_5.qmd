@@ -2,6 +2,9 @@
 title: "09_analysis_5"
 author: "Group 29: Helena Møller, Emma Christensen, Frederik Holmstrup, Casper Harreby & Laura Christiansen"
 format: html
+execute: 
+  message: FALSE
+  warning: FALSE
 ---
 
 # Data analysis - visualizing the overall effect of the treatments
@@ -9,6 +12,9 @@ format: html
 ## Loading libraries
 
 ```{r}
+#| echo: true
+#| eval: true
+
 library("tidyverse")
 library("survival")
 library("here")
@@ -82,3 +88,4 @@ p2 <- cox_tidy |>
 ggsave(filename = here("results/09_keyplot_a.png"), plot = p1)  
 ggsave(filename = here("results/09_keyplot_b.png"), plot = p2)  
 ```
+

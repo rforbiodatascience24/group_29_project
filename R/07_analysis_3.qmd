@@ -2,6 +2,9 @@
 title: "07_analysis_3"
 author: "Group 29: Helena Møller, Emma Christensen, Frederik Holmstrup, Casper Harreby & Laura Christiansen"
 format: html
+execute: 
+  message: FALSE
+  warning: FALSE
 ---
 
 ## Data analysis
@@ -9,6 +12,9 @@ format: html
 ## Loading libraries
 
 ```{r}
+#| echo: true
+#| eval: true
+
 library("tidyverse")
 library("here")
 ```
@@ -124,6 +130,6 @@ p5 <- group_5_counts |>
 p5
 
 # Save the plot as a PNG
-ggsave("../results/my_plot.png", plot = p0, width = 6, height = 4, dpi = 300)
+ggsave("../results/my_plot.png", plot = p0, dpi = 300)
 
 ```
