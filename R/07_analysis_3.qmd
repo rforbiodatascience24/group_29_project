@@ -7,7 +7,7 @@ execute:
   warning: FALSE
 ---
 
-## Data analysis
+# Data analysis 
 
 ## Loading libraries
 
@@ -28,10 +28,12 @@ data <- read_tsv(here("data/03_dat_aug.tsv"))
 ## Preparing data
 
 ```{r}
+# Grouping the data by the variable "DEACD"
 grouped_data <- data |>
   group_by(DEADC) |>
-  mutate(
-    TD_causes = case_when(
+  # Creating a new column "TD_causes", which categorizes each cause of death based on "DEADC"
+  mutate( 
+    TD_causes = case_when( 
       DEADC == 1 ~ "cause_1",
       DEADC == 2 ~ "cause_2",
       DEADC == 3 ~ "cause_3",
@@ -43,48 +45,46 @@ grouped_data <- data |>
     )
   )
 
-group_1_data <- grouped_data |> 
-  filter(TD_causes == "cause_1")
-
-group_2_data <- grouped_data |>
-  filter(TD_causes == "cause_2")
-
-group_3_data <- grouped_data |>
-  filter(TD_causes == "cause_3")
-
-group_4_data <- grouped_data |>
-  filter(TD_causes == "cause_4")
-
-group_5_data <- grouped_data |>
-  filter(TD_causes == "cause_5")
-
-group_6_data <- grouped_data |>
-  filter(TD_causes == "cause_6")
-
-group_7_data <- grouped_data |>
-  filter(TD_causes == "cause_7")
-
-group_8_data <- grouped_data |>
-  filter(TD_causes == "cause_8")
+#Filter data for each cause of death
+causes <- paste0("cause_", 1:8) #Creates a list of causes
+group_data_list <- map(causes, ~ grouped_data |> filter(TD_causes == .x)) # Filter the data for each cause and stores it in a list
+names(group_data_list) <- causes #Assign proper names to the list elements
 ```
 
-## Plot
+## Plot the overall data count
 
 ```{r}
+#Count the occurences of "TD" for the whole dataset 
 group_counts <- grouped_data |>
   count(TD)
 
+#Plots the time of death (TD) vs. the number of occurences.
 p0 <- group_counts |>
   ggplot(mapping = aes(x = TD, y = n))+
   geom_line()+
-  coord_cartesian(xlim = c(0, 200))
+  coord_cartesian(xlim = c(0, 200))+
+  labs(
+    title =  "Days elapsed since randomisation before death",
+    x = "Days elapsed since randomisation",
+    y = "Number of peopled died after x days"
+  ) 
 
 p0
   
+# Save the plot as a PNG
+ggsave("../results/overall.png", plot = p0, dpi = 300)
+
+```
+
+## Creating individual plots for each cause of death
+
+```{r}
+#Count the occurences of "TD" for only those died of ischaemic stroke
 group_1_counts <- group_1_data |> 
   group_by(data_group, TD) |>
   summarise(count = n(), .groups = "drop")
 
+#Plots the time of death (TD) vs. the number of occurences.
 p1 <- group_1_counts |> 
   ggplot(mapping = aes(x = TD, y = count, color = data_group)) + 
   geom_line() +
@@ -97,39 +97,27 @@ p1 <- group_1_counts |>
 
 p1
 
+# Save the plot as a PNG
+ggsave("../results/ischaemic_stroke_td.png", plot = p1, dpi = 300)
+
+#Count the occurences of "TD" for only those died of pulmonary embolism
 group_6_counts <- group_6_data |> 
   group_by(data_group, TD) |>
   summarise(count = n(), .groups = "drop")
 
+#Plots the time of death (TD) vs. the number of occurences.
 p6 <- group_6_counts |> 
   ggplot(mapping = aes(x = TD, y = count, color = data_group)) + 
   geom_line() +
   labs(
-    title =  "Days elapsed since randomisation before death of initial stroke",
+    title =  "Days elapsed since randomisation before death of pulmonary embolism",
     x = "Days elapsed since randomisation",
-    y = "Number of peopled died of initial stroke after x days"
+    y = "Number of peopled died of pulmonary embolism after x days"
   ) +
   facet_wrap(~ data_group)
 
 p6
 
-group_5_counts <- group_5_data |> 
-  group_by(data_group, TD) |>
-  summarise(count = n(), .groups = "drop")
-
-p5 <- group_5_counts |> 
-  ggplot(mapping = aes(x = TD, y = count, color = data_group)) + 
-  geom_line() +
-  labs(
-    title =  "Days elapsed since randomisation before death of coronary heart disease",
-    x = "Days elapsed since randomisation",
-    y = "Number of peopled died of coronary heart disease after x days"
-  ) +
-  facet_wrap(~ data_group, scales = "free_x")
-
-p5
-
 # Save the plot as a PNG
-ggsave("../results/my_plot.png", plot = p0, dpi = 300)
-
+ggsave("../results/pulmonary_td.png", plot = p6, dpi = 300)
 ```
