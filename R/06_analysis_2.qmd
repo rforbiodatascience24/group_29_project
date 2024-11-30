@@ -4,102 +4,157 @@ author: "Group 29: Helena Møller, Emma Christensen, Frederik Holmstrup, Casper 
 format: html
 ---
 
-## Short-term effects of early anticoagulant therapy
+# Descriptive analysis 
 
-Effects of anticoagulants during the scheduled treatment period (mostly about 14 days) in completed unconfounded randomised trials in acute ischaemic stroke on: (a) recurrent ischaemic stroke, (b) haemorrhagic stroke, (c) death from any cause or non-fatal stroke (non-fatal stroke includes non-fatal recurrent strokes of ischaemic or unknown type and haemorrhagic strokes). The overall results of the 95% CI is represented by diamonds.
-
-In the report it looks like this:
-
-![](images/clipboard-1936709756.png)
-
-## Loading libraries
+## Loading Libraries
 
 ```{r}
-
 #| eval: true
-library("tidyverse")
-library("ggplot2")
-library("dplyr")
-library("readr")
+library("tidyverse") 
+library("ggplot2") 
+library("dplyr") 
+library("readr") 
 library("here")
 ```
 
 ## Import the dataset
 
 ```{r}
-
-# Load the dataset
-data <- read_tsv(here("data/03_dat_aug.tsv"))
+# Load the dataset   
+dataset <- read_tsv("../data/03_dat_aug.tsv")
 ```
 
-## Preparation of subgroups in data
+## Age distribution of study population
 
 ```{r}
 
-# Prepare data
-summary <- dataset |> 
-  group_by(DH14) |>   # Group by subgroups
-  summarize(
-    Events = sum(as.numeric(DEADC), na.rm = TRUE),  # Sum events for each subgroup
-    Total = n(),  # Total population in each subgroup
-    NonEvents = Total - Events  # Calculate non-events
-  ) |> 
-  mutate(
-    Odds = Events / NonEvents,  # Calculate odds
-    Reference_Odds = first(Odds),  # Reference odds (assume first group is control)
-    Odds_Ratio = Odds / Reference_Odds,  # Calculate odds ratio
-    Variance = 1 / Events + 1 / NonEvents +
-               1 / first(Events) + 1 / first(NonEvents),  # Variance for confidence intervals
-    CI_Lower = exp(log(Odds_Ratio) - 1.96 * sqrt(Variance)),  # Lower bound of 95% CI
-    CI_Upper = exp(log(Odds_Ratio) + 1.96 * sqrt(Variance)),  # Upper bound of 95% CI
-    Reduction = paste0(round((1 - Odds_Ratio) * 100, 1), "% ↓")  # Calculate percentage reduction
-  )
+# Calculate the mean of AGE
+mean_age <- mean(data$AGE, na.rm = TRUE)
 
-# Display the summary table
-print(summary)
+data <- data |>  filter(!is.na(AGE) & AGE >= 0) # Exclude missing or negative ages
+
+# Visualizing age distribution of study population
+p1 <- ggplot(data, aes(x = AGE)) +      
+  geom_histogram(fill = "lightblue", 
+                 color = "darkblue", 
+                 bins = 30, 
+                 alpha = 0.7) + 
+  labs(title = "Age Distribution of the Study Population",             
+       x = "Age (years)", 
+       y = "Number of People") +      
+  theme_minimal(base_size = 14) + # Clean minimal theme with larger text      
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 18), 
+        axis.title.x = element_text(face = "bold", size = 14), # Bold x-axis title              
+        axis.title.y = element_text(face = "bold", size = 14), # Bold y-axis title         
+        panel.grid.minor = element_blank()) + # Removes minor grid lines                
+  scale_x_continuous(breaks = seq(0, 100, by = 10), 
+                     limits = c(0, 100)) + # Set x-axis limits and breaks      
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05)), 
+                     breaks = seq(0, 3000, by = 500)) + # Avoids crowded y-axis and setting breaks    
+  geom_segment(x = mean_age, # Static value, not in aes()
+               xend = mean_age, 
+               y = 0, 
+               yend = 2900, 
+               color = "darkgreen", 
+               linetype = "dashed", 
+               size = 1.0) + # Adds mean age as a vertical dashed line      
+  annotate("label", 
+           x = mean_age + 12, # Move label to the right of the mean                      
+           y = 2400, # Position slightly below the peak                      
+           label = paste("Mean Age:", round(mean_age, 1), "years"),                 
+           color = "white",                 
+           fill = "darkgreen",                 
+           fontface = "bold",                 
+           size = 4,                      
+           label.padding = unit(0.4, "lines")) # Mean age shown in a text box with padding  
+
+# Display the plot
+print(p1)
+
+# Saving the plot as a PNG file
+ggsave("../results/03_description_plot_1.png", plot = p1, width = 8, height = 4, dpi = 300, bg = "white")
 ```
 
-## Recreate figure 3
+## Age distribution of stroke subtypes (STYPE)
+
+The stroke subtypes (STYPE) are here distributed by age and visualized with boxplots:
+
+-   Describe the different subtypes of strokes
 
 ```{r}
 
-# Create forest plot
-forest_plot <- ggplot(summary, aes(x = Odds_Ratio, y = DH14)) +
-  geom_point(size = 4) +  # Add points for odds ratios
-  geom_errorbarh(aes(xmin = CI_Lower, xmax = CI_Upper), height = 0.2) +  # Add error bars
-  geom_text(aes(label = Reduction), hjust = -0.2, size = 3) +  # Annotate percentage reduction
-  scale_x_log10(limits = c(0.5, 2)) +  # Log scale for odds ratios
+p2<-ggplot(dataset, aes(x = STYPE, y = AGE, fill = STYPE)) +   geom_boxplot(alpha = 0.7, outlier.shape = NA) + 
+  # Boxplot without outlier points   
+  labs(     title = "Stroke subtypes distributed by age",     x = "Stroke Type (STYPE)",     
+   y = "Age (years)"   ) +   
+  theme_minimal(base_size = 14) + 
+  theme(     plot.title = element_text(hjust = 0.5, face = "bold", size = 18),   
+             axis.title.x = element_text(face = "bold", size = 14),   
+             axis.title.y = element_text(face = "bold", size = 14),
+             legend.position = "right"   )
+
+# Display the plot
+print(p2)
+
+# Saving the plot as a PNG file
+ggsave("../results/03_description_plot_2.png", plot = p2, width = 8, height = 4, dpi = 300, bg = "white")
+```
+
+```{r}
+STYPE_median <- dataset |>
+  group_by(STYPE) |>
+  summarize(Median_AGE = round(median(AGE, na.rm = TRUE), 0))
+
+print(STYPE_median)
+```
+
+The median age of the different stroke subtypes are shown, where the subtype TACS has the highest median age of 76 years.
+
+# Data visualisation
+
+## Boxplot for predicted probability of death at 6 months compared by gender
+
+```{r}
+
+# Boxplot of predicted probability of death at 6 months distributed by gender
+p3<-ggplot(dataset, aes(x = SEX, y = EXPD6, fill = SEX)) +   
+  geom_boxplot(alpha = 0.7, color = "black") +    
+  scale_fill_manual(values = c("darkred", "blue")) + # Custom fill colors for gender   
   labs(
-    title = "Anticoagulant vs Control",
-    x = "Anticoagulant Better                 Anticoagulant Worse",
-    y = "Subgroup"
-  ) +
-  theme_minimal() +
+    title = "Predicted probability of death at 6 months",     
+    x = "Gender",     
+    y = "EXPD6",     
+    fill = "Gender"
+  ) + 
+  theme_minimal(base_size = 14) +   
   theme(
-    axis.text.y = element_text(size = 10),
-    axis.title.x = element_text(size = 10, face = "bold"),
-    plot.title = element_text(hjust = 0.5, size = 12, face = "bold")
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 18),
+    axis.title.x = element_text(face = "bold", size = 14), 
+    axis.title.y = element_text(face = "bold", size = 14), 
+    legend.position = "top"
+  ) +   
+  scale_y_continuous(
+    limits = c(0, 1), # Adjust the range to display outliers     
+    expand = expansion(mult = c(0.05, 0.1))
   )
 
-# Print the plot
-print(forest_plot)
+# Display the plot
+print(p3)
 
+# Saving the plot as a PNG file
+ggsave("../results/03_description_plot_3.png", plot = p1, width = 8, height = 4, dpi = 300, bg = "white")
 ```
 
-### **Add Supporting Table**
-
-Combine the summary table and the forest plot:
+## Comparison of median of EXPD6 by gender
 
 ```{r}
-library(gridExtra)
+#Show median EXPD6 by gender  
 
-# Create a table of summary statistics
-table <- tableGrob(summary |> 
-                     select(DH14, Odds_Ratio, CI_Lower, CI_Upper, Reduction), 
-                   rows = NULL)
+median_table <- dataset |>
+  group_by(SEX) |>
+  summarize(Median_EXPD6 = median(EXPD6, na.rm = TRUE)) 
 
-# Arrange the table and plot side by side
-
-grid.arrange(forest_plot, table, ncol = 2)
-
+print(median_table)
 ```
+
+From the medians of the EXPD6 variable, it can be seen by comparing the genders, that females have a higher median of 0.73175 than males (0.53940), thus a relatively higher predicted probability of death at 6 months from randomization.
