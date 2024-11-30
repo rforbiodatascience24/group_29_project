@@ -10,7 +10,7 @@
     font-size: 5.0rem;
     color: #ddddbc !important; /* Add !important to force this color */
     text-transform: uppercase;
-  }  
+  }
 
 .reveal h2 {
     font-family: 'Arial Black', sans-serif;
@@ -24,7 +24,7 @@
     color: #ddddbc !important;
     text-transform: uppercase;
   }
-  
+
   body {
     font-family: 'Arial', sans-serif;
     font-size: 2.0rem;  /* Adjust font size */
@@ -37,11 +37,11 @@
     font-size: 1.5rem;
     color: #ddddbc; /* Light gray for body text */
   }
-  
+
   /* Custom list styling */
   .reveal ul {
     font-family: 'Arial', sans-serif;
-    font-size: 1.0rem;
+    font-size: 1.5rem;
     color: #ddddbc; /* Light gray for body text */
   }
 
@@ -53,4 +53,3 @@
     font-size: 5px; /* Smaller footer text */
     color: #ddddbc;
   }
-  

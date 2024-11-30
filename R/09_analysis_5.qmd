@@ -1,16 +1,29 @@
 ---
 title: "09_analysis_5"
+author: "Group 29: Helena Møller, Emma Christensen, Frederik Holmstrup, Casper Harreby & Laura Christiansen"
 format: html
-editor: visual
+execute: 
+  message: FALSE
+  warning: FALSE
 ---
 
-## Data analysis
+# Data analysis - visualizing the overall effect of the treatments
 
 ## Loading libraries
 
 ```{r}
+#| echo: true
+#| eval: true
+
 library("tidyverse")
 library("here")
+library("survival")
+library("RColorBrewer")
+library("broom")
+```
+
+```{r}
+source(here("R/99_proj_func.R"))
 ```
 
 ## Loading data
@@ -19,111 +32,97 @@ library("here")
 data <- read_tsv(here("data/03_dat_aug.tsv"))
 ```
 
-## Preparing data
+## Preparing data for plot
+
+A Kaplan-Meier curve is a curve illustrating the overall survival rate for each group over time. We can plot it for 0-6 months after randomization. We can use this to see if there is an overall difference in survival for the treatments over time. For this we need a time-of-death (if one) and group value for each subject.
+
+A Chi-squared test is a statistical test to see of there is a significant difference in group sizes. The null-hypothesis would be that for all types of treatments, there is the same fraction of people which has died or are dependent after 6 months.
 
 ```{r}
-grouped_data <- data_clean_groups |>
-  group_by(DEADC) |>
-  mutate(
-    TD_causes = case_when(
-      DEADC == 1 ~ "cause_1",
-      DEADC == 2 ~ "cause_2",
-      DEADC == 3 ~ "cause_3",
-      DEADC == 4 ~ "cause_4",
-      DEADC == 5 ~ "cause_5",
-      DEADC == 6 ~ "cause_6",
-      DEADC == 7 ~ "cause_7",
-      DEADC == 8 ~ "cause_8",
-    )
-  )
+data_filtered <- data |> 
+  select(TD,FDEAD,data_group) |> 
+  mutate(FDEAD = recode(FDEAD, "Y" = 1, "N" = 0)) |> 
+  mutate(TD = if_else(TD > 183, 183, TD))
 
-group_1_data <- grouped_data |> 
-  filter(TD_causes == "cause_1")
+data_filtered_group <- data_filtered |> 
+  select(data_group,FDEAD) |> 
+  filter(!is.na(FDEAD)) |> 
+  group_by(data_group,FDEAD) |> 
+  count()
 
-group_2_data <- grouped_data |>
-  filter(TD_causes == "cause_2")
+data_filtered_chisqr <- data_filtered_group |> 
+  pivot_wider(names_from = data_group, values_from = n) |> 
+  column_to_rownames(var = "FDEAD")
 
-group_3_data <- grouped_data |>
-  filter(TD_causes == "cause_3")
+data_filtered_barchart <- data_filtered_group |> 
+  group_by(data_group) |> 
+  summarize(sum = sum(n),
+            fraction = sum(n * (FDEAD == 1))/sum) |> 
+  mutate(data_name = str_glue("{data_group}(n = {sum})"))
 
-group_4_data <- grouped_data |>
-  filter(TD_causes == "cause_4")
+data_filtered_chisqr <- data_filtered |> 
+  select(data_group,FDEAD) |> 
+  filter(!is.na(FDEAD)) |> 
+  group_by(data_group,FDEAD) |> 
+  count() |> 
+  pivot_wider(names_from = data_group, values_from = n) |> 
+  column_to_rownames(var = "FDEAD")
 
-group_5_data <- grouped_data |>
-  filter(TD_causes == "cause_5")
-
-group_6_data <- grouped_data |>
-  filter(TD_causes == "cause_6")
-
-group_7_data <- grouped_data |>
-  filter(TD_causes == "cause_7")
-
-group_8_data <- grouped_data |>
-  filter(TD_causes == "cause_8")
+group_combinations <- data_filtered |> 
+  expand(data_group,data_group)
 ```
 
-## Plot
+```{r}
+km_fit <- survfit(Surv(TD, FDEAD) ~ data_group, data = data_filtered)
+km_tidy <- broom::tidy(km_fit)
+
+chi_sqr_test <- group_combinations |> 
+  mutate(chisqr_pval = 
+           map2_dbl(.x = data_group...1,
+                    .y = data_group...2,
+                    .f = ~ chisqr_pval(data_filtered_chisqr, c(.x, .y)))) |> 
+  mutate(chisqr_pval = if_else(data_group...1 == data_group...2, 1, chisqr_pval ))
+```
 
 ```{r}
-group_counts <- grouped_data |>
-  count(TD)
-
-p0 <- group_counts |>
-  ggplot(mapping = aes(x = TD, y = n))+
-  geom_line()+
-  coord_cartesian(xlim = c(0, 200))
-
-p0
-  
-group_1_counts <- group_1_data |> 
-  group_by(data_group, TD) |>
-  summarise(count = n(), .groups = "drop")
-
-p1 <- group_1_counts |> 
-  ggplot(mapping = aes(x = TD, y = count, color = data_group)) + 
-  geom_line() +
+p1 <- km_tidy|>
+  mutate(strata = str_remove(strata,"data_group=")) |> 
+  ggplot(mapping = aes(x = time, 
+                       y = estimate, 
+                       color = strata)) + # `strata` is the name of the groups from the km model
+  geom_step(linewidth = 1) +                           # Kaplan-Meier steps
+  geom_ribbon(aes(ymin = conf.low, ymax = conf.high), 
+              alpha = 0.1, linetype = "dashed") +       # Confidence interval
   labs(
-    title =  "Days elapsed since randomisation before death of initial stroke",
-    x = "Days elapsed since randomisation",
-    y = "Number of peopled died of initial stroke after x days"
-  ) +
-  facet_wrap(~ data_group)
+    title = "Kaplan-Meier Survival curve",
+    x = "Time (days)",
+    y = "Probability of survival",
+    color = "Treatment group")+
+  scale_color_brewer(palette="Dark2")+
+  theme_minimal()
+```
 
-p1
+```{r}
+# Plot tiles where color correspond to the pvalues
 
-group_6_counts <- group_6_data |> 
-  group_by(data_group, TD) |>
-  summarise(count = n(), .groups = "drop")
+chi_sqr_test |> 
+  ggplot(mapping = aes(x = data_group...1,
+                       y = data_group...2,
+                       fill = chisqr_pval))+
+  geom_tile()+
+  scale_fill_gradient2(
+    low = "#1B9E77",
+    mid = "white",
+    high = "#7570B3",
+    midpoint = 0.05)+
+  theme_minimal()+
+  theme(axis.title = element_blank(),
+        axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+```
 
-p6 <- group_6_counts |> 
-  ggplot(mapping = aes(x = TD, y = count, color = data_group)) + 
-  geom_line() +
-  labs(
-    title =  "Days elapsed since randomisation before death of initial stroke",
-    x = "Days elapsed since randomisation",
-    y = "Number of peopled died of initial stroke after x days"
-  ) +
-  facet_wrap(~ data_group)
+## Save the results
 
-p6
-
-group_5_counts <- group_5_data |> 
-  group_by(data_group, TD) |>
-  summarise(count = n(), .groups = "drop")
-
-p5 <- group_5_counts |> 
-  ggplot(mapping = aes(x = TD, y = count, color = data_group)) + 
-  geom_line() +
-  labs(
-    title =  "Days elapsed since randomisation before death of coronary heart disease",
-    x = "Days elapsed since randomisation",
-    y = "Number of peopled died of coronary heart disease after x days"
-  ) +
-  facet_wrap(~ data_group, scales = "free_x")
-
-p5
-
-# Save the plot as a PNG
-ggsave("../results/my_plot.png", plot = p0, width = 6, height = 4, dpi = 300)
-
+```{r}
+ggsave(filename = here("results/09_keyplot_a.png"), plot = p1)  
+ggsave(filename = here("results/09_keyplot_b.png"), plot = p2)  
 ```

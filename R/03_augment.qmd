@@ -1,7 +1,10 @@
 ---
 title: "03_augment"
+author: "Group 29: Helena Møller, Emma Christensen, Frederik Holmstrup, Casper Harreby & Laura Christiansen"
 format: html
-editor: visual
+execute: 
+  message: FALSE
+  warning: FALSE
 ---
 
 # Data Augmentation
@@ -10,13 +13,16 @@ editor: visual
 
 ```{r}
 #| eval: true
+#| echo: true
+
 library("tidyverse")
+library("here")
 ```
 
 ## Loading clean data
 
 ```{r}
-data_clean <- read_tsv(file = "../data/02_dat_clean.tsv")
+data_clean <- read_tsv(here("data/02_dat_clean.tsv"))
 ```
 
 ## Data augmentation

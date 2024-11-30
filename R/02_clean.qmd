@@ -1,10 +1,10 @@
 ---
 title: "02_clean"
+author: "Group 29: Helena Møller, Emma Christensen, Frederik Holmstrup, Casper Harreby & Laura Christiansen"
 format: html
-output:
-  html:
-    output-dir: "/results"
-editor: visual
+execute: 
+  message: FALSE
+  warning: FALSE
 ---
 
 # Data Cleaning
@@ -14,9 +14,11 @@ editor: visual
 ```{r}
 #| echo: true 
 #| eval: true
-#| message: false
 
 library("tidyverse")
+library("knitr")
+library("quarto")
+library("here")
 ```
 
 ## Loading data
@@ -24,9 +26,8 @@ library("tidyverse")
 ```{r}
 #| echo: true 
 #| eval: true
-#| message: false
 
-data <- read_tsv("../data/_raw/01_dat_load.tsv")
+data <- read_tsv(here("data/_raw/01_dat_load.tsv"))
 ```
 
 ## Data cleaning
@@ -250,4 +251,6 @@ data_left_joined <- data_split_1_1 |>
 
 ```{r}
 write_tsv(data_inner_joined, file = "../data/02_dat_clean.tsv")
+
+list.files("../")
 ```

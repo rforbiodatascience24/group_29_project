@@ -1,34 +1,123 @@
 ---
 title: "07_analysis_3"
-author: "Group 29"
+author: "Group 29: Helena Møller, Emma Christensen, Frederik Holmstrup, Casper Harreby & Laura Christiansen"
 format: html
-editor: visual
+execute: 
+  message: FALSE
+  warning: FALSE
 ---
 
-## Data Analysis
-
-## Long-term effects of early anticoagulant therapy
-
-![](images/clipboard-517319475.png){width="256"}
-
-Effects of anticoagulants at end of scheduled follow-up period (generally 3, or as in the IST, 6 months) in completed unconfounded randomised trials in acute ischaemic stroke on: (a) death from any cause, and (b) death or dependency in activities of daily living
+# Data analysis 
 
 ## Loading libraries
 
 ```{r}
+#| echo: true
+#| eval: true
+
 library("tidyverse")
-library("ggplot2")
-library("dplyr")
-library("readr")
+library("here")
 ```
 
 ## Loading data
 
 ```{r}
-data<- read_tsv("../data/03_dat_aug.tsv")
+data <- read_tsv(here("data/03_dat_aug.tsv"))
 ```
 
-## Preparation of subgroups in data
+## Preparing data
 
-```         
+```{r}
+# Grouping the data by the variable "DEACD"
+grouped_data <- data |>
+  group_by(DEADC) |>
+  # Creating a new column "TD_causes", which categorizes each cause of death based on "DEADC"
+  mutate( 
+    TD_causes = case_when( 
+      DEADC == 1 ~ "cause_1",
+      DEADC == 2 ~ "cause_2",
+      DEADC == 3 ~ "cause_3",
+      DEADC == 4 ~ "cause_4",
+      DEADC == 5 ~ "cause_5",
+      DEADC == 6 ~ "cause_6",
+      DEADC == 7 ~ "cause_7",
+      DEADC == 8 ~ "cause_8",
+    )
+  )
+
+#Filter data for each cause of death
+causes <- paste0("cause_", 1:8) #Creates a list of causes
+group_data_list <- map(causes, ~ grouped_data |> filter(TD_causes == .x)) # Filter the data for each cause and stores it in a list
+names(group_data_list) <- causes #Assign proper names to the list elements
+```
+
+## Plot the overall data count
+
+```{r}
+#Count the occurences of "TD" for the whole dataset 
+group_counts <- grouped_data |>
+  count(TD)
+
+#Plots the time of death (TD) vs. the number of occurences.
+p0 <- group_counts |>
+  ggplot(mapping = aes(x = TD, y = n))+
+  geom_line()+
+  coord_cartesian(xlim = c(0, 200))+
+  labs(
+    title =  "Days elapsed since randomisation before death",
+    x = "Days elapsed since randomisation",
+    y = "Number of peopled died after x days"
+  ) 
+
+p0
+  
+# Save the plot as a PNG
+ggsave("../results/overall.png", plot = p0, dpi = 300)
+
+```
+
+## Creating individual plots for each cause of death
+
+```{r}
+#Count the occurences of "TD" for only those died of ischaemic stroke
+group_1_counts <- group_1_data |> 
+  group_by(data_group, TD) |>
+  summarise(count = n(), .groups = "drop")
+
+#Plots the time of death (TD) vs. the number of occurences.
+p1 <- group_1_counts |> 
+  ggplot(mapping = aes(x = TD, y = count, color = data_group)) + 
+  geom_line() +
+  labs(
+    title =  "Days elapsed since randomisation before death of initial stroke",
+    x = "Days elapsed since randomisation",
+    y = "Number of peopled died of initial stroke after x days"
+  ) +
+  facet_wrap(~ data_group)
+
+p1
+
+# Save the plot as a PNG
+ggsave("../results/ischaemic_stroke_td.png", plot = p1, dpi = 300)
+
+#Count the occurences of "TD" for only those died of pulmonary embolism
+group_6_counts <- group_6_data |> 
+  group_by(data_group, TD) |>
+  summarise(count = n(), .groups = "drop")
+
+#Plots the time of death (TD) vs. the number of occurences.
+p6 <- group_6_counts |> 
+  ggplot(mapping = aes(x = TD, y = count, color = data_group)) + 
+  geom_line() +
+  labs(
+    title =  "Days elapsed since randomisation before death of pulmonary embolism",
+    x = "Days elapsed since randomisation",
+    y = "Number of peopled died of pulmonary embolism after x days"
+  ) +
+  facet_wrap(~ data_group)
+
+p6
+
+# Save the plot as a PNG
+ggsave("../results/pulmonary_td.png", plot = p6, dpi = 300)
 ```
