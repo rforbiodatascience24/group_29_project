@@ -77,9 +77,23 @@ ggsave("../results/03_description_plot_1.png", plot = p1, width = 8, height = 4,
 
 ## Age distribution of stroke subtypes (STYPE)
 
-The stroke subtypes (STYPE) are here distributed by age and visualized with boxplots:
+The stroke subtypes (STYPE) are here distributed by age and visualized with boxplots. Here's a brief description of the subtypes:
 
--   Describe the different subtypes of strokes
+**LACS (Lacunar Stroke Syndrome)**
+
+Blockage of small penetrating arteries in deep brain structures, such as the basal ganglia, thalamus, or internal capsule. The prognosis is genereally better than other subtypes; smaller infarct size.
+
+**PACS (Partial Anterior Circulation Syndrome)**
+
+Partial occlusion in the anterior cerebral circulation, typically affecting the middle cerebral artery (MCA) or anterior cerebral artery (ACA). The prognosis is moderate; larger infarct than LACS, but less severe than TACS.
+
+**POCS (Posterior Circulation Syndrome)**
+
+Infarction in the posterior cerebral circulation, affecting the brainstem, cerebellum, or occipital lobes. The prognosis is variable, depending on location and size of the infarction.
+
+**TACS (Total Anterior Circulation Syndrome)**
+
+Complete occlusion of the anterior cerebral circulation, typically affecting the middle cerebral artery (MCA) or internal carotid artery (ICA). The prognosis is poor; associated with large infarcts, severe disability, and high mortality rates.
 
 ```{r}
 
@@ -108,7 +122,7 @@ STYPE_median <- dataset |>
 print(STYPE_median)
 ```
 
-The median age of the different stroke subtypes are shown, where the subtype TACS has the highest median age of 76 years.
+The median age of the different stroke subtypes are shown, where the most severe subtype TACS with high mortality rates, has the highest median age of 76 years.
 
 # Data visualisation
 
