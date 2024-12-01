@@ -206,9 +206,9 @@ From the table, females have a higher median probability of death at 6 months (0
 ```{r}
 # Save the plots as PNG files
 
-ggsave("../results/03_description_plot_1.png", plot = p1, width = 8, height = 4, dpi = 300, bg = "white")
+ggsave(here("results/04_description_plot_1.png"), plot = p1, width = 8, height = 4, dpi = 300, bg = "white")
 
-ggsave("../results/03_description_plot_2.png", plot = p2, width = 8, height = 4, dpi = 300, bg = "white")
+ggsave(here("results/04_description_plot_2.png"), plot = p2, width = 8, height = 4, dpi = 300, bg = "white")
 
-ggsave("../results/03_description_plot_3.png", plot = p1, width = 8, height = 4, dpi = 300, bg = "white")
+ggsave(here("results/04_description_plot_3.png"), plot = p3, width = 8, height = 4, dpi = 300, bg = "white")
 ```

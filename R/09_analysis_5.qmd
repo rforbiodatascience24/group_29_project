@@ -105,23 +105,24 @@ p1 <- km_tidy|>
 ```{r}
 # Plot tiles where color correspond to the pvalues
 
-chi_sqr_test |> 
-  ggplot(mapping = aes(x = data_group...1,
-                       y = data_group...2,
-                       fill = chisqr_pval))+
-  geom_tile()+
-  scale_fill_gradient2(
-    low = "#1B9E77",
-    mid = "white",
-    high = "#7570B3",
-    midpoint = 0.05)+
-  theme_minimal()+
-  theme(axis.title = element_blank(),
-        axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+p2 <- chi_sqr_test |> 
+        ggplot(mapping = aes(x = data_group...1,
+                             y = data_group...2,
+                             fill = chisqr_pval))+
+        geom_tile()+
+        scale_fill_gradient2(
+          low = "#1B9E77",
+          mid = "white",
+          high = "#7570B3",
+          midpoint = 0.05)+
+        theme_minimal()+
+        theme(axis.title = element_blank(),
+              axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
 ```
 
 ## Save the results
 
 ```{r}
-ggsave(filename = here("results/09_keyplot_a.png"), plot = p1)  
+ggsave(filename = here("results/09_keyplot_5a.png"), plot = p1, width = 8, height = 4, dpi = 300, bg = "white")  
+ggsave(filename = here("results/09_keyplot_5b.png"), plot = p2, width = 8, height = 4, dpi = 300, bg = "white")  
 ```

@@ -58,7 +58,7 @@ data_clean_trtgroups <- data_clean_hepgroups |>
 ## Saving augmented data
 
 ```{r}
-write_tsv(data_clean_trtgroups, file = "../data/03_dat_aug.tsv")
+write_tsv(data_clean_trtgroups, file = here("data/03_dat_aug.tsv"))
 ```
 
 ## 

@@ -361,9 +361,8 @@ Holmstrup, Casper Harreby &amp; Laura Christiansen</h4>
 <div id="loading-libraries" class="section level2">
 <h2>Loading libraries</h2>
 <pre class="r"><code>library(&quot;tidyverse&quot;)
-library(&quot;knitr&quot;)</code></pre>
-<pre><code>## Warning: package &#39;knitr&#39; was built under R version 4.2.3</code></pre>
-<pre class="r"><code>library(&quot;quarto&quot;)
+library(&quot;knitr&quot;)
+library(&quot;quarto&quot;)
 library(&quot;here&quot;)</code></pre>
 </div>
 <div id="loading-data" class="section level2">
@@ -580,11 +579,7 @@ data_left_joined &lt;- data_split_1_1 |&gt;
 </div>
 <div id="saving-final-clean-data" class="section level2">
 <h2>Saving final clean data</h2>
-<pre class="r"><code>write_tsv(data_inner_joined, file = &quot;../data/02_dat_clean.tsv&quot;)
-
-list.files(&quot;../&quot;)</code></pre>
-<pre><code>## [1] &quot;data&quot;                   &quot;doc&quot;                    &quot;group_29_project.Rproj&quot; &quot;images&quot;                 &quot;R&quot;                     
-## [6] &quot;README.md&quot;              &quot;results&quot;</code></pre>
+<pre class="r"><code>write_tsv(data_inner_joined, file = here(&quot;data/02_dat_clean.tsv&quot;))</code></pre>
 </div>
 </div>
 
