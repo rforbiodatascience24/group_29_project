@@ -2,68 +2,179 @@
 title: "04_describe"
 author: "Group 29: Helena Møller, Emma Christensen, Frederik Holmstrup, Casper Harreby & Laura Christiansen"
 format: html
-execute: 
-  message: FALSE
-  warning: FALSE
 ---
 
-# Data description
+# Descriptive analysis
 
-## Loading libraries
+## Loading Libraries
 
 ```{r}
-#| eval: true 
-#| echo: true
-
-library("tidyverse")
-library("ggplot2")
+#| eval: true
+library("tidyverse") 
+library("ggplot2") 
 library("dplyr") 
-library("readr")
+library("readr") 
+library("here")
 ```
 
 ## Import the dataset
 
 ```{r}
-
-# Load the dataset  
+# Load the dataset   
 dataset <- read_tsv("../data/03_dat_aug.tsv")
 ```
 
-## Description of Data
-
-From the paper - figure 1 and table 1 + 2 + 3 + 4 + 5 + 6
-
-Figure 1 - the group sizes:
-
-![](images/clipboard-2585393746.png)
+## Age distribution of study population
 
 ```{r}
-#| eval: true
-#| echo: true
 
-library(ggplot2)
-library(dplyr)
-library(readr)
+# Calculate the mean of AGE
+mean_age <- mean(data$AGE, na.rm = TRUE)
+
+data <- data |>  filter(!is.na(AGE) & AGE >= 0) # Exclude missing or negative ages
+
+# Visualizing age distribution of study population
+p1 <- ggplot(data, aes(x = AGE)) +      
+  geom_histogram(fill = "lightblue", 
+                 color = "darkblue", 
+                 bins = 30, 
+                 alpha = 0.7) + 
+  labs(title = "Age Distribution of the Study Population",             
+       x = "Age (years)", 
+       y = "Number of People") +      
+  theme_minimal(base_size = 14) + # Clean minimal theme with larger text      
+  theme(plot.title = element_text(hjust = 0.5, face = "bold", size = 18), 
+        axis.title.x = element_text(face = "bold", size = 14), # Bold x-axis title              
+        axis.title.y = element_text(face = "bold", size = 14), # Bold y-axis title         
+        panel.grid.minor = element_blank()) + # Removes minor grid lines                
+  scale_x_continuous(breaks = seq(0, 100, by = 10), 
+                     limits = c(0, 100)) + # Set x-axis limits and breaks      
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05)), 
+                     breaks = seq(0, 3000, by = 500)) + # Avoids crowded y-axis and setting breaks    
+  geom_segment(x = mean_age, # Static value, not in aes()
+               xend = mean_age, 
+               y = 0, 
+               yend = 2900, 
+               color = "darkgreen", 
+               linetype = "dashed", 
+               size = 1.0) + # Adds mean age as a vertical dashed line      
+  annotate("label", 
+           x = mean_age + 12, # Move label to the right of the mean                      
+           y = 2400, # Position slightly below the peak                      
+           label = paste("Mean Age:", round(mean_age, 1), "years"),                 
+           color = "white",                 
+           fill = "darkgreen",                 
+           fontface = "bold",                 
+           size = 4,                      
+           label.padding = unit(0.4, "lines")) # Mean age shown in a text box with padding  
+
+# Display the plot
+print(p1)
+
+# Saving the plot as a PNG file
+ggsave("../results/03_description_plot_1.png", plot = p1, width = 8, height = 4, dpi = 300, bg = "white")
+```
+
+## Age distribution of stroke subtypes (STYPE)
+
+The stroke subtypes (STYPE) are here distributed by age and visualized with boxplots. Here's a brief description of the subtypes:
+
+**LACS (Lacunar Stroke Syndrome)**
+
+Blockage of small penetrating arteries in deep brain structures, such as the basal ganglia, thalamus, or internal capsule. The prognosis is genereally better than other subtypes; smaller infarct size.
+
+**PACS (Partial Anterior Circulation Syndrome)**
+
+Partial occlusion in the anterior cerebral circulation, typically affecting the middle cerebral artery (MCA) or anterior cerebral artery (ACA). The prognosis is moderate; larger infarct than LACS, but less severe than TACS.
+
+**POCS (Posterior Circulation Syndrome)**
+
+Infarction in the posterior cerebral circulation, affecting the brainstem, cerebellum, or occipital lobes. The prognosis is variable, depending on location and size of the infarction.
+
+**TACS (Total Anterior Circulation Syndrome)**
+
+Complete occlusion of the anterior cerebral circulation, typically affecting the middle cerebral artery (MCA) or internal carotid artery (ICA). The prognosis is poor; associated with large infarcts, severe disability, and high mortality rates.
+
+```{r}
+
+p2<-ggplot(dataset, aes(x = STYPE, y = AGE, fill = STYPE)) +   geom_boxplot(alpha = 0.7, outlier.shape = NA) + 
+  # Boxplot without outlier points   
+  labs(     title = "Stroke subtypes distributed by age",     x = "Stroke Type (STYPE)",     
+   y = "Age (years)"   ) +   
+  theme_minimal(base_size = 14) + 
+  theme(     plot.title = element_text(hjust = 0.5, face = "bold", size = 18),   
+             axis.title.x = element_text(face = "bold", size = 14),   
+             axis.title.y = element_text(face = "bold", size = 14),
+             legend.position = "right"   )
+
+# Display the plot
+print(p2)
+
+# Saving the plot as a PNG file
+ggsave("../results/03_description_plot_2.png", plot = p2, width = 8, height = 4, dpi = 300, bg = "white")
 ```
 
 ```{r}
-data <- read_tsv("../data/03_dat_aug.tsv")
+STYPE_median <- dataset |>
+  group_by(STYPE) |>
+  summarize(Median_AGE = round(median(AGE, na.rm = TRUE), 0))
+
+print(STYPE_median)
 ```
 
+The median age of the different stroke subtypes are shown, where the most severe subtype TACS with high mortality rates, has the highest median age of 76 years.
+
+# Data visualisation
+
 ```{r}
-data |> 
+dataset |> 
   group_by(data_group) |> 
   count()
 ```
 
-Table 1 - characteristics of patients
+## Boxplot for predicted probability of death at 6 months compared by gender
 
-Table 2 - outcome of the different groups after 14 days
+```{r}
 
-Table 3 - outcome of the different groups after 6 months
+# Boxplot of predicted probability of death at 6 months distributed by gender
+p3<-ggplot(dataset, aes(x = SEX, y = EXPD6, fill = SEX)) +   
+  geom_boxplot(alpha = 0.7, color = "black") +    
+  scale_fill_manual(values = c("darkred", "blue")) + # Custom fill colors for gender   
+  labs(
+    title = "Predicted probability of death at 6 months",     
+    x = "Gender",     
+    y = "EXPD6",     
+    fill = "Gender"
+  ) + 
+  theme_minimal(base_size = 14) +   
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 18),
+    axis.title.x = element_text(face = "bold", size = 14), 
+    axis.title.y = element_text(face = "bold", size = 14), 
+    legend.position = "top"
+  ) +   
+  scale_y_continuous(
+    limits = c(0, 1), # Adjust the range to display outliers     
+    expand = expansion(mult = c(0.05, 0.1))
+  )
 
-Table 4 - outcome of the different groups after 14 days split up into groups with and without atrial fibrillation
+# Display the plot
+print(p3)
 
-Table 5 - outcome of the different groups after 14 days of only heparin split between small and medium dose
+# Saving the plot as a PNG file
+ggsave("../results/03_description_plot_3.png", plot = p1, width = 8, height = 4, dpi = 300, bg = "white")
+```
 
-Table 6 - Direct comparison of low dose heparin and aspirin absolute outcomes after 14 days compared to the control
+## Comparison of median of EXPD6 by gender
+
+```{r}
+#Show median EXPD6 by gender  
+
+median_table <- dataset |>
+  group_by(SEX) |>
+  summarize(Median_EXPD6 = median(EXPD6, na.rm = TRUE)) 
+
+print(median_table)
+```
+
+From the medians of the EXPD6 variable, it can be seen by comparing the genders, that females have a higher median of 0.73175 than males (0.53940), thus a relatively higher predicted probability of death at 6 months from randomization.

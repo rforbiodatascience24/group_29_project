@@ -126,6 +126,12 @@ The median age of the different stroke subtypes are shown, where the most severe
 
 # Data visualisation
 
+```{r}
+dataset |> 
+  group_by(data_group) |> 
+  count()
+```
+
 ## Boxplot for predicted probability of death at 6 months compared by gender
 
 ```{r}
