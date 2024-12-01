@@ -13,15 +13,16 @@ editor: visual
 
 ### The International Stroke Trial v. 2 data
 
--   Accessing efficacy and safety of antithrombotic therapy compared to control.
+-   Assessing efficacy and safety of antithrombotic therapy compared to control.
+-   Antithrombotic agents: Aspirin and subcutaneous Heparin.
 
 ### Ischaemic stroke and treatments
 
-Ischaemic stroke:
+-   **Ischaemic stroke**: Medical condition in which poor blood flow to a part of the brain causes cell death
 
-### Aim
+### Project Aim
 
-Assesing effects of antithrombotics (heparin and aspirin) for recurrent ischaemic strokes
+-   Assessing effects of antithrombotics (heparin and aspirin) for recurrent ischaemic strokes
 
 ## Methods
 
@@ -43,18 +44,24 @@ Groups created based on different treatments, and different doses of aspirin and
 
 ## Descriptive analysis
 
-Observations: 19,435
 
-Variables: 98
+::: {layout-nrow=2}
 
-::: {layout-ncol="2"}
-![](../results/03_decription_plot_1.png){fig-align="right" width="50%"}
+- **Observations/patients**: 19,435  
+- **Variables**: 98 
+- **Treatment groups**: 6
+![](../images/treatment_groups.png){fig-align="center" width="500"}
 
-![](images/03_description_plot_3-01.png){fig-align="center" width="350"}
+![](../results/03_decription_plot_1.png){fig-align="center" width="500"}
+
+![](images/03_description_plot_3-01.png){fig-align="center" width="500"}
+
+![](images/03_description_plot_2.png){fig-align="center" width="500"}
 :::
 
-![](images/03_description_plot_2.png){fig-align="left" width="400"}
+
 
 ## Data visualization: type of stroke
+
 
 ## Data visualization: effects of treatments
