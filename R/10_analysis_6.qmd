@@ -44,7 +44,8 @@ Using `AGE` to see if can be used predict `EXPDD`.
 ```{r}
 model_1 <- data |> 
   filter(STYPE == "LACS") |> 
-  lm(data = _, EXPDD ~ AGE)
+  lm(data = _,
+     EXPDD ~ AGE)
   
 ```
 
@@ -69,7 +70,8 @@ p1
 
 model_2 <- data |> 
   filter(STYPE == "LACS") |> 
-  lm(data = _, log2(EXPD6) ~ AGE)
+  lm(data = _,
+     log2(EXPD6) ~ AGE)
 ```
 
 ```{r}
