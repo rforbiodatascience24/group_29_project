@@ -7,7 +7,7 @@ execute:
   warning: FALSE
 ---
 
-# Data modeling 
+# Data modeling
 
 ## Loading Libraries
 
@@ -30,7 +30,7 @@ library("here")
 data <- read_tsv(here("data/03_dat_aug.tsv"))
 ```
 
-## Analysis Obejctive 
+## Analysis Obejctive
 
 This analysis investigates whether`AGE` can predict the following probabilities making a simple linear model for prediction of:
 
@@ -71,7 +71,7 @@ p1 <- data |>
 print(p1)
 ```
 
-### Model 2: Predicting `EXPD6` with `AGE` 
+### Model 2: Predicting `EXPD6` with `AGE`
 
 ```{r}
 
