@@ -81,7 +81,7 @@ data_slim_heparin <- data |>
 
 ### Data augmentation - Calculating the statistics used in the plot
 
-The data is modified to have one dataframe for each subgroup nested together in the same dataframe, where the original dataframe has the noted group and subgroup. Thereby there is one dataframe indicating for the individuals with and without heparin, what the outcomes is after 6 months
+The data is modified to have one dataframe for each subgroup nested together in the same dataframe, where the original dataframe has the noted group and subgroup. Thereby there is one dataframe indicating for the individuals with and without heparin, what the outcomes is after 6 months.
 
 ```{r}
 data_nested_heparin <- data_slim_heparin |>
