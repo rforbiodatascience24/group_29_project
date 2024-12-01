@@ -33,7 +33,7 @@ raw_data <- read_csv(file = "https://datashare.ed.ac.uk/bitstream/handle/10283/1
 #| message: false
 
 # Define the file path
-file_path <- "../data/_raw/" 
+file_path <- "../data/_raw/"
 if (!file.exists(file_path)){dir.create(file_path, recursive = TRUE)}
 
 #Create the directory if it doesn't exist
