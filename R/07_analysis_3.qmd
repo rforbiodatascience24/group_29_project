@@ -7,7 +7,7 @@ execute:
   warning: FALSE
 ---
 
-# Data analysis 
+# Data analysis
 
 ## Loading libraries
 
