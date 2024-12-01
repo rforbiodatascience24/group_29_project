@@ -124,5 +124,4 @@ chi_sqr_test |>
 
 ```{r}
 ggsave(filename = here("results/09_keyplot_a.png"), plot = p1)  
-ggsave(filename = here("results/09_keyplot_b.png"), plot = p2)  
 ```
