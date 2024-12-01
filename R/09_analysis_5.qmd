@@ -123,6 +123,6 @@ chi_sqr_test |>
 ## Save the results
 
 ```{r}
-ggsave(filename = here("results/09_keyplot_a.png"), plot = p1)  
+ggsave(filename = here("results/09_keyplot_a.png"), plot = p1, dpi = 300, bg = "white")  
 ggsave(filename = here("results/09_keyplot_b.png"), plot = p2)  
 ```

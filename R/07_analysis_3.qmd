@@ -66,7 +66,7 @@ p0 <- group_counts |>
   labs(
     title =  "Days elapsed since randomisation before death",
     x = "Days elapsed since randomisation",
-    y = "Number of peopled died after x days"
+    y = "Number of people died after x days"
   ) 
 
 p0

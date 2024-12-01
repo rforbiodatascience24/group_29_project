@@ -55,15 +55,19 @@ editor: visual
 - **Observations/patients**: 19,435  
 - **Variables**: 98 
 - **Treatment groups**: 6
+
 ![](../images/treatment_groups.png){fig-align="center" width="500"}
 
-![](../results/03_decription_plot_1.png){fig-align="center" width="500"}
+![](../results/03_decription_plot_1.png){fig-align="center" width="700"}
 
-![](images/03_description_plot_3-01.png){fig-align="center" width="500"}
+![](images/03_description_plot_3-01.png){fig-align="center" width="800"}
 
-![](images/03_description_plot_2.png){fig-align="center" width="500"}
 :::
 
+## Data visualisation: Types of strokes
+
+
+![](images/03_description_plot_2.png){fig-align="center" width="500"}
 
 ## Data visualization: Events during first 14 days
 
@@ -79,7 +83,12 @@ editor: visual
 :::
 
 
-## Data visualization: type of stroke
+## Data visualization: 
+
+![](../results/pulmonary_td.png){fig-align="center" width="500"}
 
 
-## Data visualization: effects of treatments
+
+## Data visualization: 
+
+![](../results/09_keyplot_a.png){fig-align="center" width="500"}
