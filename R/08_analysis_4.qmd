@@ -149,7 +149,9 @@ ggsave(filename = here("results/08_keyplot_b.png"), plot = p2)
 ggsave(filename = here("results/08_keyplot_c.png"), plot = p3)
 ```
 
-## 
+## Rendering Document
+
+Rendering the document and storing the HTML in the results folder.
 
 ```{r}
 rmarkdown::render("08_analysis_4.qmd", output_dir = "../results/")
