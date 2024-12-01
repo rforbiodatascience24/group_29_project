@@ -9,11 +9,7 @@ execute:
 
 ## Data analysis
 
-Creation of figure 5A: H14
-
-Creation of figure 5B: TRAN14
-
-Creation of figure 5D: PE14
+Examining which effect combinations of treatments affects the probability of side events. The code can be used to create improved versions of figure 5A, 5B and 5D from the report that the data originates from. The effects are illustrated with bar plots.
 
 ## Loading Libraries
 
@@ -30,15 +26,17 @@ library("here")
 
 ## Creating Function
 
-```{r}
-box_func <- function(group_title,data,colvar){
+Since several different effects will be examined, the code for creating the barplot is encoded in a function. First, a the data set is changed to contain only the rows investigated: dose op heparin, dose of heparin and whether the effect has been reported. Secondly, a new data set is created, calculating what percentage of patients are experiencing that effect. Thirdly, the plot is created: different heparin doses are on the x-axis, the treatment with aspirin is indicated by coloring and the y-axis is the percentage of patients with the effect reported.
 
-  #Select only the data of the effect we are investigating
+```{r}
+bar_func <- function(group_title,data,colvar){
+
+#Removing patients that do not fulfill the requirement for investigation
   relevant_data <- data |> 
     select(RXHEP, RXASP, {{colvar}})
-    #Removes all patients which does not fulfill the requirement we want to investigate
-    
+
   
+#Creating a data set with a column counting the percentage of patients with reported effect
   percentage_data <- relevant_data |>
   #Counts the patients in each group
       group_by_all() |> 
@@ -57,8 +55,9 @@ box_func <- function(group_title,data,colvar){
   sorted_data <- percentage_data |> 
     mutate(RXHEP = factor(RXHEP, levels = c("M", "L", "N")),
            RXASP = factor(RXASP, levels = c("Y", "N")))
-  
-  plot_box <- sorted_data |>   
+
+#Defining the plot
+  plot_bar <- sorted_data |>   
   
     ggplot(mapping = aes(x = RXHEP, #Stratisfy on dose of heparin
                          y = percentage, #Expresses the chance of the event happening 
@@ -75,7 +74,7 @@ box_func <- function(group_title,data,colvar){
     geom_text(aes(label = round(percentage, 2),
                   y = percentage / 2),
               
-              #Makes text centered in boxes and correct sizes
+              #Makes text centered in bars and correct sizes
               position = position_dodge(width = 0.9),
               vjust = 0.5,
               size = 4) +
@@ -84,7 +83,7 @@ box_func <- function(group_title,data,colvar){
     geom_errorbar(position = position_dodge(width = 0.9),
                   width = 0.3) +
     
-    #Create labels for each patient
+    #Create labels 
     labs(title = str_c("Percentage of patients with ", group_title),
          x = NULL,
          y = "%",
@@ -94,7 +93,7 @@ box_func <- function(group_title,data,colvar){
                                    "N" = "No Aspirin")) +
     
     
-    theme_minimal() + #Chooses a design (remove grey background)
+    theme_minimal() + #Chooses a design (removes grey background)
     theme(legend.position = "bottom",
           axis.title.y = element_text(angle = 0, vjust = 0.5), #Adjust y-axis tet
           panel.grid.major.x = element_blank()) +     #Adjusting horizontal lines
@@ -105,7 +104,7 @@ box_func <- function(group_title,data,colvar){
                                 "N" = "No Heparin"))
   
   #Defines final output of function to be the plot
-  return(plot_box)
+  return(plot_bar)
 }
 ```
 
@@ -118,20 +117,26 @@ data <- read_tsv(here("data/03_dat_aug.tsv"))
 
 ## Creating bar plots
 
+In the code below, a plot illustrating the percentage of patients in each group with cerebral bleed/heamorrhagic stroke within 14 days.
+
 ```{r}
-p1 <- box_func("cerebral bleed/heamorrhagic stroke within 14 days",data,H14)
+p1 <- bar_func("cerebral bleed/heamorrhagic stroke within 14 days",data,H14)
 
 p1
 ```
 
+Here, the plot illustrates the percentage of patients in each group with major non-cerebral bleed within 14 days.
+
 ```{r}
-p2 <- box_func("indicator of major non-cerebral bleed within 14 days",data,TRAN14)
+p2 <- bar_func("indicator of major non-cerebral bleed within 14 days",data,TRAN14)
 
 p2
 ```
 
+Finally, a plot illustrating the percentage of patients with reported pulmonary embolism within 14 days are created. This effect has a possibility of substantial under-reporting.
+
 ```{r}
-p3 <- box_func("indicator of pulmonary embolism within 14 days",data,PE14)
+p3 <- bar_func("indicator of pulmonary embolism within 14 days",data,PE14)
 
 p3
 ```
