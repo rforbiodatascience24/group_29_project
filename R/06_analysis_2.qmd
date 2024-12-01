@@ -161,7 +161,12 @@ p3<-ggplot(dataset, aes(x = SEX, y = EXPD6, fill = SEX)) +
 print(p3)
 
 # Saving the plot as a PNG file
-ggsave("../results/03_description_plot_3.png", plot = p1, width = 8, height = 4, dpi = 300, bg = "white")
+ggsave(here("results/03_description_plot_3.png"), 
+       plot = p1, 
+       width = 8, 
+       height = 4, 
+       dpi = 300, 
+       bg = "white")
 ```
 
 ## Comparison of median of EXPD6 by gender
