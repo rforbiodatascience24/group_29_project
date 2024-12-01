@@ -84,7 +84,7 @@ print(p1)
 
 From the histogram distributed by age, it can be seen that the mean age of the study population is 72 years.
 
-## Age distribution of stroke subtypes (STYPE) 
+## Age distribution of stroke subtypes (STYPE)
 
 The stroke subtypes (STYPE) are here distributed by age and visualized with boxplots. Here's a brief description of the different subtypes:
 
@@ -152,7 +152,7 @@ data_summary <- data |>
 print(data_summary)
 ```
 
-## Predicted probability of death by gender at 6 months 
+## Predicted probability of death by gender at 6 months
 
 This section visualizes the predicted probability of death at six months (EXPD6) by gender. A boxplot is used to compare probabilities.
 
