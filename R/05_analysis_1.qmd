@@ -11,8 +11,6 @@ execute:
 
 We want to investigate the apparent beneficial effect of the treatment by aspirin and heparin, divided into the different subgroups of the data. We will do that with inspiration from figure 2 in the original paper.
 
-The CI of the different treatments looking at different subgroups in the data. Pay note that some of the groups are represented by a 95% CI and others has a 99% CI. The 99% CI is used for all the subgroups, while the 95% CI is for the main group. Size of square refer to the amount of available information (the sample size).
-
 ## Loading libraries
 
 ```{r}
@@ -25,7 +23,11 @@ library("here")
 
 ## Loading data
 
+The augmented data will be loaded, but further processing of the data will be needed.
+
 ```{r}
+#| echo: true
+#| eval: true
 data <- read_tsv(here("data/03_dat_aug.tsv"))
 ```
 
@@ -33,13 +35,17 @@ data <- read_tsv(here("data/03_dat_aug.tsv"))
 
 ### Data augmentation - Creating the desired subgroups
 
+The data is preprocessed to have the groups which are also visible in figure 2 in the original paper.
+
 ```{r}
 data_slim_heparin <- data |>
+  #One result heparin column is created to group the low and medium doses of heparin together (as done in the original paper)
   mutate("Heparin" = case_when(
     RXHEP == 'L' ~ 'Y',
     RXHEP == 'M' ~ 'Y',
     RXHEP == 'N' ~ 'N',
     is.na(RXHEP) ~ NA)) |>
+  #The outcomes are gruped in dead/dependent and independent (as done in the original paper)
   mutate("Outcome" = case_when(
     OCCODE == "dead" ~ "dead/dependent",
     OCCODE == "dependent" ~ "dead/dependent",
@@ -47,36 +53,48 @@ data_slim_heparin <- data |>
     OCCODE == "recovered" ~ "independent",
     is.na(OCCODE) ~ NA
   )) |> 
+  #The delay from stroke to randomization is grouped into 4 subgroups
   mutate("RDELAY_group" = case_when(
     RDELAY <= 8 ~ "0-8h",
     RDELAY <= 12 ~ "9-12h",
     RDELAY <= 24 ~ "13-24h",
     RDELAY <= 48 ~ "25-48h",
     TRUE ~ NA)) |> 
+  #The age is divided into two groups divided by 75 years
   mutate("AGE_group" = case_when(
     AGE <= 75 ~ "≤75",
     AGE > 75 ~ ">75"
   )) |> 
+  #The systolic blood pressure above 180 is subdivided into a group as this is defined as hypertensive crisis
   mutate("RSBP_group" = case_when(
     RSBP <= 180 ~ "≤180",
     RSBP > 180 ~ ">180")) |> 
+  #The expected death after 6 months is subdivded into 4 groups
   mutate("EXPDD_group" = case_when(
     EXPDD <= 0.4 ~ "0-40%",
     EXPDD <= 0.65 ~ "40-65%",
     EXPDD <= 0.90 ~ "65-90%",
     EXPDD <= 1 ~ "90-100%")) |> 
+  #Only the columns containing the subgroups interesting for this study is selected
   select(Heparin,Outcome,RXASP,RDELAY_group,SEX,AGE_group,RSLEEP,RCONSC,RATRIAL,RSBP_group,STYPE,RDEF3,RCT,RVISINF,DDIAG,RASP3,RHEP24,EXPDD_group)
 ```
 
 ### Data augmentation - Calculating the statistics used in the plot
 
+The data is modified to have one dataframe for each subgroup nested together in the same dataframe, where the original dataframe has the noted group and subgroup. Thereby there is one dataframe indicating for the individuals with and without heparin, what the outcomes is after 6 months
+
 ```{r}
-data_nested_heparin <- data_slim_heparin |> 
-  pivot_longer(cols = -c(Heparin,Outcome), names_to = "group", values_to = "subgroup") |>
+data_nested_heparin <- data_slim_heparin |>
+  #All the different data subgroups are pivoted into one column
+  pivot_longer(cols = -c(Heparin,Outcome), 
+               names_to = "group", 
+               values_to = "subgroup") |>
   drop_na() |> 
+  #The data is grouped by the different subgroups and it is counted how many there are for each group and outcome
   group_by(Heparin,Outcome,group,subgroup) |> 
   count() |> 
   mutate(n = n/1000) |> 
+  #The data is nested into each subgroup
   group_by(group,subgroup) |> 
   nest() |> 
   ungroup()
