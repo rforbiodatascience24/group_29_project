@@ -2,6 +2,9 @@
 title: "09_analysis_5"
 author: "Group 29: Helena Møller, Emma Christensen, Frederik Holmstrup, Casper Harreby & Laura Christiansen"
 format: html
+execute: 
+  message: FALSE
+  warning: FALSE
 ---
 
 # Data analysis - visualizing the overall effect of the treatments
@@ -9,10 +12,18 @@ format: html
 ## Loading libraries
 
 ```{r}
+#| echo: true
+#| eval: true
+
 library("tidyverse")
-library("survival")
 library("here")
+library("survival")
 library("RColorBrewer")
+library("broom")
+```
+
+```{r}
+source(here("R/99_proj_func.R"))
 ```
 
 ## Loading data
@@ -23,24 +34,58 @@ data <- read_tsv(here("data/03_dat_aug.tsv"))
 
 ## Preparing data for plot
 
-To asses the overall impact of the different treatment groups, the data is prepared for a Kaplan-Meier curve of the data and a Cox proportional hazards model
-
 A Kaplan-Meier curve is a curve illustrating the overall survival rate for each group over time. We can plot it for 0-6 months after randomization. We can use this to see if there is an overall difference in survival for the treatments over time. For this we need a time-of-death (if one) and group value for each subject.
+
+A Chi-squared test is a statistical test to see of there is a significant difference in group sizes. The null-hypothesis would be that for all types of treatments, there is the same fraction of people which has died or are dependent after 6 months.
 
 ```{r}
 data_filtered <- data |> 
   select(TD,FDEAD,data_group) |> 
   mutate(FDEAD = recode(FDEAD, "Y" = 1, "N" = 0)) |> 
   mutate(TD = if_else(TD > 183, 183, TD))
+
+data_filtered_group <- data_filtered |> 
+  select(data_group,FDEAD) |> 
+  filter(!is.na(FDEAD)) |> 
+  group_by(data_group,FDEAD) |> 
+  count()
+
+data_filtered_chisqr <- data_filtered_group |> 
+  pivot_wider(names_from = data_group, values_from = n) |> 
+  column_to_rownames(var = "FDEAD")
+
+data_filtered_barchart <- data_filtered_group |> 
+  group_by(data_group) |> 
+  summarize(sum = sum(n),
+            fraction = sum(n * (FDEAD == 1))/sum) |> 
+  mutate(data_name = str_glue("{data_group}(n = {sum})"))
+
+data_filtered_chisqr <- data_filtered |> 
+  select(data_group,FDEAD) |> 
+  filter(!is.na(FDEAD)) |> 
+  group_by(data_group,FDEAD) |> 
+  count() |> 
+  pivot_wider(names_from = data_group, values_from = n) |> 
+  column_to_rownames(var = "FDEAD")
+
+group_combinations <- data_filtered |> 
+  expand(data_group,data_group)
 ```
 
 ```{r}
 km_fit <- survfit(Surv(TD, FDEAD) ~ data_group, data = data_filtered)
 km_tidy <- broom::tidy(km_fit)
+
+chi_sqr_test <- group_combinations |> 
+  mutate(chisqr_pval = 
+           map2_dbl(.x = data_group...1,
+                    .y = data_group...2,
+                    .f = ~ chisqr_pval(data_filtered_chisqr, c(.x, .y)))) |> 
+  mutate(chisqr_pval = if_else(data_group...1 == data_group...2, 1, chisqr_pval ))
 ```
 
 ```{r}
-p1 <- km_tidy |>
+p1 <- km_tidy|>
   mutate(strata = str_remove(strata,"data_group=")) |> 
   ggplot(mapping = aes(x = time, 
                        y = estimate, 
@@ -55,25 +100,24 @@ p1 <- km_tidy |>
     color = "Treatment group")+
   scale_color_brewer(palette="Dark2")+
   theme_minimal()
-
-p1
 ```
 
 ```{r}
-# Plot HR fra Cox-model
-p2 <- cox_tidy |> 
-        mutate(term = str_replace(term, "gruppe", "")) |>   # Fjern præfikset "gruppe"
-        ggplot(aes(x = estimate, y = term)) +
-        geom_point(size = 3, color = "blue") +
-        #geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), height = 0.2) +  # CI
-        labs(
-          title = "Hazard Ratios fra Cox-modellen",
-          x = "Hazard Ratio (log-skala)",
-          y = "Gruppe"
-        ) +
-        scale_x_log10() +  # Log-skala for HR
-        theme_minimal()
+# Plot tiles where color correspond to the pvalues
 
+chi_sqr_test |> 
+  ggplot(mapping = aes(x = data_group...1,
+                       y = data_group...2,
+                       fill = chisqr_pval))+
+  geom_tile()+
+  scale_fill_gradient2(
+    low = "#1B9E77",
+    mid = "white",
+    high = "#7570B3",
+    midpoint = 0.05)+
+  theme_minimal()+
+  theme(axis.title = element_blank(),
+        axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
 ```
 
 ## Save the results

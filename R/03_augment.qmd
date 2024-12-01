@@ -2,6 +2,9 @@
 title: "03_augment"
 author: "Group 29: Helena Møller, Emma Christensen, Frederik Holmstrup, Casper Harreby & Laura Christiansen"
 format: html
+execute: 
+  message: FALSE
+  warning: FALSE
 ---
 
 # Data Augmentation
@@ -10,6 +13,8 @@ format: html
 
 ```{r}
 #| eval: true
+#| echo: true
+
 library("tidyverse")
 library("here")
 ```
