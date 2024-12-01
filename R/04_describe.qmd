@@ -199,7 +199,7 @@ median_table <- data |>
 print(median_table)
 ```
 
-From the table, females have a higher median probability of death at 6 months (0.73175) compared to males (0.53940).
+From the table, females have a higher median probability of death at 6 months (0.1888) compared to males (0.1390).
 
 ## Save the results
 
