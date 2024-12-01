@@ -2,9 +2,6 @@
 title: "06_analysis_2"
 author: "Group 29: Helena Møller, Emma Christensen, Frederik Holmstrup, Casper Harreby & Laura Christiansen"
 format: html
-execute: 
-  message: FALSE
-  warning: FALSE
 ---
 
 # Descriptive analysis
@@ -13,8 +10,6 @@ execute:
 
 ```{r}
 #| eval: true
-#| echo: true
-
 library("tidyverse") 
 library("ggplot2") 
 library("dplyr") 
