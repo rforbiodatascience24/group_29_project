@@ -33,7 +33,7 @@ data <- read_tsv(here("data/_raw/01_dat_load.tsv"))
 
 ### Ensuring global use of Yes/No for binary variables, and NA if information is unknown (U/u/0)
 
-During revision of the data, many faulty characters of U and C appear within columns, only meant for Y or N. The U and C are therefore changed to NA to indicate a missing value.
+During revision of the data, many faulty characters of "U" and "C" appear within columns, only meant for "Y" or "N". The "U" and "C" are therefore changed to NA to indicate a missing value.
 
 ```{r}
 #converting U and C to NA
@@ -55,7 +55,7 @@ data_clean_properNA2 <- data_clean_properNA |>
   mutate(SET14D = if_else(SET14D == 0, NA, SET14D))
 ```
 
-In column DASP14 and FAP, both n and N along with y and Y both indicating No and Yes respectively. To match the general synthax, all letters are made upper case
+In column DASP14 and FAP, both "n" and "N" along with "y" and "Y" both indicating "No" and "Yes" respectively. To match the general syntax, all letters are made upper case.
 
 ```{r}
 #making y and n upper case
@@ -63,10 +63,10 @@ data_clean_propervar <- data_clean_properNA2 |>
   mutate(across(c(DASP14,FAP), ~str_to_upper(.)))
 ```
 
-In the columns DVT14, H14,DDEAD, HTI14, ID14, ISC14, NCB14, NK14, PE14, TRAN14, values are 0 = no and 1 = yes, and to match the other binary variables they will therefore be transformed to N = no and Y = yes.
+In the columns DVT14, H14, DDEAD, HTI14, ID14, ISC14, NCB14, NK14, PE14, TRAN14, values are 0 = no and 1 = yes, and to match the other binary variables they will therefore be transformed to N = no and Y = yes.
 
 ```{r}
-#converting 0 to N(No) and 1 to Y(yes)
+#converting 0 to N(no) and 1 to Y(yes)
 data_clean_propervar2 <- data_clean_propervar |> 
   mutate(across(c(DVT14,H14,DDEAD,HTI14,ID14,ISC14,NCB14,NK14,PE14,TRAN14,STRK14), 
                 ~case_when(
@@ -100,7 +100,7 @@ data_clean_truetime <- data_clean_properOCcode |>
          HOURLOCAL = if_else(HOURLOCAL > 23, NA, HOURLOCAL))
 ```
 
-### Fixing errors made in the gathering of the data
+### Fixing errors made during data collection
 
 For the pilot study, medium dose of heparin is annotated as high dose. The high dose annotation is changed to medium dose annotation, and the two columns for medium dose of pilot study and following study is merged.
 
