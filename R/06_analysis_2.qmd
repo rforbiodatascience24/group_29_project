@@ -134,7 +134,7 @@ To document the results, the plots are saved in the `results` folder.
 
 ```{r}
 
-ggsave(filename = here("results/14_keyplot_a.png"), plot = p1)  
-ggsave(filename = here("results/14_keyplot_b.png"), plot = p2)
-ggsave(filename = here("results/14_keyplot_c.png"), plot = p3)
+ggsave(filename = here("results/14_keyplot_a.png"), plot = p1, width = 8, height = 4, dpi = 300, bg = "white")  
+ggsave(filename = here("results/14_keyplot_b.png"), plot = p2, width = 8, height = 4, dpi = 300, bg = "white")
+ggsave(filename = here("results/14_keyplot_c.png"), plot = p3, width = 8, height = 4, dpi = 300, bg = "white")
 ```

@@ -26,3 +26,9 @@ editor: visual
 {{< include 09_analysis_5.qmd >}}
 
 {{< include 10_analysis_6.qmd >}}
+
+# Individual HTLMs
+
+```{r}
+rmarkdown::render("01_load.qmd", output_dir = "../results/")
+```
