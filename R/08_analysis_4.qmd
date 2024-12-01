@@ -144,7 +144,7 @@ p3
 ## Save the results
 
 ```{r}
-ggsave(filename = here("results/08_keyplot_a.png"), plot = p1)  
-ggsave(filename = here("results/08_keyplot_b.png"), plot = p2)
-ggsave(filename = here("results/08_keyplot_c.png"), plot = p3)
+ggsave(filename = here("results/08_keyplot_a.png"), plot = p1, dpi = 300, bg = "white")  
+ggsave(filename = here("results/08_keyplot_b.png"), plot = p2, dpi = 300, bg = "white")
+ggsave(filename = here("results/08_keyplot_c.png"), plot = p3, dpi = 300, bg = "white")
 ```
