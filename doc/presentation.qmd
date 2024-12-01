@@ -47,11 +47,11 @@ Observations: 19,435
 
 Variables: 98
 
-![](../results/03_decription_plot_1.png){fig-align="right" width="58%"}
+![](../results/03_decription_plot_1.png){fig-align="right" width="28%"}
 
-![](images/03_description_plot_3-01.png){fig-align="left" width="400"}
+![](images/03_description_plot_3-01.png){fig-align="left" width="341"}
 
-![](images/03_description_plot_2.png){fig-align="right" width="400"}
+![](images/03_description_plot_2.png){fig-align="right" width="272"}
 
 ## Data visualization: type of stroke
 

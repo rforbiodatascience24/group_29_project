@@ -68,8 +68,6 @@ p0 <- group_counts |>
     x = "Days elapsed since randomisation",
     y = "Number of peopled died after x days"
   ) 
-
-p0
   
 # Save the plot as a PNG
 ggsave("../results/overall.png", plot = p0, dpi = 300)
@@ -95,8 +93,6 @@ p1 <- group_1_counts |>
   ) +
   facet_wrap(~ data_group)
 
-p1
-
 # Save the plot as a PNG
 ggsave("../results/ischaemic_stroke_td.png", plot = p1, dpi = 300)
 
@@ -115,8 +111,6 @@ p6 <- group_6_counts |>
     y = "Number of peopled died of pulmonary embolism after x days"
   ) +
   facet_wrap(~ data_group)
-
-p6
 
 # Save the plot as a PNG
 ggsave("../results/pulmonary_td.png", plot = p6, dpi = 300)
