@@ -102,12 +102,12 @@ knitr::include_graphics(here("results/04_description_plot_3.png"))
 :::: {.columns}
 ::: {.column width="50%"}
 ```{r, echo = FALSE, out.width = "500px"}
-knitr::include_graphics(here("results/05_keyplot_1a.png"))
+knitr::include_graphics(here("results/05_keyplot_2a.png"))
 ```
 :::
 ::: {.column width="50%"}
 ```{r, echo = FALSE, out.width = "500px"}
-knitr::include_graphics(here("results/05_keyplot_1b.png"))
+knitr::include_graphics(here("results/05_keyplot_2b.png"))
 ```
 
 :::
