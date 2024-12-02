@@ -363,12 +363,19 @@ library(&quot;here&quot;)</code></pre>
 </div>
 <div id="loading-relevant-data" class="section level2">
 <h2>Loading relevant data</h2>
-<pre class="r"><code>raw_data &lt;- read_csv(file = &quot;https://datashare.ed.ac.uk/bitstream/handle/10283/124/IST_corrected.csv?sequence=5&amp;isAllowed=y&quot;)</code></pre>
+<p>The data webpage link are used for a direct load of the data to
+ensure reproducability</p>
+<pre class="r"><code>#The data is loaded directly from the webpage
+raw_data &lt;- read_csv(file = &quot;https://datashare.ed.ac.uk/bitstream/handle/10283/124/IST_corrected.csv?sequence=5&amp;isAllowed=y&quot;)</code></pre>
 </div>
 <div id="saving-data-in-a-tsv-format" class="section level2">
 <h2>Saving data in a tsv format</h2>
-<pre class="r"><code># Define the file path
-file_path &lt;- &quot;../data/_raw/&quot;
+<p>The data is saved in a data/_raw folder on your local directory. The
+.gitignore is modified to include the entire data folder.</p>
+<pre class="r"><code># Define the file path using the here terminology
+file_path &lt;- here(&quot;data/_raw/&quot;)
+
+#Checking if the folder path already exists in your local directory
 if (!file.exists(file_path)){dir.create(file_path, recursive = TRUE)}
 
 #Write the data to a TSV file
