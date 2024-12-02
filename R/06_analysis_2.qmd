@@ -7,7 +7,7 @@ execute:
   warning: FALSE
 ---
 
-# Descriptive analysis
+# Data modeling
 
 ## Loading Libraries
 
@@ -25,183 +25,116 @@ library("here")
 ## Import the dataset
 
 ```{r}
+
 # Load the dataset   
-dataset <- read_tsv("../data/03_dat_aug.tsv")
+data <- read_tsv(here("data/03_dat_aug.tsv"))
 ```
 
-## Age distribution of study population
+## Analysis Obejctive
+
+This analysis investigates whether`AGE` can predict the following probabilities making a simple linear model for prediction of:
+
+-   `EXPDD` (Predicted probability of death/dependence at 6 month)
+
+-   `EXPD6` (Predicted probability of death at 6 month)
+
+-   `EXPD14` (Predicted probability of death at 14 days)
+
+We will visualize the relationships between `AGE` and these outcomes using scatter plots.
+
+### Model 1: Predicting `EXPDD` with `AGE`
 
 ```{r}
 
-# Calculate the mean of AGE
-mean_age <- mean(data$AGE, na.rm = TRUE)
+# Linear regression for EXPDD 
+model_1 <- data |> 
+  filter(STYPE == "LACS") |> 
+  lm(data = _,
+     EXPDD ~ AGE)
+```
 
-data <- data |>  filter(!is.na(AGE) & AGE >= 0) # Exclude missing or negative ages
+```{r}
 
-# Visualizing age distribution of study population
+# Display model summary 
+model_1 |> 
+  summary()
+```
+
+```{r}
+
+# Plotting AGE vs log10(EXPDD)
 p1 <- data |> 
-  ggplot(mapping = aes(x = AGE)) +      
-  geom_histogram(fill = "lightblue", 
-                 color = "darkblue", 
-                 bins = 30, 
-                 alpha = 0.7) + 
-  labs(title = "Age Distribution of the Study Population",             
-       x = "Age (years)", 
-       y = "Number of People") +      
-  theme_minimal(base_size = 14) +     
-  theme(plot.title = element_text(hjust = 0.5,
-                                  face = "bold",
-                                  size = 18), 
-        axis.title.x = element_text(face = "bold",
-                                    size = 14),              
-        axis.title.y = element_text(face = "bold",
-                                    size = 14),         
-        panel.grid.minor = element_blank()) +
-  scale_x_continuous(breaks = seq(0, 100, by = 10), 
-                     limits = c(0, 100)) +      
-  scale_y_continuous(expand = expansion(mult = c(0, 0.05)), 
-                     breaks = seq(0, 3000, by = 500)) + 
-  #Illustrating the mean value
-  geom_segment(x = mean_age,
-               xend = mean_age, 
-               y = 0, 
-               yend = 2900, 
-               color = "darkgreen", 
-               linetype = "dashed", 
-               size = 1.0) +
-  #Annotating the mean age with a text
-  annotate("label", 
-           x = mean_age + 12,                     
-           y = 2400,                     
-           label = paste("Mean Age:", round(mean_age, 1), "years"),               
-           color = "white",                 
-           fill = "darkgreen",                 
-           fontface = "bold",                 
-           size = 4,                      
-           label.padding = unit(0.4, "lines"))
+        filter(STYPE == "LACS") |> 
+        ggplot(aes(x = AGE, y = log10(EXPDD))) +
+        geom_point(color = "PURPLE")
 
-# Display the plot
 print(p1)
-
-# Saving the plot as a PNG file
-ggsave("../results/03_description_plot_1.png", plot = p1, width = 8, height = 4, dpi = 300, bg = "white")
 ```
 
-## Age distribution of stroke subtypes (STYPE)
-
-The stroke subtypes (STYPE) are here distributed by age and visualized with boxplots. Here's a brief description of the subtypes:
-
-**LACS (Lacunar Stroke Syndrome)**
-
-Blockage of small penetrating arteries in deep brain structures, such as the basal ganglia, thalamus, or internal capsule. The prognosis is genereally better than other subtypes; smaller infarct size.
-
-**PACS (Partial Anterior Circulation Syndrome)**
-
-Partial occlusion in the anterior cerebral circulation, typically affecting the middle cerebral artery (MCA) or anterior cerebral artery (ACA). The prognosis is moderate; larger infarct than LACS, but less severe than TACS.
-
-**POCS (Posterior Circulation Syndrome)**
-
-Infarction in the posterior cerebral circulation, affecting the brainstem, cerebellum, or occipital lobes. The prognosis is variable, depending on location and size of the infarction.
-
-**TACS (Total Anterior Circulation Syndrome)**
-
-Complete occlusion of the anterior cerebral circulation, typically affecting the middle cerebral artery (MCA) or internal carotid artery (ICA). The prognosis is poor; associated with large infarcts, severe disability, and high mortality rates.
+### Model 2: Predicting `EXPD6` with `AGE`
 
 ```{r}
 
-p2 <- dataset |> 
-  ggplot(mapping = aes(x = STYPE,
-                       y = AGE,
-                       fill = STYPE)) +
-  geom_boxplot(alpha = 0.7,
-               outlier.shape = NA) + 
-  # Boxplot without outlier points   
-  labs(title = "Stroke subtypes distributed by age",
-       x = "Stroke Type (STYPE)",
-       y = "Age (years)") +   
-  theme_minimal(base_size = 14) + 
-  theme(plot.title = element_text(hjust = 0.5,
-                                  face = "bold",
-                                  size = 18),
-        axis.title.x = element_text(face = "bold",
-                                    size = 14),
-        axis.title.y = element_text(face = "bold",
-                                    size = 14),
-        legend.position = "right")
-
-# Display the plot
-p2
-
-# Saving the plot as a PNG file
-ggsave(here("results/03_description_plot_2.png"), 
-       plot = p2, 
-       width = 8,
-       height = 4,
-       dpi = 300,
-       bg = "white")
+# Linear regression for EXPD6
+model_2 <- data |> 
+  filter(STYPE == "LACS") |> 
+  lm(data = _,
+     log2(EXPD6) ~ AGE)
 ```
 
 ```{r}
-STYPE_median <- dataset |>
-  group_by(STYPE) |>
-  summarize(Median_AGE = round(median(AGE, na.rm = TRUE), 0))
 
-print(STYPE_median)
+# Display model summary 
+model_2 |> 
+  summary()
 ```
-
-The median age of the different stroke subtypes are shown, where the most severe subtype TACS with high mortality rates, has the highest median age of 76 years.
-
-# Data visualisation
-
-## Boxplot for predicted probability of death at 6 months compared by gender
 
 ```{r}
 
-# Boxplot of predicted probability of death at 6 months distributed by gender
-p3 <- dataset |> 
-  ggplot(mapping = aes(x = SEX,
-                       y = EXPD6,
-                       fill = SEX)) +
-  geom_boxplot(alpha = 0.7,
-               color = "black") +    
-  scale_fill_manual(values = c("darkred", "blue")) + # Custom fill colors for gender   
-  labs(
-    title = "Predicted probability of death at 6 months",     
-    x = "Gender",     
-    y = "EXPD6",     
-    fill = "Gender") + 
-  theme_minimal(base_size = 14) +   
-  theme(
-    plot.title = element_text(hjust = 0.5, face = "bold", size = 18),
-    axis.title.x = element_text(face = "bold", size = 14), 
-    axis.title.y = element_text(face = "bold", size = 14), 
-    legend.position = "top") +   
-  scale_y_continuous(
-    limits = c(0, 1), # Adjust the range to display outliers     
-    expand = expansion(mult = c(0.05, 0.1)))
+# Plotting AGE vs log2(EXPD6)
+p2 <- data |> 
+        filter(STYPE == "LACS") |> 
+        ggplot(aes(x = AGE, y = log2(EXPD6))) +
+        geom_point(color = "BLUE")
 
-# Display the plot
-p3
-
-# Saving the plot as a PNG file
-ggsave(here("results/03_description_plot_3.png"), 
-       plot = p1, 
-       width = 8, 
-       height = 4, 
-       dpi = 300, 
-       bg = "white")
+print(p2)
 ```
 
-## Comparison of median of EXPD6 by gender
+### Model 3: Predicting `EXPD14` with `AGE`
 
 ```{r}
-#Show median EXPD6 by gender  
 
-median_table <- dataset |>
-  group_by(SEX) |>
-  summarize(Median_EXPD6 = median(EXPD6, na.rm = TRUE)) 
-
-print(median_table)
+# Linear regression for EXPD14
+model_3 <- data |> 
+  filter(STYPE == "LACS") |> 
+  lm(data = _, log2(EXPD14) ~ AGE)
 ```
 
-From the medians of the EXPD6 variable, it can be seen by comparing the genders, that females have a higher median of 0.73175 than males (0.53940), thus a relatively higher predicted probability of death at 6 months from randomization.
+```{r}
+
+# Display model summary
+model_3 |> 
+  summary()
+```
+
+```{r}
+
+# Plotting AGE vs. log2(EXPD14)
+p3 <- data |> 
+        filter(STYPE == "LACS") |> 
+        ggplot(aes(x = AGE, y = log2(EXPD14))) +
+        geom_point(color = "RED")
+
+print(p3)
+```
+
+## Saving Plots
+
+To document the results, the plots are saved in the `results` folder.
+
+```{r}
+
+ggsave(filename = here("results/06_keyplot_2a.png"), plot = p1, width = 8, height = 4, dpi = 300, bg = "white")  
+ggsave(filename = here("results/06_keyplot_2b.png"), plot = p2, width = 8, height = 4, dpi = 300, bg = "white")
+ggsave(filename = here("results/06_keyplot_2c.png"), plot = p3, width = 8, height = 4, dpi = 300, bg = "white")
+```

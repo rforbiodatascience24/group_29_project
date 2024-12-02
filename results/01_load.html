@@ -371,9 +371,6 @@ library(&quot;here&quot;)</code></pre>
 file_path &lt;- &quot;../data/_raw/&quot;
 if (!file.exists(file_path)){dir.create(file_path, recursive = TRUE)}
 
-#Create the directory if it doesn&#39;t exist
-if (!file.exists(file_path)) { dir.create(file_path, recursive = TRUE) }
-
 #Write the data to a TSV file
 write_tsv(x = raw_data, 
           file = str_c(file_path, &quot;01_dat_load.tsv&quot;))</code></pre>

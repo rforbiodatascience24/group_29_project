@@ -66,13 +66,13 @@ p0 <- group_counts |>
   labs(
     title =  "Days elapsed since randomisation before death",
     x = "Days elapsed since randomisation",
-    y = "Number of peopled died after x days"
+    y = "Number of people died after x days"
   ) 
 
 p0
   
 # Save the plot as a PNG
-ggsave("../results/overall.png", plot = p0, dpi = 300)
+ggsave(filename = here("results/07_keyplot_3a.png"), plot = p0, width = 8, height = 4, dpi = 300, bg = "white")
 
 ```
 
@@ -98,7 +98,7 @@ p1 <- group_1_counts |>
 p1
 
 # Save the plot as a PNG
-ggsave("../results/ischaemic_stroke_td.png", plot = p1, dpi = 300)
+ggsave(filename = here("results/07_keyplot_3b.png"), plot = p1, width = 8, height = 4, dpi = 300, bg = "white")
 
 #Count the occurences of "TD" for only those died of pulmonary embolism
 group_6_counts <- group_6_data |> 
@@ -119,5 +119,5 @@ p6 <- group_6_counts |>
 p6
 
 # Save the plot as a PNG
-ggsave("../results/pulmonary_td.png", plot = p6, dpi = 300)
+ggsave(filename = here("results/07_keyplot_3c.png"), plot = p6, width = 8, height = 4, dpi = 300, bg = "white")
 ```
