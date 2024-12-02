@@ -81,17 +81,12 @@ p0 <- group_counts |>
   labs(
     title =  "Most patients die within the first 20 days after randomisation",
     x = "Days elapsed since randomisation",
-<<<<<<< HEAD
-    y = "Number of peopled died after x days"
-  ) 
-=======
-    y = "Number of people died x days after randomization"
-  )+
+    y = "Number of people died x days after randomization")+
   theme_minimal()+
   theme(plot.title = element_text(hjust = 0.5))
 
 p0
->>>>>>> origin/main
+
   
 # Save the plot as a PNG
 ggsave(filename = here("results/07_keyplot_3a.png"), 
