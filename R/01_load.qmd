@@ -4,6 +4,10 @@ author: "Group 29: Helena Møller, Emma Christensen, Frederik Holmstrup, Casper 
 format: html
 ---
 
+## Introduction
+
+The data used for this project is the data used for the article "The International Stroke Trial (IST): a randomised trial of aspirin, subcutaneous heparin, both, or neither among 19435 patient with acute ischaemic stroke" by the International Stroke Trial Collaborative Group. The purpose of this project is to improve some of the figures from the article as well as trying to get further insights. The purpose of the study and our project is to access the efficacy and safety of antithrombic therapy for treatment of acute ischemic strokes. Two different doses of heparin is tested together with and without a dose of aspirin. That creates 6 groups of patients, where one of them is the control group with no treatment.
+
 ## Loading relevant libraries
 
 ```{r}
