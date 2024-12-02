@@ -12,6 +12,7 @@ library("here")
 ```
 
 ```{r}
+#|output: false
 quarto::quarto_render(here("R/01_load.qmd"))
 ```
 
@@ -22,6 +23,7 @@ file.rename(here("R/01_load.html"),here("results/01_load.html"))
 ```
 
 ```{r}
+#|output: false
 quarto::quarto_render(here("R/02_clean.qmd"))
 ```
 
@@ -32,6 +34,7 @@ file.rename(here("R/02_clean.html"),here("results/02_clean.html"))
 ```
 
 ```{r}
+#|output: false
 quarto::quarto_render(here("R/03_augment.qmd"))
 ```
 
@@ -42,6 +45,7 @@ file.rename(here("R/03_augment.html"),here("results/03_augment.html"))
 ```
 
 ```{r}
+#|output: false
 quarto::quarto_render(here("R/04_describe.qmd"))
 ```
 
@@ -52,6 +56,7 @@ file.rename(here("R/04_describe.html"),here("results/04_describe.html"))
 ```
 
 ```{r}
+#|output: false
 quarto::quarto_render(here("R/05_analysis_1.qmd"))
 ```
 
@@ -62,6 +67,7 @@ file.rename(here("R/05_analysis_1.html"),here("results/05_analysis_1.html"))
 ```
 
 ```{r}
+#|output: false
 quarto::quarto_render(here("R/06_analysis_2.qmd"))
 ```
 
@@ -72,6 +78,7 @@ file.rename(here("R/06_analysis_2.html"),here("results/06_analysis_2.html"))
 ```
 
 ```{r}
+#|output: false
 quarto::quarto_render(here("R/07_analysis_3.qmd"))
 ```
 
@@ -82,6 +89,7 @@ file.rename(here("R/07_analysis_3.html"),here("results/07_analysis_3.html"))
 ```
 
 ```{r}
+#|output: false
 quarto::quarto_render(here("R/08_analysis_4.qmd"))
 ```
 
@@ -89,8 +97,4 @@ quarto::quarto_render(here("R/08_analysis_4.qmd"))
 
 ```{r}
 file.rename(here("R/08_analysis_4.html"),here("results/08_analysis_4.html"))
-```
-
-```{r}
-file.rename(here("R/00_all.html"),here("results/00_all.html"))
 ```
