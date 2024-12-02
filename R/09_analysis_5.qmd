@@ -159,8 +159,8 @@ p3 <- chi_sqr_test |>
   #The tiles is plotted with a gradient, which can be interpreted as green colors are below the significance level, purple levels are above the significance level
   scale_fill_gradient2(
     low = "#1B9E77",
-    mid = "white",
-    high = "#7570B3",
+    mid = "#7570B3",
+    high = "white",
     midpoint = 0.05,
     limits = c(0, 1),
     breaks = c(0.05, 1),
