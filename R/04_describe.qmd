@@ -29,6 +29,43 @@ library("here")
 data <- read_tsv(here("data/03_dat_aug.tsv"))
 ```
 
+## Observations and (augmented) variables
+
+```{r}
+
+# Show number of observations and (augmented) variables in the study population
+
+obs_and_variables <- data |> 
+  dim() |> 
+  tibble()
+
+obs_and_variables |> 
+  write_tsv(here("results/04_obs_and_variables.tsv"))
+```
+
+There are 19435 observations distributed in 97 (augmented) variables in the trial.
+
+The variabes have different names shown below:
+
+```{r}
+
+data |>    
+  colnames()
+```
+
+## Gender distribution of study population
+
+This section shows the gender distribution of the study population:
+
+```{r}
+
+# Gender distribution visualized using count()
+data |> 
+  count(SEX)
+```
+
+In the study population, there are 9028 females and 10407 males.
+
 ## Age distribution of study population
 
 This section explores the age distribution of the study population:
