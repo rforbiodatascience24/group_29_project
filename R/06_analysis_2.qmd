@@ -9,6 +9,16 @@ execute:
 
 # Data modeling
 
+This analysis investigates whether`AGE` can predict the following probabilities making a simple linear model for prediction of:
+
+-   `EXPDD` (Predicted probability of death/dependence at 6 month)
+
+-   `EXPD6` (Predicted probability of death at 6 months)
+
+-   `EXPD14` (Predicted probability of death at 14 days)
+
+We will visualize the relationships between `AGE` and these outcomes using scatter plots.
+
 ## Loading Libraries
 
 ```{r}
@@ -29,18 +39,6 @@ library("here")
 # Load the dataset   
 data <- read_tsv(here("data/03_dat_aug.tsv"))
 ```
-
-## Analysis Obejctive
-
-This analysis investigates whether`AGE` can predict the following probabilities making a simple linear model for prediction of:
-
--   `EXPDD` (Predicted probability of death/dependence at 6 month)
-
--   `EXPD6` (Predicted probability of death at 6 months)
-
--   `EXPD14` (Predicted probability of death at 14 days)
-
-We will visualize the relationships between `AGE` and these outcomes using scatter plots.
 
 ### Model 1: Predicting `EXPDD` with `AGE`
 
