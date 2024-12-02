@@ -36,13 +36,15 @@ This analysis investigates whether`AGE` can predict the following probabilities 
 
 -   `EXPDD` (Predicted probability of death/dependence at 6 month)
 
--   `EXPD6` (Predicted probability of death at 6 month)
+-   `EXPD6` (Predicted probability of death at 6 months)
 
 -   `EXPD14` (Predicted probability of death at 14 days)
 
 We will visualize the relationships between `AGE` and these outcomes using scatter plots.
 
 ### Model 1: Predicting `EXPDD` with `AGE`
+
+**Linear regression:**
 
 ```{r}
 
@@ -62,16 +64,27 @@ model_1 |>
 
 ```{r}
 
-# Plotting AGE vs log10(EXPDD)
+
+# Plot AGE vs log10(EXPDD) to observe the relationship
 p1 <- data |> 
-        filter(STYPE == "LACS") |> 
-        ggplot(aes(x = AGE, y = log10(EXPDD))) +
-        geom_point(color = "PURPLE")
+  filter(STYPE == "LACS") |> 
+  ggplot(aes(x = AGE, y = log10(EXPDD))) +
+  geom_point(color = "purple") +
+  labs(
+    title = "AGE vs. Predicted Death/Dependence Probability at 6 Months",
+    x = "Age (Years)",
+    y = "log10(Predicted Death/Dependence Probability)",
+    caption = "Relationship modeled using simple linear regression"
+  ) +
+  theme_minimal()
 
 print(p1)
+
 ```
 
 ### Model 2: Predicting `EXPD6` with `AGE`
+
+**Linear regression:**
 
 ```{r}
 
@@ -82,6 +95,8 @@ model_2 <- data |>
      log2(EXPD6) ~ AGE)
 ```
 
+**Model summary:**
+
 ```{r}
 
 # Display model summary 
@@ -89,18 +104,29 @@ model_2 |>
   summary()
 ```
 
+**Visualization:**
+
 ```{r}
 
-# Plotting AGE vs log2(EXPD6)
+# Plot AGE vs log2(EXPD6) to observe the relationship
 p2 <- data |> 
-        filter(STYPE == "LACS") |> 
-        ggplot(aes(x = AGE, y = log2(EXPD6))) +
-        geom_point(color = "BLUE")
+  filter(STYPE == "LACS") |> 
+  ggplot(aes(x = AGE, y = log2(EXPD6))) +
+  geom_point(color = "blue") +
+  labs(
+    title = "AGE vs. Predicted Death Probability at 6 Months",
+    x = "Age (Years)",
+    y = "log2(Predicted Death Probability)",
+    caption = "Relationship modeled using simple linear regression"
+  ) +
+  theme_minimal()
 
 print(p2)
 ```
 
 ### Model 3: Predicting `EXPD14` with `AGE`
+
+**Linear regression:**
 
 ```{r}
 
@@ -110,6 +136,8 @@ model_3 <- data |>
   lm(data = _, log2(EXPD14) ~ AGE)
 ```
 
+**Model summary:**
+
 ```{r}
 
 # Display model summary
@@ -117,13 +145,22 @@ model_3 |>
   summary()
 ```
 
+**Visualization:**
+
 ```{r}
 
-# Plotting AGE vs. log2(EXPD14)
+# Plot AGE vs log2(EXPD14) to observe the relationship
 p3 <- data |> 
-        filter(STYPE == "LACS") |> 
-        ggplot(aes(x = AGE, y = log2(EXPD14))) +
-        geom_point(color = "RED")
+  filter(STYPE == "LACS") |> 
+  ggplot(aes(x = AGE, y = log2(EXPD14))) +
+  geom_point(color = "red") +
+  labs(
+    title = "AGE vs. Predicted Death Probability at 14 Days",
+    x = "Age (Years)",
+    y = "log2(Predicted Death Probability)",
+    caption = "Relationship modeled using simple linear regression"
+  ) +
+  theme_minimal()
 
 print(p3)
 ```
