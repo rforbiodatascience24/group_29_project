@@ -113,7 +113,9 @@ group_1_counts <- group_data_list |>
 
 #Plots the time of death (TD) vs. the number of occurences.
 p1 <- group_1_counts |> 
-  ggplot(mapping = aes(x = TD, y = count, color = data_group)) + 
+  ggplot(mapping = aes(x = TD, 
+                       y = count, 
+                       color = data_group)) + 
   geom_line() +
   labs(
     title =  "Days elapsed since randomisation before death of initial stroke",
@@ -125,7 +127,12 @@ p1 <- group_1_counts |>
 p1
 
 # Save the plot as a PNG
-ggsave(filename = here("results/07_keyplot_3b.png"), plot = p1, width = 8, height = 4, dpi = 300, bg = "white")
+ggsave(filename = here("results/07_keyplot_3b.png"), 
+       plot = p1, 
+       width = 8, 
+       height = 4, 
+       dpi = 300, 
+       bg = "white")
 
 #Count the occurences of "TD" for only those died of pulmonary embolism
 group_6_counts <- group_data_list |>
@@ -135,7 +142,9 @@ group_6_counts <- group_data_list |>
 
 #Plots the time of death (TD) vs. the number of occurences.
 p6 <- group_6_counts |> 
-  ggplot(mapping = aes(x = TD, y = count, color = data_group)) + 
+  ggplot(mapping = aes(x = TD, 
+                       y = count, 
+                       color = data_group)) + 
   geom_line() +
   labs(
     title =  "Days elapsed since randomisation before death of pulmonary embolism",
@@ -147,5 +156,10 @@ p6 <- group_6_counts |>
 p6
 
 # Save the plot as a PNG
-ggsave(filename = here("results/07_keyplot_3c.png"), plot = p6, width = 8, height = 4, dpi = 300, bg = "white")
+ggsave(filename = here("results/07_keyplot_3c.png"), 
+       plot = p6, 
+       width = 8, 
+       height = 4, 
+       dpi = 300, 
+       bg = "white")
 ```
