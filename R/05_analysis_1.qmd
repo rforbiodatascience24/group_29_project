@@ -90,7 +90,7 @@ In the end we have `nrow(data_slim_heparin)` different datapoints, with informat
 
 ### Data augmentation - Calculating the statistics used in the plot
 
-The data is modified to have one dataframe for each subgroup nested together in the same dataframe, where the original dataframe has the noted group and subgroup. Thereby there is one dataframe indicating for the individuals with and without heparin, what the outcome is after 6 months, and all the subgroup calculations can be handled at once.
+The data is modified to have one data frame for each subgroup nested together in the same data frame, where the original data frame has the noted group and subgroup. Thereby there is one data frame indicating for the individuals with and without heparin, what the outcome is after 6 months, and all the subgroup calculations can be handled at once.
 
 ```{r}
 #| echo: true
@@ -187,7 +187,7 @@ data_CI_heparin <- data_statistics_heparin |>
 
 ### Data Illustration
 
-The group labels are created to actually explain which subgroup it is. As an example, DDIAG_DDIAGHA is changed to Final diagnosis: Haemorrhagic stroke, and RHEP24_Y is changed to Heparin within 24 hours prior to randomisation.
+The group labels are created to actually explain which subgroup it is. As an example, DDIAG_DDIAGHA is changed to Final diagnosis: Haemorrhagic stroke, and RHEP24_Y is changed to Heparin within 24 hours prior to randomization.
 
 ```{r}
 #| eval: true
