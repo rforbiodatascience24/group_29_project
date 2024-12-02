@@ -75,32 +75,23 @@ library("here")
 
 ![](images/03_description_plot_2.png){fig-align="center" width="500"}
 
-## Data visualization: Events during first 14 days
+## Events during first 14 days
 
-
+:::: {.columns}
+::: {.column width="50%"}
 - Patients receiving higher heparin doses and asprin are more frequent in cerebral bleed/haemorrhagic stroke group
 - Likewise, higher heparin doses and aspirin patients are more represented in patients with indicator of non-cerebral bleed
 - Patient group receiving no trial medication had more subjects with indicator of pulmonary embolism
-:::: {.columns}
-::: {.column width="33%"}
-```{r, echo = FALSE, out.width = "300px"}
+```{r, echo = FALSE, out.width = "500px"}
 knitr::include_graphics(here("results/08_keyplot_4a.png"))
 ```
 :::
-
-::: {.column width="33%"}
-```{r, echo = FALSE, out.width = "300px"}
+::: {.column width="50%"}
+```{r, echo = FALSE, out.width = "500px"}
 knitr::include_graphics(here("results/08_keyplot_4b.png"))
-
-```
-:::
-
-::: {.column width="33%"}
-```{r, echo = FALSE, out.width = "300px"}
 knitr::include_graphics(here("results/08_keyplot_4c.png"))
 ```
 :::
-
 ::::
 
 
@@ -112,4 +103,6 @@ knitr::include_graphics(here("results/08_keyplot_4c.png"))
 
 ## Data visualization: 
 
-![](../results/09_keyplot_a.png){fig-align="center" width="500"}
+```{r, echo = FALSE, out.width = "500px"}
+knitr::include_graphics(here("results/09_keyplot_5a.png"))
+```
