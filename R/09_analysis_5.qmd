@@ -100,6 +100,8 @@ p1 <- km_tidy|>
     color = "Treatment group")+
   scale_color_brewer(palette="Dark2")+
   theme_minimal()
+
+p1
 ```
 
 ```{r}
@@ -118,20 +120,13 @@ p2 <- chi_sqr_test |>
         theme_minimal()+
         theme(axis.title = element_blank(),
               axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+
+p2
 ```
 
 ## Save the results
 
 ```{r}
-<<<<<<< HEAD
 ggsave(filename = here("results/09_keyplot_5a.png"), plot = p1, width = 8, height = 4, dpi = 300, bg = "white")  
 ggsave(filename = here("results/09_keyplot_5b.png"), plot = p2, width = 8, height = 4, dpi = 300, bg = "white")  
-=======
-<<<<<<< HEAD
-ggsave(filename = here("results/09_keyplot_a.png"), plot = p1, dpi = 300, bg = "white")  
-ggsave(filename = here("results/09_keyplot_b.png"), plot = p2)  
-=======
-ggsave(filename = here("results/09_keyplot_a.png"), plot = p1)  
->>>>>>> 63d38ee4278ad7925ef079f8659f4bc41eec03a0
->>>>>>> 1c1601e4f957e4aa7bfd563993823e20d7559892
 ```

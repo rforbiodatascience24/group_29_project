@@ -5,6 +5,21 @@ format: html
 editor: visual
 ---
 
+# Individual HTMLs
+
+```{r}
+library("here")
+rmarkdown::render("01_load.qmd", output_dir = here("results/"))
+rmarkdown::render("02_clean.qmd", output_dir = here("results/"))
+rmarkdown::render("03_augment.qmd", output_dir = here("results/"))
+rmarkdown::render("04_describe.qmd", output_dir = here("results/"))
+rmarkdown::render("05_analysis_1.qmd", output_dir = here("results/"))
+rmarkdown::render("06_analysis_2.qmd", output_dir = here("results/"))
+rmarkdown::render("07_analysis_3.qmd", output_dir = here("results/"))
+rmarkdown::render("08_analysis_4.qmd", output_dir = here("results/"))
+rmarkdown::render("09_analysis_5.qmd", output_dir = here("results/"))
+```
+
 # All document
 
 {{< include 01_load.qmd >}}
@@ -19,24 +34,6 @@ editor: visual
 
 {{< include 06_analysis_2.qmd >}}
 
-{{< include 07_analysis_3.qmd >}}
-
 {{< include 08_analysis_4.qmd >}}
 
 {{< include 09_analysis_5.qmd >}}
-
-{{< include 10_analysis_6.qmd >}}
-
-# Individual HTMLs
-
-```{r}
-rmarkdown::render("01_load.qmd", output_dir = here("results/"))
-rmarkdown::render("02_clean.qmd", output_dir = here("results/"))
-rmarkdown::render("03_augment.qmd", output_dir = here("results/"))
-rmarkdown::render("04_describe.qmd", output_dir = here("results/"))
-rmarkdown::render("05_analysis_1.qmd", output_dir = here("results/"))
-rmarkdown::render("06_analysis_2.qmd", output_dir = here("results/"))
-rmarkdown::render("07_analysis_3.qmd", output_dir = here("results/"))
-rmarkdown::render("08_analysis_4.qmd", output_dir = here("results/"))
-rmarkdown::render("09_analysis_5.qmd", output_dir = here("results/"))
-```
