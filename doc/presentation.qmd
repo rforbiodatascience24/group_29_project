@@ -9,37 +9,45 @@ format:
 editor: visual
 ---
 
+```{r}
+#| include: false
+library("here")
+```
+
+
 ## Introduction
 
 ### The International Stroke Trial v. 2 data
 
--   Accessing efficacy and safety of antithrombotic therapy compared to control.
 -   Assessing efficacy and safety of antithrombotic therapy compared to control.
 -   Antithrombotic agents: Aspirin and subcutaneous Heparin.
 
 ### Ischaemic stroke and treatments
 
-Ischaemic stroke: - **Ischaemic stroke**: Medical condition in which poor blood flow to a part of the brain causes cell death
-
-### Aim
+-   **Ischaemic stroke**: Medical condition in which poor blood flow to a part of the brain causes cell death
 
 ### Project Aim
 
-Assesing effects of antithrombotics (heparin and aspirin) for recurrent ischaemic strokes - Assessing effects of antithrombotics (heparin and aspirin) for recurrent ischaemic strokes
+-   Assessing effects of antithrombotics (heparin and aspirin) for recurrent ischaemic strokes
 
 ## Methods
 
-### Raw data
+### Raw data:
 
-19435 observations with 112 variables - 19435 observations with 112 variables.
+-   19435 observations with 112 variables.
 
-### 01_load
+### 01_load:
 
-Data has been loaded and saved in a tsv-file. - Data has been loaded and saved in a tsv-file.
+-   Data has been loaded and saved in a tsv-file.
 
-### 02_clean
+### 02_clean:
 
-Global syntax of NA, and Y/N for binary variables, global syntax for the use of numbers 1-8 as to describe causes of death, correction of errors made when the data was gathered, removal of column determined to be irrelevant, and lastly merging of columns for easier data analysis. Data was split and re-joined into one. - Global syntax of NA, and Y/N for binary variables. - Global syntax for the use of numbers 1-8 as to describe causes of death. - Correction of errors made when the data was collected. - Removal of column determined to be irrelevant. - Merging of columns for easier data analysis. - Data was split and re-joined into one.
+-   Global syntax of NA, and Y/N for binary variables.
+-   Global syntax for the use of numbers 1-8 as to describe causes of death.
+-   Correction of errors made when the data was collected.
+-   Removal of column determined to be irrelevant.
+-   Merging of columns for easier data analysis.
+-   Data was split and re-joined into one.
 
 ### 03_augment
 
@@ -47,27 +55,61 @@ Global syntax of NA, and Y/N for binary variables, global syntax for the use of 
 
 ## Descriptive analysis
 
-{layout-ncol="2"} ![](../results/04_description_plot_1.png){fig-align="right" width="50%"} - **Observations/patients**: 19,435\
-- **Variables**: 98 - **Treatment groups**: 6
 
-![](../results/04_description_plot_1.png){fig-align="center" width="700"}
+::: {layout-nrow=2}
 
-![](../results/04_description_plot_3.png){fig-align="left" width="400"}
+- **Observations/patients**: 19,435  
+- **Variables**: 98 
+- **Treatment groups**: 6
+
+![](../images/treatment_groups.png){fig-align="center" width="500"}
+
+![](../results/03_decription_plot_1.png){fig-align="center" width="700"}
+
+![](images/03_description_plot_3-01.png){fig-align="center" width="800"}
+
+:::
 
 ## Data visualisation: Types of strokes
 
-![](../results/04_description_plot_2.png){fig-align="left" width="400"}
+
+![](images/03_description_plot_2.png){fig-align="center" width="500"}
 
 ## Data visualization: Events during first 14 days
 
-{layout-nrow=2} ![](../results/08_keyplot_4a.png){fig-align="center" width="32%"} ![](../results/08_keyplot_4b.png){fig-align="center" width="32%"} ![](../results/08_keyplot_4c.png){fig-align="center" width="32%"}
 
--   Patients receiving higher heparin doses and asprin are more frequent in cerebral bleed/haemorrhagic stroke group
--   Likewise, higher heparin doses and aspirin patients are more represented in patients with indicator of non-cerebral bleed
--   Patient group receiving no trial medication had more subjects with indicator of pulmonary embolism
+- Patients receiving higher heparin doses and asprin are more frequent in cerebral bleed/haemorrhagic stroke group
+- Likewise, higher heparin doses and aspirin patients are more represented in patients with indicator of non-cerebral bleed
+- Patient group receiving no trial medication had more subjects with indicator of pulmonary embolism
+:::: {.columns}
+::: {.column width="33%"}
+```{r, echo = FALSE, out.width = "300px"}
+knitr::include_graphics(here("results/08_keyplot_4a.png"))
+```
+:::
 
-![](../results/04_description_plot_2.png){fig-align="left" width="400"}
+::: {.column width="33%"}
+```{r, echo = FALSE, out.width = "300px"}
+knitr::include_graphics(here("results/08_keyplot_4b.png"))
 
-## Data visualization:
+```
+:::
+
+::: {.column width="33%"}
+```{r, echo = FALSE, out.width = "300px"}
+knitr::include_graphics(here("results/08_keyplot_4c.png"))
+```
+:::
+
+::::
+
+
+## Data visualization: 
+
+![](../results/pulmonary_td.png){fig-align="center" width="500"}
+
+
+
+## Data visualization: 
 
 ![](../results/09_keyplot_a.png){fig-align="center" width="500"}
