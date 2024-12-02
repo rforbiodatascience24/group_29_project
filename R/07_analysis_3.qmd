@@ -6,6 +6,8 @@ format: html
 
 # Data analysis
 
+We aim to visualize the overall time it takes before each person dies no matter the cause. The aim then is to plot the 6 different treatment combinations: aspirin or no aspirin and low, medium or no heparin for different causes of death for further analysis of which treatment works best.
+
 ## Loading libraries
 
 ```{r}
@@ -19,6 +21,8 @@ library("scales")
 
 ## Loading data
 
+The augmented data is loaded.
+
 ```{r}
 #| echo: true
 #| eval: true
@@ -28,6 +32,8 @@ data <- read_tsv(here("data/03_dat_aug.tsv"))
 ```
 
 ## Preparing data
+
+Prior to doing the analysis the augmented data is grouped by the cause of death, which are created into a new column having the different causes of death as values.
 
 ```{r}
 #| echo: true
@@ -62,6 +68,8 @@ group_data_list <- causes |>
 
 ## Plot the overall data count
 
+The patients died pr. day are plotted for the first six months. It is noticed that most of the patients die within 20 days of randomization. This aim of this is to get an overall idea of how the treatment is working.
+
 ```{r}
 #| echo: true
 #| eval: true
@@ -77,7 +85,7 @@ p0 <- group_counts |>
   ggplot(mapping = aes(x = TD,
                        y = n))+
   geom_line()+
-  coord_cartesian(xlim = c(0, 200))+
+  coord_cartesian(xlim = c(0, 180))+
   labs(
     title =  "Most patients die within the first 20 days after randomisation",
     x = "Days elapsed since randomisation",
@@ -85,8 +93,8 @@ p0 <- group_counts |>
   theme_minimal()+
   theme(plot.title = element_text(hjust = 0.5))
 
+#Display til plot
 p0
-
   
 # Save the plot as a PNG
 ggsave(filename = here("results/07_keyplot_3a.png"), 
@@ -99,6 +107,8 @@ ggsave(filename = here("results/07_keyplot_3a.png"),
 ```
 
 ## Creating individual plots for each cause of death
+
+For later comparison, the amount of patient dying of ischaemic stroke, and pulomonary embolism are pr day are plotted. It is included which of the 6 treatments the patients were having. The aim of this is to see which initial appears to work best.
 
 ```{r}
 #| echo: true
@@ -132,6 +142,9 @@ ggsave(filename = here("results/07_keyplot_3b.png"),
        dpi = 300, 
        bg = "white")
 
+#Display the plot
+p1
+
 #Count the occurences of "TD" for only those died of pulmonary embolism
 group_6_counts <- group_data_list |>
   pluck("cause_6") |> 
@@ -150,6 +163,9 @@ p6 <- group_6_counts |>
     y = "Number of peopled died of pulmonary embolism after x days"
   ) +
   facet_wrap(~ data_group)
+
+#Display til plot
+p6
 
 # Save the plot as a PNG
 ggsave(filename = here("results/07_keyplot_3c.png"), 
