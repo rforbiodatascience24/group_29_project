@@ -9,7 +9,7 @@ execute:
 
 # Data modeling
 
-This analysis investigates whether`AGE` can predict the following probabilities making a simple linear model for prediction of:
+This analysis investigates whether `AGE` can be used to predict the following probabilities making a simple linear model:
 
 -   `EXPDD` (Predicted probability of death/dependence at 6 month)
 
@@ -60,18 +60,20 @@ model_1 |>
   summary()
 ```
 
+From the model summary, R-squared is relatively low suggesting a poor fit if the model to the data.
+
 ```{r}
 
 
-# Plot AGE vs log10(EXPDD) to observe the relationship
+# Plot AGE vs log2(EXPDD) to observe the relationship
 p1 <- data |> 
   filter(STYPE == "LACS") |> 
-  ggplot(aes(x = AGE, y = log10(EXPDD))) +
+  ggplot(aes(x = AGE, y = log2(EXPDD))) +
   geom_point(color = "purple") +
   labs(
     title = "AGE vs. Predicted Death/Dependence Probability at 6 Months",
     x = "Age (Years)",
-    y = "log10(Predicted Death/Dependence Probability)",
+    y = "log2(Predicted Death/Dependence Probability)",
     caption = "Relationship modeled using simple linear regression"
   ) +
   theme_minimal()
@@ -79,6 +81,8 @@ p1 <- data |>
 print(p1)
 
 ```
+
+Visualizing the log-transformed **predicted probability of death/dependence** **at 6 months**, we are able to see a tendency that older patients have a higher probability of death/dependence at 6 months.
 
 ### Model 2: Predicting `EXPD6` with `AGE`
 
@@ -102,6 +106,8 @@ model_2 |>
   summary()
 ```
 
+From the model summary, R-squared is relatively low suggesting a poor fit if the model to the data. However, the fit is better than the previous (R-squared = 0.9153)
+
 **Visualization:**
 
 ```{r}
@@ -121,6 +127,8 @@ p2 <- data |>
 
 print(p2)
 ```
+
+Visualizing the log-transformed **predicted probability of death** **at 6 months**, we are able to see a tendency that older patients have a higher probability of death/dependence at 6 months. This variable is better predicted that the previous.
 
 ### Model 3: Predicting `EXPD14` with `AGE`
 
@@ -143,6 +151,8 @@ model_3 |>
   summary()
 ```
 
+From the model summary, R-squared is relatively low suggesting a poor fit if the model to the data. This fit is the worst of the three variables we are investigating.
+
 **Visualization:**
 
 ```{r}
@@ -162,6 +172,8 @@ p3 <- data |>
 
 print(p3)
 ```
+
+Again, visualizing the log-transformed **predicted probability of death** **at 14 days**, we are able to see a tendency that older patients have a higher probability of death/dependence at 6 months. It even looks like there groups in the data where a line would be able to separate them.
 
 ## Saving Plots
 
