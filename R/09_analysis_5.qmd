@@ -6,7 +6,7 @@ format: html
 
 # Data analysis
 
-We aim to visualize if there is an overall effect of the 6 different treatment combinations: aspirin or no aspirin and low, medium or no heparin.
+We aim to visualize if there is an overall effect of the 6 different treatment combinations: aspirin or no aspirin and low, medium or no heparin. The aim is to make a survival plot for the five different treatments and to make a chi-squared test to test if there is a signficiant difference in survival rates after 6 months.
 
 ## Loading libraries
 
@@ -20,7 +20,7 @@ library("survival")
 library("RColorBrewer")
 ```
 
-The project functions are sourced
+The project functions are sourced, where a tidyverse-compatible chi-squared calculator function is available.
 
 ```{r}
 #| echo: true
@@ -31,6 +31,8 @@ source(here("R/99_proj_func.R"))
 
 ## Loading data
 
+The augmented data is loaded.
+
 ```{r}
 #| echo: true
 #| eval: true
@@ -40,67 +42,90 @@ data <- read_tsv(here("data/03_dat_aug.tsv"))
 
 ## Preparing data for plot
 
-A Kaplan-Meier curve is a curve illustrating the overall survival rate for each group over time. We can plot it for 0-6 months after randomization. We can use this to see if there is an overall difference in survival for the treatments over time. For this we need a time-of-death (if one) and group value for each subject.
-
-A Chi-squared test is a statistical test to see of there is a significant difference in group sizes. The null-hypothesis would be that for all types of treatments, there is the same fraction of people which has died or are dependent after 6 months.
+A Kaplan-Meier curve is a curve illustrating the overall survival rate for each group over time. For this plot we therefore need to augment the data to plot if a person is dead within the time period, and when the person died, and which treatment group the patient is within. We can thereby see if there is an overall difference in survival for the treatments over time.
 
 ```{r}
+#| echo: true
+#| eval: true
+
+#We first filter the data to contain the time of death, if the person is actually dead and the treatment groups of the subject
 data_filtered <- data |> 
   select(TD,FDEAD,data_group) |> 
   mutate(FDEAD = recode(FDEAD, "Y" = 1, "N" = 0)) |> 
+  #We only want to plot for 0-6 months, and therefore change all the time-of-deaths after 6 months to be censored at 6 months instead
   mutate(TD = if_else(TD > 183, 183, TD))
 
+#We filter all the individuals which we do not know of the person is dead or not, and count the amount of dead or not after 6 months
 data_filtered_group <- data_filtered |> 
   select(data_group,FDEAD) |> 
   filter(!is.na(FDEAD)) |> 
   group_by(data_group,FDEAD) |> 
   count()
-
-data_filtered_chisqr <- data_filtered_group |> 
-  pivot_wider(names_from = data_group, values_from = n) |> 
-  column_to_rownames(var = "FDEAD")
-
-data_filtered_barchart <- data_filtered_group |> 
-  group_by(data_group) |> 
-  summarize(sum = sum(n),
-            fraction = sum(n * (FDEAD == 1))/sum) |> 
-  mutate(data_name = str_glue("{data_group}(n = {sum})"))
-
-data_filtered_chisqr <- data_filtered |> 
-  select(data_group,FDEAD) |> 
-  filter(!is.na(FDEAD)) |> 
-  group_by(data_group,FDEAD) |> 
-  count() |> 
-  pivot_wider(names_from = data_group, values_from = n) |> 
-  column_to_rownames(var = "FDEAD")
-
-group_combinations <- data_filtered |> 
-  expand(data_group,data_group)
 ```
 
-```{r}
-km_fit <- survfit(Surv(TD, FDEAD) ~ data_group, data = data_filtered)
-km_tidy <- broom::tidy(km_fit)
+A Chi-squared test is a statistical test to see of there is a significant difference in group sizes. The null-hypothesis would be that for all types of treatments, there is the same fraction of people which has died after 6 months. From the data created for the Kaplan-Meier curve, we therefore need to calculate the actual number of dead and not dead after 6 months.
 
+```{r}
+#| echo: true
+#| eval: true
+#| 
+#We create a contigency table with the different groups vs the status after 6 months
+data_filtered_chisqr_old <- data_filtered_group |> 
+  pivot_wider(names_from = data_group, values_from = n) |> 
+  column_to_rownames(var = "FDEAD")
+
+#We want to make a chisquare test of the difference between all groups. We therefore create a dataframe with two columns creating all different group combinations
+group_combinations <- data_filtered |> 
+  expand(data_group,data_group) |> 
+  filter(data_group...1 != data_group...2)
+```
+
+For creating a Kaplan-Meier curve, we want to calculate the number of patients alive for each timepoint, the number of patients that then dies at this timepoint, and the survival probability for reaching each timepoint. This can also be done from the command survfit from the survival package using the Surv object, where the syntax is Surv(time,event), where the event normally indicates 0 = alive and 1 = dead, as our FDEAD variable. The broom package can be used to extract the information from the survfit command to be used in ggplot.
+
+```{r}
+#| echo: true
+#| eval: true
+
+#The survfit command using the Surv object is used
+km_fit <- survfit(Surv(TD, FDEAD) ~ data_group, data = data_filtered)
+
+#Tidy creates a variable time, estimate (the survival probability), as well as a confidence interval for the estimate. It also creates a variable called 'strata' indicating the data groups defined
+km_tidy <- broom::tidy(km_fit)
+```
+
+The chi squared test is performed on all the different group combinations, where the modified data for the chisquared test is used for the actual calculations
+
+```{r}
+#| echo: true
+#| eval: true
+#| warning: false
+
+#The chisqr_pval is a function which calculates the chisquared p-value testing the null hypothesis that these two groups are not independent
 chi_sqr_test <- group_combinations |> 
   mutate(chisqr_pval = 
            map2_dbl(.x = data_group...1,
                     .y = data_group...2,
-                    .f = ~ chisqr_pval(data_filtered_chisqr, c(.x, .y)))) |> 
-  mutate(chisqr_pval = if_else(data_group...1 == data_group...2, 1, chisqr_pval ))
+                    .f = ~ chisqr_pval(data_filtered_chisqr, c(.x, .y))))
 ```
 
+## Model visualisatin
+
+The two different models, the Kaplan-Meier curve and the chisquared test is visualized for final evalutation
+
 ```{r}
-p1 <- km_tidy|>
+#| echo: true
+#| eval: true
+
+#The Kaplan-Meier curve is visualized by steps
+p1 <- km_tidy|> 
   mutate(strata = str_remove(strata,"data_group=")) |> 
   ggplot(mapping = aes(x = time, 
                        y = estimate, 
-                       color = strata)) + # `strata` is the name of the groups from the km model
-  geom_step(linewidth = 1) +                           # Kaplan-Meier steps
-  geom_ribbon(aes(ymin = conf.low, ymax = conf.high), 
-              alpha = 0.1, linetype = "dashed") +       # Confidence interval
+                       color = strata)) +
+  geom_step(linewidth = 1) + 
   labs(
-    title = "Kaplan-Meier Survival curve",
+    title = "Aspirin and low heparin have the higest effect on survival rate",
+    subtitle = "Only asprin and no heparin does also have a posive effect on survival rate \n compared to control",
     x = "Time (days)",
     y = "Probability of survival",
     color = "Treatment group")+
@@ -108,31 +133,75 @@ p1 <- km_tidy|>
   theme_minimal()
 
 p1
-```
 
-```{r}
-# Plot tiles where color correspond to the pvalues
-
-p2 <- chi_sqr_test |> 
-        ggplot(mapping = aes(x = data_group...1,
-                             y = data_group...2,
-                             fill = chisqr_pval))+
-        geom_tile()+
-        scale_fill_gradient2(
-          low = "#1B9E77",
-          mid = "white",
-          high = "#7570B3",
-          midpoint = 0.05)+
-        theme_minimal()+
-        theme(axis.title = element_blank(),
-              axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+p2 <- p1 +
+  geom_ribbon(aes(ymin = conf.low, ymax = conf.high), 
+              alpha = 0.1, linetype = "dashed")+
+  labs(title = "There are no difference in the survival curves",
+       subtitle = "The curves for the different treatment regimes are, including the 95% confidence \n intervals, very similar")
 
 p2
 ```
 
+The chisquared test is visualized as a heatmap with a significance level of 5%.
+
+```{r}
+#| echo: true
+#| eval: true
+
+
+p3 <- chi_sqr_test |> 
+  ggplot(mapping = aes(x = data_group...1,
+                       y = data_group...2,
+                       fill = chisqr_pval))+
+  geom_tile()+
+  #The tiles is plotted with a gradient, which can be interpreted as green colors are below the significance level, purple levels are above the significance level
+  scale_fill_gradient2(
+    low = "#1B9E77",
+    mid = "white",
+    high = "#7570B3",
+    midpoint = 0.05,
+    limits = c(0, 1),
+    breaks = c(0.05, 1),
+    name = "p-value")+
+  labs(title = "There is only a significant differnce between two pairs of groups",
+       subtitle = "Asp-Hep(low) vs Asp(no)-Hep(low) | Asp-Hep(no) vs Asp(no)-Hep(low)")+
+  theme_classic()+
+  theme(axis.title = element_blank(),
+        axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1),
+        panel.background = element_rect(fill = "lightgrey",
+                                colour = "lightgrey"),
+        plot.title.position = "plot")
+  
+
+
+p3
+```
+
+Comparing the results between the kaplan-meier curve and the chi-squared test, it can be concluded that the Asp-Hep(low) or Asp-Hep(no) has a significant higher probability of survival than the Asp(No)-Hep(low). Based on these results, it can therefore not be recommended to only put the patient on a low dose of heparin, where the odds of survival would be better to put the patient also on aspirin or both on aspirin and low dose of heparin. But putting a patient on a treatment is not significantly improving the survival rate compared to control group, why it cannot be concluded that one of the treatment regimes significantly increase survival rate.
+
 ## Save the results
 
 ```{r}
-ggsave(filename = here("results/09_keyplot_5a.png"), plot = p1, width = 8, height = 4, dpi = 300, bg = "white")  
-ggsave(filename = here("results/09_keyplot_5b.png"), plot = p2, width = 8, height = 4, dpi = 300, bg = "white")  
+#| echo: true
+#| eval: true
+
+ggsave(filename = here("results/09_keyplot_5aa.png"), 
+       plot = p1, 
+       width = 8, 
+       height = 4, 
+       dpi = 300, 
+       bg = "white")  
+ggsave(filename = here("results/09_keyplot_5ab.png"), 
+       plot = p2, 
+       width = 8, 
+       height = 4, 
+       dpi = 300, 
+       bg = "white")  
+ggsave(filename = here("results/09_keyplot_5b.png"), 
+       plot = p3, 
+       width = 8, 
+       height = 4,
+       dpi = 300, 
+       bg = "white")  
 ```
