@@ -2,12 +2,11 @@
 title: "09_analysis_5"
 author: "Group 29: Helena Møller, Emma Christensen, Frederik Holmstrup, Casper Harreby & Laura Christiansen"
 format: html
-execute: 
-  message: FALSE
-  warning: FALSE
 ---
 
-# Data analysis - visualizing the overall effect of the treatments
+# Data analysis
+
+We aim to visualize if there is an overall effect of the 6 different treatment combinations: aspirin or no aspirin and low, medium or no heparin.
 
 ## Loading libraries
 
@@ -19,16 +18,23 @@ library("tidyverse")
 library("here")
 library("survival")
 library("RColorBrewer")
-library("broom")
 ```
 
+The project functions are sourced
+
 ```{r}
+#| echo: true
+#| eval: true
+
 source(here("R/99_proj_func.R"))
 ```
 
 ## Loading data
 
 ```{r}
+#| echo: true
+#| eval: true
+
 data <- read_tsv(here("data/03_dat_aug.tsv"))
 ```
 
