@@ -127,6 +127,7 @@ p1 <- group_1_counts |>
                        y = count, 
                        color = data_group)) + 
   geom_line() +
+  coord_cartesian(xlim = c(0, 20))+
   labs(
     title =  "Days elapsed since randomisation before death of initial stroke",
     x = "Days elapsed since randomisation",
@@ -157,6 +158,7 @@ p6 <- group_6_counts |>
                        y = count, 
                        color = data_group)) + 
   geom_line() +
+  coord_cartesian(xlim = c(0, 20))+
   labs(
     title =  "Days elapsed since randomisation before death of pulmonary embolism",
     x = "Days elapsed since randomisation",
