@@ -130,10 +130,6 @@ knitr::include_graphics(here("results/08_keyplot_4c.png"))
 knitr::include_graphics(here("results/08_keyplot_4c.png"))
 ```
 
-![](../results/pulmonary_td.png){fig-align="center" width="500"}
-
-
-
 ## Kaplan Meier Plot after stroke: 
 
 ```{r, echo = FALSE, out.width = "500px"}
