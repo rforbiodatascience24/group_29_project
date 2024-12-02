@@ -5,24 +5,96 @@ format: html
 editor: visual
 ---
 
-# All document
+# Individual HTMLs
+
+```{r}
+library("here")
+```
+
+```{r}
+#|output: false
+quarto::quarto_render(here("R/01_load.qmd"))
+```
 
 {{< include 01_load.qmd >}}
 
+```{r}
+file.rename(here("R/01_load.html"),here("results/01_load.html"))
+```
+
+```{r}
+#|output: false
+quarto::quarto_render(here("R/02_clean.qmd"))
+```
+
 {{< include 02_clean.qmd >}}
+
+```{r}
+file.rename(here("R/02_clean.html"),here("results/02_clean.html"))
+```
+
+```{r}
+#|output: false
+quarto::quarto_render(here("R/03_augment.qmd"))
+```
 
 {{< include 03_augment.qmd >}}
 
+```{r}
+file.rename(here("R/03_augment.html"),here("results/03_augment.html"))
+```
+
+```{r}
+#|output: false
+quarto::quarto_render(here("R/04_describe.qmd"))
+```
+
 {{< include 04_describe.qmd >}}
+
+```{r}
+file.rename(here("R/04_describe.html"),here("results/04_describe.html"))
+```
+
+```{r}
+#|output: false
+quarto::quarto_render(here("R/05_analysis_1.qmd"))
+```
 
 {{< include 05_analysis_1.qmd >}}
 
+```{r}
+file.rename(here("R/05_analysis_1.html"),here("results/05_analysis_1.html"))
+```
+
+```{r}
+#|output: false
+quarto::quarto_render(here("R/06_analysis_2.qmd"))
+```
+
 {{< include 06_analysis_2.qmd >}}
+
+```{r}
+file.rename(here("R/06_analysis_2.html"),here("results/06_analysis_2.html"))
+```
+
+```{r}
+#|output: false
+quarto::quarto_render(here("R/07_analysis_3.qmd"))
+```
 
 {{< include 07_analysis_3.qmd >}}
 
+```{r}
+file.rename(here("R/07_analysis_3.html"),here("results/07_analysis_3.html"))
+```
+
+```{r}
+#|output: false
+quarto::quarto_render(here("R/08_analysis_4.qmd"))
+```
+
 {{< include 08_analysis_4.qmd >}}
 
-{{< include 09_analysis_5.qmd >}}
-
-{{< include 10_analysis_6.qmd >}}
+```{r}
+file.rename(here("R/08_analysis_4.html"),here("results/08_analysis_4.html"))
+```

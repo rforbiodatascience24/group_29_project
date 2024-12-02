@@ -2,9 +2,6 @@
 title: "07_analysis_3"
 author: "Group 29: Helena Møller, Emma Christensen, Frederik Holmstrup, Casper Harreby & Laura Christiansen"
 format: html
-execute: 
-  message: FALSE
-  warning: FALSE
 ---
 
 # Data analysis
@@ -17,18 +14,27 @@ execute:
 
 library("tidyverse")
 library("here")
+library("scales")
 ```
 
 ## Loading data
 
 ```{r}
+#| echo: true
+#| eval: true
+#| message: false
+
 data <- read_tsv(here("data/03_dat_aug.tsv"))
 ```
 
 ## Preparing data
 
 ```{r}
-# Grouping the data by the variable "DEACD"
+#| echo: true
+#| eval: true
+#| message: false
+
+# Grouping the data by the variable "DEADC"
 grouped_data <- data |>
   group_by(DEADC) |>
   # Creating a new column "TD_causes", which categorizes each cause of death based on "DEADC"
@@ -46,45 +52,75 @@ grouped_data <- data |>
   )
 
 #Filter data for each cause of death
-causes <- paste0("cause_", 1:8) #Creates a list of causes
-group_data_list <- map(causes, ~ grouped_data |> filter(TD_causes == .x)) # Filter the data for each cause and stores it in a list
-names(group_data_list) <- causes #Assign proper names to the list elements
+causes <- str_c("cause_", 1:8) #Creates a list of causes
+group_data_list <- causes |> 
+  set_names() |> 
+  map(.x = ,
+      .f = ~ grouped_data |>
+        filter(TD_causes == .x)) # Filter the data for each cause and stores it in a list
 ```
 
 ## Plot the overall data count
 
 ```{r}
-#Count the occurences of "TD" for the whole dataset 
+#| echo: true
+#| eval: true
+#| warning: false
+
+#Count the occurences of time of death for the whole dataset if the person is dead at the 6 month follow up
 group_counts <- grouped_data |>
+  filter(FDEAD == "Y") |> 
   count(TD)
 
 #Plots the time of death (TD) vs. the number of occurences.
 p0 <- group_counts |>
-  ggplot(mapping = aes(x = TD, y = n))+
+  ggplot(mapping = aes(x = TD,
+                       y = n))+
   geom_line()+
   coord_cartesian(xlim = c(0, 200))+
   labs(
-    title =  "Days elapsed since randomisation before death",
+    title =  "Most patients die within the first 20 days after randomisation",
     x = "Days elapsed since randomisation",
+<<<<<<< HEAD
     y = "Number of peopled died after x days"
   ) 
+=======
+    y = "Number of people died x days after randomization"
+  )+
+  theme_minimal()+
+  theme(plot.title = element_text(hjust = 0.5))
+
+p0
+>>>>>>> origin/main
   
 # Save the plot as a PNG
-ggsave("../results/overall.png", plot = p0, dpi = 300)
+ggsave(filename = here("results/07_keyplot_3a.png"), 
+       plot = p0, 
+       width = 8, 
+       height = 4, 
+       dpi = 300, 
+       bg = "white")
 
 ```
 
 ## Creating individual plots for each cause of death
 
 ```{r}
+#| echo: true
+#| eval: true
+#| warning: false
+
 #Count the occurences of "TD" for only those died of ischaemic stroke
-group_1_counts <- group_1_data |> 
+group_1_counts <- group_data_list |>
+  pluck("cause_1") |> 
   group_by(data_group, TD) |>
   summarise(count = n(), .groups = "drop")
 
 #Plots the time of death (TD) vs. the number of occurences.
 p1 <- group_1_counts |> 
-  ggplot(mapping = aes(x = TD, y = count, color = data_group)) + 
+  ggplot(mapping = aes(x = TD, 
+                       y = count, 
+                       color = data_group)) + 
   geom_line() +
   labs(
     title =  "Days elapsed since randomisation before death of initial stroke",
@@ -94,16 +130,24 @@ p1 <- group_1_counts |>
   facet_wrap(~ data_group)
 
 # Save the plot as a PNG
-ggsave("../results/ischaemic_stroke_td.png", plot = p1, dpi = 300)
+ggsave(filename = here("results/07_keyplot_3b.png"), 
+       plot = p1, 
+       width = 8, 
+       height = 4, 
+       dpi = 300, 
+       bg = "white")
 
 #Count the occurences of "TD" for only those died of pulmonary embolism
-group_6_counts <- group_6_data |> 
+group_6_counts <- group_data_list |>
+  pluck("cause_6") |> 
   group_by(data_group, TD) |>
   summarise(count = n(), .groups = "drop")
 
 #Plots the time of death (TD) vs. the number of occurences.
 p6 <- group_6_counts |> 
-  ggplot(mapping = aes(x = TD, y = count, color = data_group)) + 
+  ggplot(mapping = aes(x = TD, 
+                       y = count, 
+                       color = data_group)) + 
   geom_line() +
   labs(
     title =  "Days elapsed since randomisation before death of pulmonary embolism",
@@ -113,5 +157,10 @@ p6 <- group_6_counts |>
   facet_wrap(~ data_group)
 
 # Save the plot as a PNG
-ggsave("../results/pulmonary_td.png", plot = p6, dpi = 300)
+ggsave(filename = here("results/07_keyplot_3c.png"), 
+       plot = p6, 
+       width = 8, 
+       height = 4, 
+       dpi = 300, 
+       bg = "white")
 ```

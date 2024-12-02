@@ -250,7 +250,5 @@ data_left_joined <- data_split_1_1 |>
 ## Saving final clean data
 
 ```{r}
-write_tsv(data_inner_joined, file = "../data/02_dat_clean.tsv")
-
-list.files("../")
+write_tsv(data_inner_joined, file = here("data/02_dat_clean.tsv"))
 ```
