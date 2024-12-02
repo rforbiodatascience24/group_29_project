@@ -7,6 +7,10 @@ editor: visual
 
 # Individual HTMLs
 
+All project quarto files are rendered and stored as HTML files in "results".
+
+"00_all.html" contains all rendered quarto files in one HTML file and is located in "results" folder.
+
 ```{r}
 library("here")
 ```
@@ -97,4 +101,15 @@ quarto::quarto_render(here("R/08_analysis_4.qmd"))
 
 ```{r}
 file.rename(here("R/08_analysis_4.html"),here("results/08_analysis_4.html"))
+```
+
+```{r}
+#|output: false
+quarto::quarto_render(here("R/09_analysis_5.qmd"))
+```
+
+{{< include 09_analysis_5.qmd >}}
+
+```{r}
+file.rename(here("R/09_analysis_5.html"),here("results/09_analysis_5.html"))
 ```
