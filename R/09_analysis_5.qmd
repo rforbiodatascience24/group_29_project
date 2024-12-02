@@ -70,7 +70,7 @@ A Chi-squared test is a statistical test to see of there is a significant differ
 #| eval: true
 #| 
 #We create a contigency table with the different groups vs the status after 6 months
-data_filtered_chisqr_old <- data_filtered_group |> 
+data_filtered_chisqr <- data_filtered_group |> 
   pivot_wider(names_from = data_group, values_from = n) |> 
   column_to_rownames(var = "FDEAD")
 
